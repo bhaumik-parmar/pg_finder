@@ -95,20 +95,18 @@ export default function CheckoutCart({ handleClick }) {
     //   }
     // }
     onSubmit: (values) => {
-      // navigate('/auth/login/customer');
       values.profession = profession;
       values.roomType = roomType;
       db.collection('CustomerDetails').add({
-        firstname: values.firstName,
+        bookDate: firebase.firestore.FieldValue.serverTimestamp(),
+        firstName: values.firstName,
         lastName: values.lastName,
         email: values.email,
         phone: +values.phone,
         profession: values.profession,
         roomType: values.roomType
       });
-
       handleClick();
-      // Navigate()
     }
   });
 
@@ -122,7 +120,7 @@ export default function CheckoutCart({ handleClick }) {
             .then((doc) => {
               if (doc.exists) {
                 const data = doc.data();
-                formik.setFieldValue('firstName', data?.firstname);
+                formik.setFieldValue('firstName', data?.firstName);
                 formik.setFieldValue('lastName', data?.lastName);
                 formik.setFieldValue('phone', data?.phone);
                 formik.setFieldValue('email', data?.email);

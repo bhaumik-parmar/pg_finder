@@ -68,6 +68,8 @@ export default function PaymentNewCardForm({ onCancel }) {
     validationSchema: NewCardSchema,
 
     onSubmit: () => {
+      const now = new Date();
+      console.log('now', now);
       enqueueSnackbar('Payment Successful', {
         variant: 'success',
         action: (key) => (
@@ -106,13 +108,22 @@ export default function PaymentNewCardForm({ onCancel }) {
     setFieldValue,
     setFieldTouched
   } = formik;
+
+  const PGname = JSON.parse(localStorage.getItem('PG Name'));
+
   return (
     <>
       <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
           <Grid item xs={14} md={10}>
             <Card sx={{ mb: 3, ml: 25 }}>
-              <CardHeader title={<Typography variant="h6">Payment Details:</Typography>} sx={{ mb: 3 }} />
+              <Stack direction="row">
+                <CardHeader title={<Typography variant="h6">Payment Details:</Typography>} sx={{ mb: 3 }} />
+                <Typography sx={{ ml: 100, mt: 3 }}>Pay To:</Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary', ml: 1, mt: 3 }}>
+                  {PGname.name}
+                </Typography>
+              </Stack>
               <Stack sx={{ mb: 2 }} spacing={2}>
                 <Stack spacing={2}>
                   <TextField

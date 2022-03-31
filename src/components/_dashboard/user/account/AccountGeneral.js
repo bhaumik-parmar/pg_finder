@@ -1,11 +1,12 @@
 import * as Yup from 'yup';
 import { useSnackbar } from 'notistack';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
 import { Box, Grid, Card, Stack, Switch, TextField, FormControlLabel, Typography, FormHelperText } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { useNavigate } from 'react-router';
 import { storage } from '../../../../config';
 // hooks
 import useAuth from '../../../../hooks/useAuth';
@@ -14,11 +15,11 @@ import { UploadAvatar } from '../../../upload';
 // utils
 import { fData } from '../../../../utils/formatNumber';
 //
-import countries from '../countries';
 
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral() {
+  const navigate = useNavigate();
   const isMountedRef = useIsMountedRef();
   const { enqueueSnackbar } = useSnackbar();
   // const [image, setImage] = useState('');
@@ -46,8 +47,8 @@ export default function AccountGeneral() {
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
         await updateProfile({ ...values });
-        console.log('...values', { ...values });
         enqueueSnackbar('Update success', { variant: 'success' });
+        navigate('/dashboard/pg-finder/home');
         if (isMountedRef.current) {
           setSubmitting(false);
         }

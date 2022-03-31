@@ -63,26 +63,6 @@ export default function RegisterForm() {
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
         await register(values.email, values.password, values.firstName, values.lastName, values.phone);
-        // firebase
-        //   .auth()
-        //   .createUserWithEmailAndPassword(values.email, values.password)
-        //   .then((res) => {
-        //     firebase
-        //       .firestore()
-        //       .collection('Registration')
-        //       .doc(res.user.uid)
-        //       .set({
-        //         uid: res.user.uid,
-        //         firstname: values.firstName,
-        //         lastName: values.lastName,
-        //         email: values.email,
-        //         phone: +values.phone,
-        //         password: values.password,
-        //         displayName: `${values.firstName} ${values.lastName}`
-        //       });
-        //   });
-
-        // await db.collection('Registration').add(register);
         enqueueSnackbar('Register success', {
           variant: 'success',
           action: (key) => (
@@ -94,7 +74,6 @@ export default function RegisterForm() {
         navigate('/auth/login/customer');
         if (isMountedRef.current) {
           setSubmitting(false);
-          // navigate('/auth/login/customer');
         }
       } catch (error) {
         console.error(error);

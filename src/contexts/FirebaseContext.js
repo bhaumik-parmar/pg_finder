@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { createContext, useEffect, useReducer, useState } from 'react';
 import firebase from 'firebase/compat/app';
-import 'firebase/firestore';
 import 'firebase/auth';
 import { firebaseConfig } from '../config';
 // ----------------------------------------------------------------------
@@ -39,6 +38,7 @@ const AuthContext = createContext({
   login: () => Promise.resolve(),
   register: () => Promise.resolve(),
   updateProfile: () => Promise.resolve(),
+  changePassword: () => Promise.resolve(),
   loginWithGoogle: () => Promise.resolve(),
   loginWithFaceBook: () => Promise.resolve(),
   loginWithTwitter: () => Promise.resolve(),
@@ -128,24 +128,48 @@ function AuthProvider({ children }) {
     await firebase.auth().sendPasswordResetEmail(email);
   };
 
+  const changePassword = async (password) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        const passwdRef = firebase.firestore().collection('Registration').doc(user.uid);
+        passwdRef
+          .update(
+            {
+              password
+            },
+            { merge: true }
+          )
+          .then(() => {
+            console.log('Password changed');
+          })
+          .catch((error) => {
+            console.error('Error updating document: ', error);
+          });
+      }
+    });
+  };
+
   const updateProfile = async ({ displayName, email, phone, photoURL, address, city, zipCode, about }) => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         const [firstName, lastName] = displayName.split(' ');
         const profileRef = firebase.firestore().collection('Registration').doc(user.uid);
         profileRef
-          .update({
-            firstName,
-            lastName,
-            displayName,
-            email,
-            phone,
-            photoURL,
-            address,
-            city,
-            zipCode,
-            about
-          })
+          .update(
+            {
+              firstName,
+              lastName,
+              displayName,
+              email,
+              phone,
+              photoURL,
+              address,
+              city,
+              zipCode,
+              about
+            },
+            { merge: true }
+          )
           .then(() => {
             console.log('Profile updated');
           })
@@ -165,8 +189,9 @@ function AuthProvider({ children }) {
         user: {
           id: auth.uid,
           email: auth.email || profile?.email,
-          firstName: profile?.firstname,
+          firstName: profile?.firstName,
           lastName: profile?.lastName,
+          password: auth.password || profile?.password,
           photoURL: auth.photoURL || profile?.photoURL,
           displayName: auth.displayName || profile?.displayName,
           role: ADMIN_EMAILS.includes(auth.email) ? 'admin' : 'user',
@@ -182,6 +207,7 @@ function AuthProvider({ children }) {
         login,
         register,
         updateProfile,
+        changePassword,
         loginWithGoogle,
         loginWithFaceBook,
         loginWithTwitter,

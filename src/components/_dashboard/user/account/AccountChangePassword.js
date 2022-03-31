@@ -5,11 +5,15 @@ import { useFormik, Form, FormikProvider } from 'formik';
 import { Stack, Card, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // utils
-import fakeRequest from '../../../../utils/fakeRequest';
+import { useNavigate } from 'react-router';
+import useAuth from '../../../../hooks/useAuth';
+// import fakeRequest from '../../../../utils/fakeRequest';
 
 // ----------------------------------------------------------------------
 
 export default function AccountChangePassword() {
+  const { user, changePassword } = useAuth();
+  const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
   const ChangePassWordSchema = Yup.object().shape({
@@ -33,10 +37,16 @@ export default function AccountChangePassword() {
     },
     validationSchema: ChangePassWordSchema,
     onSubmit: async (values, { setSubmitting }) => {
-      await fakeRequest(500);
+      if (values.oldPassword !== user.password) {
+        enqueueSnackbar('Your password is incorect', { variant: 'error' });
+      } else if (values.oldPassword === values.newPassword) {
+        enqueueSnackbar('Your new password cannot be the same as your old password', { variant: 'error' });
+      } else {
+        await changePassword(values.newPassword);
+        enqueueSnackbar('Password changed', { variant: 'success' });
+        navigate('/dashboard/pg-finder/home');
+      }
       setSubmitting(false);
-      alert(JSON.stringify(values, null, 2));
-      enqueueSnackbar('Save success', { variant: 'success' });
     }
   });
 

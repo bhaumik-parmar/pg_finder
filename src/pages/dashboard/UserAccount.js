@@ -1,4 +1,5 @@
 import { Icon } from '@iconify/react';
+import { useNavigate } from 'react-router';
 import { capitalCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import bellFill from '@iconify/icons-eva/bell-fill';
@@ -30,6 +31,7 @@ import {
 
 export default function UserAccount() {
   const { themeStretch } = useSettings();
+  const { navigate } = useNavigate();
   const [currentTab, setCurrentTab] = useState('general');
   const dispatch = useDispatch();
 
