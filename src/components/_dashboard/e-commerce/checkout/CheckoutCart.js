@@ -30,6 +30,8 @@ import {
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 // import useAuth from '../../../../hooks/useAuth';
+import useAuth from '../../../../hooks/useAuth';
+import { fCurrency } from '../../../../utils/formatNumber';
 import { db } from '../../../../config';
 // import { useNavigate } from 'react-router';
 // redux
@@ -53,6 +55,7 @@ import useIsMountedRef from '../../../../hooks/useIsMountedRef';
 // ----------------------------------------------------------------------
 
 export default function CheckoutCart({ handleClick }) {
+  const { bookPG } = useAuth();
   const [roomType, setRoomType] = useState('3+ Sharing');
   const [profession, setProfession] = useState('Student');
   const [open, setOpen] = useState(false);
@@ -94,18 +97,10 @@ export default function CheckoutCart({ handleClick }) {
     //     setErrors(error.message);
     //   }
     // }
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       values.profession = profession;
       values.roomType = roomType;
-      db.collection('CustomerDetails').add({
-        bookDate: firebase.firestore.FieldValue.serverTimestamp(),
-        firstName: values.firstName,
-        lastName: values.lastName,
-        email: values.email,
-        phone: +values.phone,
-        profession: values.profession,
-        roomType: values.roomType
-      });
+      await bookPG(values.firstName, values.lastName, values.email, values.phone, values.profession, values.roomType);
       handleClick();
     }
   });
@@ -231,9 +226,9 @@ export default function CheckoutCart({ handleClick }) {
                   defaultValue="3+ Sharing"
                   onChange={handleChangeDropdownBox}
                 >
-                  <MenuItem value="Double Sharing">Double Sharing</MenuItem>
+                  <MenuItem value="3+ Sharing">3+ Sharing </MenuItem>
                   <MenuItem value="Triple Sharing">Triple Sharing</MenuItem>
-                  <MenuItem value="3+ Sharing">3+ Sharing</MenuItem>
+                  <MenuItem value="Double Sharing">Double Sharing</MenuItem>
                 </Select>
               </FormControl>
             </Stack>

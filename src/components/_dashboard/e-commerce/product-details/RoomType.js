@@ -27,9 +27,9 @@ export default function RoomType() {
   ];
   return (
     <Grid container direction="row" spacing={1} justifyContent="space-around">
-      {roomInfoArray.map(({ RoomName, Price, RoomAvailable, Amenities }, count) => (
+      {roomInfoArray.map(({ RoomName, Price, RoomAvailable }, count) => (
         <Grid item key={count} lg={2}>
-          <RoomInfo room={RoomName} price={Price} roomAvailable={RoomAvailable} amenities={Amenities} key={count} />
+          <RoomInfo room={RoomName} price={Price} roomAvailable={RoomAvailable} key={count} />
         </Grid>
       ))}
     </Grid>

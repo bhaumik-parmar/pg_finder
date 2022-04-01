@@ -39,6 +39,9 @@ const AuthContext = createContext({
   register: () => Promise.resolve(),
   updateProfile: () => Promise.resolve(),
   changePassword: () => Promise.resolve(),
+  bookPG: () => Promise.resolve(),
+  paymentMethod: () => Promise.resolve(),
+  payment: () => Promise.resolve(),
   loginWithGoogle: () => Promise.resolve(),
   loginWithFaceBook: () => Promise.resolve(),
   loginWithTwitter: () => Promise.resolve(),
@@ -179,6 +182,78 @@ function AuthProvider({ children }) {
       }
     });
   };
+
+  const bookPG = async (firstName, lastName, email, phone, profession, roomType) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        const customerDetailsRef = firebase.firestore().collection('BookPG').doc();
+        customerDetailsRef
+          .set({
+            uid: user.uid,
+            bookDate: firebase.firestore.FieldValue.serverTimestamp(),
+            firstName,
+            lastName,
+            email,
+            phone,
+            profession,
+            roomType
+          })
+          .then(() => {
+            console.log('Customer details submitted');
+          })
+          .catch((error) => {
+            console.error('Error Customer details submit: ', error);
+          });
+      }
+    });
+  };
+
+  const paymentMethod = async (paymentMethod) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        const paymentMethodRef = firebase.firestore().collection('Payment').doc();
+        paymentMethodRef
+          .set({
+            uid: user.uid,
+            paymentMethod
+          })
+          .then(() => {
+            console.log('PG booking successful');
+          })
+          .catch((error) => {
+            console.error('Error booking PG: ', error);
+          });
+      }
+    });
+  };
+
+  const payment = async (cardName, cardNumber, cardExpiredMonth, cardExpiredYear, cardCvv) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        const cardExpiredDate = [cardExpiredMonth, cardExpiredYear].join('/');
+        const paymentRef = firebase.firestore().collection('Payment').doc();
+        paymentRef
+          .set(
+            {
+              uid: user.id,
+              paymentDate: firebase.firestore.FieldValue.serverTimestamp(),
+              cardName,
+              cardNumber,
+              cardExpiredDate,
+              cardCvv
+            },
+            { merge: true }
+          )
+          .then(() => {
+            console.log('Payment successful');
+          })
+          .catch((error) => {
+            console.error('Error payment: ', error);
+          });
+      }
+    });
+  };
+
   const auth = { ...state.user };
 
   return (
@@ -208,6 +283,9 @@ function AuthProvider({ children }) {
         register,
         updateProfile,
         changePassword,
+        bookPG,
+        paymentMethod,
+        payment,
         loginWithGoogle,
         loginWithFaceBook,
         loginWithTwitter,

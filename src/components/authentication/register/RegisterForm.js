@@ -13,7 +13,6 @@ import { LoadingButton } from '@mui/lab';
 import { useNavigate } from 'react-router';
 import firebase from 'firebase/compat/app';
 import user from '../../../redux/slices/user';
-import db from '../../../config';
 import useAuth from '../../../hooks/useAuth';
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
 import 'firebase/compat/firestore';

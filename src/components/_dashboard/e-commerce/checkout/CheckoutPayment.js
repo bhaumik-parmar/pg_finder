@@ -9,6 +9,7 @@ import closeFill from '@iconify/icons-eva/close-fill';
 // material
 import { Grid, Button } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import useAuth from '../../../../hooks/useAuth';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // redux
 import { useDispatch, useSelector } from '../../../../redux/store';
@@ -19,21 +20,21 @@ import CheckoutDelivery from './CheckoutDelivery';
 import CheckoutBillingInfo from './CheckoutBillingInfo';
 import CheckoutPaymentMethods from './CheckoutPaymentMethods';
 import { MIconButton } from '../../../@material-extend';
-import { PaymentNewCardForm } from '../../../_external-pages/payment';
+// import { PaymentNewCardForm } from '../../../_external-pages/payment';
 // ----------------------------------------------------------------------
 
-const DELIVERY_OPTIONS = [
-  {
-    value: 0,
-    title: 'Standard delivery (Free)',
-    description: 'Delivered on Monday, August 12'
-  },
-  {
-    value: 2,
-    title: 'Fast delivery ($2,00)',
-    description: 'Delivered on Monday, August 5'
-  }
-];
+// const DELIVERY_OPTIONS = [
+//   {
+//     value: 0,
+//     title: 'Standard delivery (Free)',
+//     description: 'Delivered on Monday, August 12'
+//   },
+//   {
+//     value: 2,
+//     title: 'Fast delivery ($2,00)',
+//     description: 'Delivered on Monday, August 5'
+//   }
+// ];
 
 const PAYMENT_OPTIONS = [
   {
@@ -56,15 +57,16 @@ const PAYMENT_OPTIONS = [
   }
 ];
 
-const CARDS_OPTIONS = [
-  { value: 'ViSa1', label: '**** **** **** 1212 - Jimmy Holland' },
-  { value: 'ViSa2', label: '**** **** **** 2424 - Shawn Stokes' },
-  { value: 'MasterCard', label: '**** **** **** 4545 - Cole Armstrong' }
-];
+// const CARDS_OPTIONS = [
+//   { value: 'ViSa1', label: '**** **** **** 1212 - Jimmy Holland' },
+//   { value: 'ViSa2', label: '**** **** **** 2424 - Shawn Stokes' },
+//   { value: 'MasterCard', label: '**** **** **** 4545 - Cole Armstrong' }
+// ];
 
 // ----------------------------------------------------------------------
 
 export default function CheckoutPayment({ handleBack, handleClick }) {
+  const { paymentMethod } = useAuth();
   const [state, setState] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -115,7 +117,12 @@ export default function CheckoutPayment({ handleBack, handleClick }) {
     validationSchema: PaymentSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
-        handleNextStep(values.payment);
+        if (values.payment === 'google_pay' || values.payment === 'cash') {
+          await paymentMethod(values.payment);
+          handleNextStep(values.payment);
+        } else {
+          handleNextStep(values.payment);
+        }
       } catch (error) {
         console.error(error);
         setSubmitting(false);
@@ -136,12 +143,7 @@ export default function CheckoutPayment({ handleBack, handleClick }) {
               onApplyShipping={handleApplyShipping}
               deliveryOptions={DELIVERY_OPTIONS}
             /> */}
-            <CheckoutPaymentMethods
-              formik={formik}
-              cardOptions={CARDS_OPTIONS}
-              paymentOptions={PAYMENT_OPTIONS}
-              setState={setState}
-            />
+            <CheckoutPaymentMethods formik={formik} paymentOptions={PAYMENT_OPTIONS} setState={setState} />
             <LoadingButton
               fullWidth
               size="large"
