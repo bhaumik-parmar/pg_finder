@@ -20,6 +20,8 @@ import {
   TableContainer,
   TablePagination
 } from '@mui/material';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getProducts, deleteProduct } from '../../redux/slices/product';
@@ -30,6 +32,7 @@ import { fCurrency } from '../../utils/formatNumber';
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
 import useSettings from '../../hooks/useSettings';
+import useAuth from '../../hooks/useAuth';
 // components
 import Page from '../../components/Page';
 import Label from '../../components/Label';
@@ -41,14 +44,16 @@ import {
   ProductListToolbar,
   ProductMoreMenu
 } from '../../components/_dashboard/e-commerce/product-list';
-
+import { db } from '../../config';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Product', alignRight: false },
-  { id: 'createdAt', label: 'Create at', alignRight: false },
-  { id: 'inventoryType', label: 'Status', alignRight: false },
-  { id: 'price', label: 'Price', alignRight: true },
+  { id: 'name', label: 'PG' },
+  { id: 'owner', label: 'Owner Name' },
+  { id: 'date', label: 'Published Date' },
+  { id: 'status', label: 'Status' },
+  { id: 'price', label: 'Price' },
+  { id: 'add', label: 'Address' },
   { id: '' }
 ];
 
@@ -98,6 +103,7 @@ function applySortFilter(array, comparator, query) {
 export default function EcommerceProductList() {
   const { themeStretch } = useSettings();
   const theme = useTheme();
+  const { user } = useAuth();
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state.product);
   const [page, setPage] = useState(0);
@@ -164,18 +170,39 @@ export default function EcommerceProductList() {
 
   const isProductNotFound = filteredProducts.length === 0;
 
+  useEffect(
+    () =>
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          const docRef = firebase.firestore().collection('PGdetails').doc(user.uid);
+          docRef
+            .get()
+            .then((doc) => {
+              if (doc.exists) {
+                const data = doc.data();
+                console.log('data', data);
+                alert('data', data.add);
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      }),
+    []
+  );
   return (
-    <Page title="Ecommerce: Product List | Minimal-UI">
+    <Page title="PG-Finder: Dashboard | PG List">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="Product List"
+          heading="Manage PG"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
-              name: 'E-Commerce',
+              name: 'Manage PG',
               href: PATH_DASHBOARD.eCommerce.root
             },
-            { name: 'Product List' }
+            { name: 'PG List' }
           ]}
           action={
             <Button
@@ -184,12 +211,12 @@ export default function EcommerceProductList() {
               to={PATH_DASHBOARD.eCommerce.newProduct}
               startIcon={<Icon icon={plusFill} />}
             >
-              New Product
+              New PG
             </Button>
           }
         />
 
-        <Card>
+        <Card style={{ width: '1300px' }}>
           <ProductListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
           <Scrollbar>
@@ -222,7 +249,7 @@ export default function EcommerceProductList() {
                         <TableCell padding="checkbox">
                           <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
                         </TableCell>
-                        <TableCell component="th" scope="row" padding="none">
+                        <TableCell style={{ minWidth: 160 }}>
                           <Box
                             sx={{
                               py: 2,
@@ -231,6 +258,19 @@ export default function EcommerceProductList() {
                             }}
                           >
                             <ThumbImgStyle alt={name} src={cover} />
+                            <Typography variant="subtitle2" noWrap>
+                              {name}
+                            </Typography>
+                          </Box>
+                        </TableCell>
+                        <TableCell style={{ minWidth: 160 }}>
+                          <Box
+                            sx={{
+                              py: 2,
+                              display: 'flex',
+                              alignItems: 'center'
+                            }}
+                          >
                             <Typography variant="subtitle2" noWrap>
                               {name}
                             </Typography>
@@ -249,7 +289,21 @@ export default function EcommerceProductList() {
                             {sentenceCase(inventoryType)}
                           </Label>
                         </TableCell>
-                        <TableCell align="right">{fCurrency(price)}</TableCell>
+                        <TableCell style={{ minWidth: 160 }}>{fCurrency(price)}</TableCell>
+                        <TableCell style={{ minWidth: 160 }}>
+                          <Box
+                            sx={{
+                              py: 2,
+                              display: 'flex',
+                              alignItems: 'center'
+                            }}
+                          >
+                            <Typography variant="subtitle2" noWrap>
+                              {name}
+                            </Typography>
+                          </Box>
+                        </TableCell>
+
                         <TableCell align="right">
                           <ProductMoreMenu onDelete={() => handleDeleteProduct(id)} productName={name} />
                         </TableCell>

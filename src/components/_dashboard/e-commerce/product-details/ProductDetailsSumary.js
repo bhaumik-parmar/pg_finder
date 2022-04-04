@@ -155,10 +155,12 @@ export default function ProductDetailsSumary() {
           </Typography>
 
           <Stack spacing={0.5} direction="row" alignItems="center" sx={{ mb: 2 }}>
-            <Rating value={totalRating} precision={0.1} readOnly />
+            {/* <Rating value={totalRating} precision={0.1} readOnly /> */}
+            Owner:&nbsp;
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              ({fShortenNumber(totalReview)}
-              &nbsp; reviews)
+              {/* ({fShortenNumber(totalReview)}
+              &nbsp; reviews) */}
+              Bhaumik Parmar
             </Typography>
           </Stack>
 

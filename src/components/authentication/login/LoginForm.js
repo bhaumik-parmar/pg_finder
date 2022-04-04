@@ -69,7 +69,7 @@ export default function LoginForm() {
               )
             });
           } else {
-            navigate('/dashboard/app');
+            navigate('/dashboard/pg-finder/app');
             enqueueSnackbar('Login success', {
               variant: 'success',
               action: (key) => (

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { createContext, useEffect, useReducer, useState } from 'react';
 import firebase from 'firebase/compat/app';
 import 'firebase/auth';
+// import product from 'src/redux/slices/product';
 import { firebaseConfig } from '../config';
 // ----------------------------------------------------------------------
 
@@ -45,7 +46,8 @@ const AuthContext = createContext({
   loginWithGoogle: () => Promise.resolve(),
   loginWithFaceBook: () => Promise.resolve(),
   loginWithTwitter: () => Promise.resolve(),
-  logout: () => Promise.resolve()
+  logout: () => Promise.resolve(),
+  newPG: () => Promise.resolve()
 });
 
 AuthProvider.propTypes = {
@@ -254,7 +256,36 @@ function AuthProvider({ children }) {
     });
   };
 
+  const newPG = async (name, description, owner, add, price, houseRules, status, category, rooms, food, amenities) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        const pgDetailsRef = firebase.firestore().collection('PGdetails').doc();
+        pgDetailsRef
+          .set({
+            uid: user.uid,
+            name,
+            description,
+            owner,
+            add,
+            price,
+            houseRules,
+            status,
+            category,
+            rooms,
+            food,
+            amenities
+          })
+          .then(() => {
+            console.log('Add PG successful');
+          })
+          .catch((error) => {
+            console.error('Error add PG: ', error);
+          });
+      }
+    });
+  };
   const auth = { ...state.user };
+  const currentProduct = { ...state.pg };
 
   return (
     <AuthContext.Provider
@@ -279,6 +310,21 @@ function AuthProvider({ children }) {
           about: profile?.about || '',
           isPublic: profile?.isPublic || false
         },
+        pg: {
+          id: auth.uid,
+          name: currentProduct?.name || '',
+          description: currentProduct?.description || '',
+          images: currentProduct?.images || [],
+          owner: auth?.displayName || '',
+          add: currentProduct?.add || '',
+          price: currentProduct?.price || '',
+          house_rules: currentProduct?.house_rules || [],
+          status: Boolean(currentProduct?.status !== 'Filled'),
+          gender: currentProduct?.gender || [],
+          rooms: currentProduct?.rooms || [],
+          food: currentProduct?.food || [],
+          amenities: currentProduct?.amenities || []
+        },
         login,
         register,
         updateProfile,
@@ -290,7 +336,8 @@ function AuthProvider({ children }) {
         loginWithFaceBook,
         loginWithTwitter,
         logout,
-        resetPassword
+        resetPassword,
+        newPG
       }}
     >
       {children}

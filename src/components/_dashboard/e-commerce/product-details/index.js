@@ -7,5 +7,4 @@ export { default as ProductDetailsSumary } from './ProductDetailsSumary';
 export { default as RoomType } from './RoomType';
 export { default as Amenities } from './Amenities';
 export { default as FoodAndKitchen } from './FoodAndKitchen';
-export { default as OtherChargesOfPG } from './OtherChargesOfPG';
 export { default as HouseRules } from './HouseRules';

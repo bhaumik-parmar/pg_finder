@@ -1,8 +1,8 @@
+import { React, useState, useCallback } from 'react';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
-import { useCallback } from 'react';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
 import { styled } from '@mui/material/styles';
@@ -22,8 +22,9 @@ import {
   FormHelperText,
   FormControlLabel
 } from '@mui/material';
-// utils
-import fakeRequest from '../../../utils/fakeRequest';
+// hook
+import useAuth from '../../../hooks/useAuth';
+// import fakeRequest from '../../../utils/fakeRequest';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 //
@@ -36,7 +37,20 @@ const GENDER_OPTION = ['Boys', 'Girls', 'Both'];
 
 const FOOD_OPTION = ['Food Provided', ' Non Veg Allowed', 'Self Cooking Kitchen'];
 
-const AMENITIES_OPTION = ['Ac', 'Power Backup', 'Washing Machine', 'Wifi', 'Room Cleaning', 'Parking'];
+const AMENITIES_OPTION = [
+  'Ac',
+  'Power Backup',
+  'Lift',
+  'Fridge',
+  'Microwave',
+  'Laundry',
+  'Water Cooler',
+  'Warden',
+  'Washing Machine',
+  'Wifi',
+  'Room Cleaning Service',
+  'Parking'
+];
 
 const ROOM_OPTION = ['Double Sharing', 'Triple Sharing', '3+ Sharing'];
 // { group: 'Clothing', classify: ['Shirts', 'T-shirts', 'Jeans', 'Leather'] },
@@ -44,20 +58,16 @@ const ROOM_OPTION = ['Double Sharing', 'Triple Sharing', '3+ Sharing'];
 // { group: 'Accessories', classify: ['Shoes', 'Backpacks and bags', 'Bracelets', 'Face masks'] }
 // ];
 
-const TAGS_OPTION = [
-  'Toy Story 3',
-  'Logan',
-  'Full Metal Jacket',
-  'Dangal',
-  'The Sting',
-  '2001: A Space Odyssey',
-  "Singin' in the Rain",
-  'Toy Story',
-  'Bicycle Thieves',
-  'The Kid',
-  'Inglourious Basterds',
-  'Snatch',
-  '3 Idiots'
+const HOUSE_RULES_OPTION = [
+  'Notice Period',
+  'Gate Closing Time',
+  'Visitor Entry',
+  'Non-Veg Food',
+  'Opposite Gender',
+  'Smoking',
+  'Drinking',
+  'Loud music',
+  'Party'
 ];
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
@@ -76,11 +86,23 @@ ProductNewForm.propTypes = {
 export default function ProductNewForm({ isEdit, currentProduct }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+  const { user, newPG } = useAuth();
+  const [checked, setChecked] = useState('');
+
+  const toggleChecked = () => {
+    setChecked((prev) => !prev);
+  };
 
   const NewProductSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
+    name: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('PG name is required'),
     description: Yup.string().required('Description is required'),
-    images: Yup.array().min(1, 'Images is required'),
+    images: Yup.array().min(1, 'Image is required'),
+    rooms: Yup.array().min(1, 'Room type is required'),
+    amenities: Yup.array().min(1, 'Amenity is required'),
+    owner: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Owner name is required'),
+    add: Yup.string().min(20, 'Too Short!').max(100, 'Too Long!').required('Address is required'),
+    food: Yup.array().min(1, 'Food amenity is required'),
+    house_rules: Yup.array().min(1, 'House Rule is required'),
     price: Yup.number().required('Price is required')
   });
 
@@ -90,25 +112,38 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
       name: currentProduct?.name || '',
       description: currentProduct?.description || '',
       images: currentProduct?.images || [],
-      code: currentProduct?.code || '',
-      sku: currentProduct?.sku || '',
+      owner: user?.displayName || '',
+      add: currentProduct?.add || '',
       price: currentProduct?.price || '',
-      priceSale: currentProduct?.priceSale || '',
-      tags: currentProduct?.tags || [TAGS_OPTION[0]],
-      inStock: Boolean(currentProduct?.inventoryType !== 'out_of_stock'),
-      taxes: true,
+      // priceSale: currentProduct?.priceSale || '',
+      house_rules: currentProduct?.house_rules || [],
+      status: Boolean(currentProduct?.status !== 'Filled'),
+      // taxes: true,
       gender: currentProduct?.gender || GENDER_OPTION[2],
-      rooms: currentProduct?.rooms || ROOM_OPTION[0],
-      food: currentProduct?.food || FOOD_OPTION[0],
-      amenities: currentProduct?.amenities || AMENITIES_OPTION[0]
+      rooms: currentProduct?.rooms || [],
+      food: currentProduct?.food || [],
+      amenities: currentProduct?.amenities || []
     },
     validationSchema: NewProductSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
-        await fakeRequest(500);
+        // await fakeRequest(500);
+        await newPG(
+          values.name,
+          values.description,
+          values.owner,
+          values.add,
+          values.price,
+          values.house_rules,
+          values.status,
+          values.gender,
+          values.rooms,
+          values.food,
+          values.amenities
+        );
         resetForm();
         setSubmitting(false);
-        enqueueSnackbar(!isEdit ? 'Create success' : 'Update success', { variant: 'success' });
+        enqueueSnackbar(!isEdit ? 'Add PG successful' : 'Update PG successful', { variant: 'success' });
         navigate(PATH_DASHBOARD.eCommerce.list);
       } catch (error) {
         console.error(error);
@@ -152,26 +187,22 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
               <Stack spacing={3}>
                 <TextField
                   fullWidth
-                  label="Product Name"
+                  label="PG Name"
                   {...getFieldProps('name')}
                   error={Boolean(touched.name && errors.name)}
                   helperText={touched.name && errors.name}
                 />
 
                 <div>
-                  <LabelStyle>Description</LabelStyle>
-                  <QuillEditor
-                    simple
-                    id="product-description"
-                    value={values.description}
-                    onChange={(val) => setFieldValue('description', val)}
+                  <TextField
+                    fullWidth
+                    label="description"
+                    multiline
+                    rows={4}
+                    {...getFieldProps('description')}
                     error={Boolean(touched.description && errors.description)}
+                    helperText={touched.description && errors.description}
                   />
-                  {touched.description && errors.description && (
-                    <FormHelperText error sx={{ px: 2 }}>
-                      {touched.description && errors.description}
-                    </FormHelperText>
-                  )}
                 </div>
 
                 <div>
@@ -192,6 +223,52 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     </FormHelperText>
                   )}
                 </div>
+                <div>
+                  <Autocomplete
+                    multiple
+                    freeSolo
+                    value={values.rooms}
+                    onChange={(event, newValue) => {
+                      setFieldValue('rooms', newValue);
+                    }}
+                    options={ROOM_OPTION.map((option) => option)}
+                    renderTags={(value, getTagProps) =>
+                      value.map((option, index) => (
+                        <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
+                      ))
+                    }
+                    renderInput={(params) => <TextField label="Room Type" {...params} />}
+                    error={Boolean(touched.rooms && errors.rooms)}
+                  />
+                  {touched.rooms && errors.rooms && (
+                    <FormHelperText error sx={{ px: 2 }}>
+                      {touched.rooms && errors.rooms}
+                    </FormHelperText>
+                  )}
+                </div>
+                <div>
+                  <Autocomplete
+                    multiple
+                    freeSolo
+                    value={values.amenities}
+                    onChange={(event, newValue) => {
+                      setFieldValue('amenities', newValue);
+                    }}
+                    options={AMENITIES_OPTION.map((option) => option)}
+                    renderTags={(value, getTagProps) =>
+                      value.map((option, index) => (
+                        <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
+                      ))
+                    }
+                    renderInput={(params) => <TextField label="Amenities" {...params} />}
+                    error={Boolean(touched.amenities && errors.amenities)}
+                  />
+                  {touched.amenities && errors.amenities && (
+                    <FormHelperText error sx={{ px: 2 }}>
+                      {touched.amenities && errors.amenities}
+                    </FormHelperText>
+                  )}
+                </div>
               </Stack>
             </Card>
           </Grid>
@@ -200,14 +277,28 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
             <Stack spacing={3}>
               <Card sx={{ p: 3 }}>
                 <FormControlLabel
-                  control={<Switch {...getFieldProps('inStock')} checked={values.inStock} />}
-                  label="Available"
+                  control={<Switch {...getFieldProps('status')} checked={checked} onChange={toggleChecked} />}
+                  label={`${checked ? 'Available' : 'Filled'}`}
                   sx={{ mb: 2 }}
                 />
 
                 <Stack spacing={3}>
-                  <TextField fullWidth label="Product Code" {...getFieldProps('code')} />
-                  <TextField fullWidth label="Product SKU" {...getFieldProps('sku')} />
+                  <TextField
+                    fullWidth
+                    label="Owner Name"
+                    {...getFieldProps('owner')}
+                    error={Boolean(touched.owner && errors.owner)}
+                    helperText={touched.owner && errors.owner}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Address"
+                    multiline
+                    rows={3}
+                    {...getFieldProps('add')}
+                    error={Boolean(touched.add && errors.add)}
+                    helperText={touched.add && errors.add}
+                  />
 
                   <div>
                     <LabelStyle>Category</LabelStyle>
@@ -221,67 +312,52 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                   </div>
 
                   <div>
-                    <LabelStyle>Room Type</LabelStyle>
-                    <RadioGroup {...getFieldProps('rooms')} row>
-                      <Stack spacing={1} direction="row">
-                        {ROOM_OPTION.map((rooms) => (
-                          <FormControlLabel key={rooms} value={rooms} control={<Radio />} label={rooms} />
-                        ))}
-                      </Stack>
-                    </RadioGroup>
+                    <div>
+                      <Autocomplete
+                        multiple
+                        freeSolo
+                        value={values.food}
+                        onChange={(event, newValue) => {
+                          setFieldValue('food', newValue);
+                        }}
+                        options={FOOD_OPTION.map((option) => option)}
+                        renderTags={(value, getTagProps) =>
+                          value.map((option, index) => (
+                            <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
+                          ))
+                        }
+                        renderInput={(params) => <TextField label="Food" {...params} />}
+                        error={Boolean(touched.food && errors.food)}
+                      />
+                      {touched.food && errors.food && (
+                        <FormHelperText error sx={{ px: 2 }}>
+                          {touched.food && errors.food}
+                        </FormHelperText>
+                      )}
+                    </div>
                   </div>
 
-                  <div>
-                    <LabelStyle>Food</LabelStyle>
-                    <RadioGroup {...getFieldProps('food')} row>
-                      <Stack spacing={1} direction="row">
-                        {FOOD_OPTION.map((food) => (
-                          <FormControlLabel key={food} value={food} control={<Radio />} label={food} />
-                        ))}
-                      </Stack>
-                    </RadioGroup>
-                  </div>
-
-                  <div>
-                    <LabelStyle>Amenities</LabelStyle>
-                    <RadioGroup {...getFieldProps('amenities')} row>
-                      <Stack spacing={1} direction="row">
-                        {AMENITIES_OPTION.map((amenities) => (
-                          <FormControlLabel key={amenities} value={amenities} control={<Radio />} label={amenities} />
-                        ))}
-                      </Stack>
-                    </RadioGroup>
-                  </div>
-
-                  {/* <FormControl fullWidth>
-                    <InputLabel>Room Type</InputLabel>
-                    <Select label="Room Type" native {...getFieldProps('room')} value={values.room}>
-                      {ROOM_OPTION.map((room) => (
-                        <optgroup key={room.group} label={category.group}>
-                          {category.classify.map((classify) => (
-                            <option key={classify} value={classify}>
-                              {classify}
-                            </option>
-                          ))}
-                        </optgroup>
-                      ))}
-                    </Select>
-                  </FormControl> */}
                   <Autocomplete
                     multiple
                     freeSolo
-                    value={values.tags}
+                    value={values.house_rules}
                     onChange={(event, newValue) => {
-                      setFieldValue('tags', newValue);
+                      setFieldValue('house_rules', newValue);
                     }}
-                    options={TAGS_OPTION.map((option) => option)}
+                    options={HOUSE_RULES_OPTION.map((option) => option)}
                     renderTags={(value, getTagProps) =>
                       value.map((option, index) => (
                         <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
                       ))
                     }
-                    renderInput={(params) => <TextField label="Tags" {...params} />}
+                    renderInput={(params) => <TextField label="House Rules" {...params} />}
+                    error={Boolean(touched.house_rules && errors.house_rules)}
                   />
+                  {touched.house_rules && errors.house_rules && (
+                    <FormHelperText error sx={{ px: 2 }}>
+                      {touched.house_rules && errors.house_rules}
+                    </FormHelperText>
+                  )}
                 </Stack>
               </Card>
 
@@ -289,8 +365,8 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                 <Stack spacing={3}>
                   <TextField
                     fullWidth
-                    placeholder="0.00"
-                    label="Regular Price"
+                    placeholder="000"
+                    label="Price"
                     {...getFieldProps('price')}
                     InputProps={{
                       startAdornment: <InputAdornment position="start">₹</InputAdornment>,
@@ -299,24 +375,13 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     error={Boolean(touched.price && errors.price)}
                     helperText={touched.price && errors.price}
                   />
-
-                  <TextField
-                    fullWidth
-                    placeholder="0.00"
-                    label="Sale Price"
-                    {...getFieldProps('priceSale')}
-                    InputProps={{
-                      startAdornment: <InputAdornment position="start">₹</InputAdornment>,
-                      type: 'number'
-                    }}
-                  />
                 </Stack>
 
-                <FormControlLabel
+                {/* <FormControlLabel
                   control={<Switch {...getFieldProps('taxes')} checked={values.taxes} />}
                   label="Price includes taxes"
                   sx={{ mt: 2 }}
-                />
+                /> */}
               </Card>
 
               <LoadingButton type="submit" fullWidth variant="contained" size="large" loading={isSubmitting}>

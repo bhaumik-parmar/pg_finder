@@ -157,16 +157,16 @@ export default function ProductDetailsCarousel() {
               <LargeItem key={item} item={item} onOpenLightbox={handleOpenLightbox} />
             ))}
           </Slider>
-          <CarouselControlsArrowsIndex
+          {/* <CarouselControlsArrowsIndex
             index={currentIndex}
             total={product.images.length}
             onNext={handleNext}
             onPrevious={handlePrevious}
-          />
+          /> */}
         </Box>
       </Box>
 
-      <Box
+      {/* <Box
         sx={{
           my: 3,
           mx: 'auto',
@@ -194,20 +194,20 @@ export default function ProductDetailsCarousel() {
           })
         }}
       >
-        <Slider {...settings2} asNavFor={nav1} ref={slider2}>
+      <Slider {...settings2} asNavFor={nav1} ref={slider2}>
           {product.images.map((item) => (
             <ThumbnailItem key={item} item={item} />
           ))}
         </Slider>
-      </Box>
+      </Box> */}
 
-      <LightboxModal
+      {/* <LightboxModal
         images={imagesLightbox}
         photoIndex={selectedImage}
         setPhotoIndex={setSelectedImage}
         isOpen={openLightbox}
         onClose={() => setOpenLightbox(false)}
-      />
+      /> */}
     </RootStyle>
   );
 }

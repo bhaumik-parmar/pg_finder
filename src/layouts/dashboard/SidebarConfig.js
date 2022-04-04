@@ -1,4 +1,5 @@
 import HomeIcon from '@mui/icons-material/Home';
+import SettingsIcon from '@mui/icons-material/Settings';
 import InfoIcon from '@mui/icons-material/Info';
 import ContactPageIcon from '@mui/icons-material/ContactPage';
 import { useLocation } from 'react-router';
@@ -33,15 +34,12 @@ const sidebarConfigAdmin = [
   {
     items: [
       {
-        title: 'Home',
+        title: 'Dashboard',
         path: PATH_DASHBOARD.general.app,
         icon: <HomeIcon />
       },
-      {
-        title: 'create',
-        path: PATH_DASHBOARD.eCommerce.newProduct,
-        icon: <HomeIcon />
-      },
+      { title: 'Manage PG', path: PATH_DASHBOARD.eCommerce.list, icon: <SettingsIcon /> },
+
       {
         title: 'About Us',
         path: PATH_PAGE.about,

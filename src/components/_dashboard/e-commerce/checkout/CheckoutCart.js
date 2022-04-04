@@ -32,7 +32,7 @@ import 'firebase/compat/firestore';
 // import useAuth from '../../../../hooks/useAuth';
 import useAuth from '../../../../hooks/useAuth';
 import { fCurrency } from '../../../../utils/formatNumber';
-import { db } from '../../../../config';
+// import { db } from '../../../../config';
 // import { useNavigate } from 'react-router';
 // redux
 import { useDispatch, useSelector } from '../../../../redux/store';

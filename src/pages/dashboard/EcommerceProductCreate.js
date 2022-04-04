@@ -34,14 +34,14 @@ export default function EcommerceProductCreate() {
     <Page title="Ecommerce: Create a new product | Minimal-UI">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading={!isEdit ? 'Create a new product' : 'Edit product'}
+          heading={!isEdit ? 'Create a new PG' : 'Edit PG'}
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
-              name: 'E-Commerce',
+              name: 'PG',
               href: PATH_DASHBOARD.eCommerce.root
             },
-            { name: !isEdit ? 'New product' : name }
+            { name: !isEdit ? 'New PG' : name }
           ]}
         />
 

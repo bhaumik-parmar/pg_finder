@@ -27,7 +27,6 @@ import {
   RoomType,
   Amenities,
   FoodAndKitchen,
-  OtherChargesOfPG,
   HouseRules
 } from '../../components/_dashboard/e-commerce/product-details';
 import CartWidget from '../../components/_dashboard/e-commerce/CartWidget';
@@ -145,13 +144,6 @@ export default function EcommerceProductDetails() {
             <Card style={{ marginTop: '1vw' }}>
               <Grid container>
                 <FoodAndKitchen />
-              </Grid>
-            </Card>
-
-            {/* Other Charges */}
-            <Card style={{ marginTop: '1vw' }}>
-              <Grid container>
-                <OtherChargesOfPG />
               </Grid>
             </Card>
 
