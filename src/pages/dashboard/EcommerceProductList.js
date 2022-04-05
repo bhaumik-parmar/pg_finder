@@ -1,3 +1,4 @@
+import { boolean } from 'yup';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import { sentenceCase } from 'change-case';
@@ -44,13 +45,12 @@ import {
   ProductListToolbar,
   ProductMoreMenu
 } from '../../components/_dashboard/e-commerce/product-list';
-import { db } from '../../config';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'name', label: 'PG' },
   { id: 'owner', label: 'Owner Name' },
-  { id: 'date', label: 'Published Date' },
+  // { id: 'date', label: 'Published Date' },
   { id: 'status', label: 'Status' },
   { id: 'price', label: 'Price' },
   { id: 'add', label: 'Address' },
@@ -103,9 +103,10 @@ function applySortFilter(array, comparator, query) {
 export default function EcommerceProductList() {
   const { themeStretch } = useSettings();
   const theme = useTheme();
-  const { user } = useAuth();
-  const dispatch = useDispatch();
-  const { products } = useSelector((state) => state.product);
+  const { user, deletePG } = useAuth();
+  // const dispatch = useDispatch();
+  const [products, setProducts] = useState([]);
+  // const { products } = useSelector((state) => state.product);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -113,9 +114,42 @@ export default function EcommerceProductList() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [orderBy, setOrderBy] = useState('createdAt');
 
-  useEffect(() => {
-    dispatch(getProducts());
-  }, [dispatch]);
+  // const getPGs = async () => {
+  //   const docRef = await firebase.firestore().collection('Registration').doc(user.uid);
+  //   docRef
+  //     .get()
+  //     .then((doc) => {
+  //       if (doc.exists) {
+  //         const data = doc.data();
+  //         console.log('data :>> ', data);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
+  const getPGs = async () => {
+    firebase.auth().onAuthStateChanged((user) => {
+      const temp = [];
+      if (user) {
+        const docRef = firebase.firestore().collection('PGdetails');
+        docRef
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              console.log(doc.data());
+              temp.push(doc.data());
+            });
+            setProducts(temp);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    });
+  };
+
+  useEffect(() => getPGs(), []);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -160,8 +194,9 @@ export default function EcommerceProductList() {
     setFilterName(event.target.value);
   };
 
-  const handleDeleteProduct = (productId) => {
-    dispatch(deleteProduct(productId));
+  const handleDeleteProduct = async (pgID) => {
+    // dispatch(deleteProduct(productId));
+    await deletePG(pgID);
   };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - products.length) : 0;
@@ -170,27 +205,6 @@ export default function EcommerceProductList() {
 
   const isProductNotFound = filteredProducts.length === 0;
 
-  useEffect(
-    () =>
-      firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          const docRef = firebase.firestore().collection('PGdetails').doc(user.uid);
-          docRef
-            .get()
-            .then((doc) => {
-              if (doc.exists) {
-                const data = doc.data();
-                console.log('data', data);
-                alert('data', data.add);
-              }
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        }
-      }),
-    []
-  );
   return (
     <Page title="PG-Finder: Dashboard | PG List">
       <Container maxWidth={themeStretch ? false : 'lg'}>
@@ -233,7 +247,7 @@ export default function EcommerceProductList() {
                 />
                 <TableBody>
                   {filteredProducts.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, cover, price, createdAt, inventoryType } = row;
+                    const { id, name, owner, add, cover, price, createdAt, status } = row;
 
                     const isItemSelected = selected.indexOf(name) !== -1;
 
@@ -257,7 +271,7 @@ export default function EcommerceProductList() {
                               alignItems: 'center'
                             }}
                           >
-                            <ThumbImgStyle alt={name} src={cover} />
+                            {/* <ThumbImgStyle alt={name} src={cover} /> */}
                             <Typography variant="subtitle2" noWrap>
                               {name}
                             </Typography>
@@ -272,21 +286,17 @@ export default function EcommerceProductList() {
                             }}
                           >
                             <Typography variant="subtitle2" noWrap>
-                              {name}
+                              {owner}
                             </Typography>
                           </Box>
                         </TableCell>
-                        <TableCell style={{ minWidth: 160 }}>{fDate(createdAt)}</TableCell>
+                        {/* <TableCell style={{ minWidth: 160 }}>{fDate(createdAt)}</TableCell> */}
                         <TableCell style={{ minWidth: 160 }}>
                           <Label
                             variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                            color={
-                              (inventoryType === 'out_of_stock' && 'error') ||
-                              (inventoryType === 'low_stock' && 'warning') ||
-                              'success'
-                            }
+                            color={status ? 'success' : 'error'}
                           >
-                            {sentenceCase(inventoryType)}
+                            {sentenceCase(status ? 'Available' : 'Filled')}
                           </Label>
                         </TableCell>
                         <TableCell style={{ minWidth: 160 }}>{fCurrency(price)}</TableCell>
@@ -299,7 +309,7 @@ export default function EcommerceProductList() {
                             }}
                           >
                             <Typography variant="subtitle2" noWrap>
-                              {name}
+                              {add}
                             </Typography>
                           </Box>
                         </TableCell>

@@ -109,15 +109,15 @@ export default function Router() {
             { path: 'account', element: <UserAccount /> }
           ]
         },
-        {
-          path: 'blog',
-          children: [
-            { element: <Navigate to="/dashboard/blog/posts" replace /> },
-            { path: 'posts', element: <BlogPosts /> },
-            { path: 'post/:title', element: <BlogPost /> },
-            { path: 'new-post', element: <BlogNewPost /> }
-          ]
-        },
+        // {
+        //   path: 'blog',
+        //   children: [
+        //     { element: <Navigate to="/dashboard/blog/posts" replace /> },
+        //     { path: 'posts', element: <BlogPosts /> },
+        //     { path: 'post/:title', element: <BlogPost /> },
+        //     { path: 'new-post', element: <BlogNewPost /> }
+        //   ]
+        // },
         {
           path: 'mail',
           children: [
@@ -148,11 +148,11 @@ export default function Router() {
       children: [
         { path: 'coming-soon', element: <ComingSoon /> },
         { path: 'maintenance', element: <Maintenance /> },
-        { path: 'pricing', element: <Pricing /> }
-        // { path: 'payment', element: <Payment /> },
-        // { path: '500', element: <Page500 /> },
-        // { path: '404', element: <NotFound /> },
-        // { path: '*', element: <Navigate to="/404" replace /> }
+        { path: 'pricing', element: <Pricing /> },
+        { path: 'payment', element: <Payment /> },
+        { path: '500', element: <Page500 /> },
+        { path: '404', element: <NotFound /> },
+        { path: '*', element: <Navigate to="/404" replace /> }
       ]
     },
     {
@@ -254,9 +254,9 @@ const EcommerceProductList = Loadable(lazy(() => import('../pages/dashboard/Ecom
 const EcommerceProductCreate = Loadable(lazy(() => import('../pages/dashboard/EcommerceProductCreate')));
 const EcommerceCheckout = Loadable(lazy(() => import('../pages/dashboard/EcommerceCheckout')));
 const EcommerceInvoice = Loadable(lazy(() => import('../pages/dashboard/EcommerceInvoice')));
-const BlogPosts = Loadable(lazy(() => import('../pages/dashboard/BlogPosts')));
-const BlogPost = Loadable(lazy(() => import('../pages/dashboard/BlogPost')));
-const BlogNewPost = Loadable(lazy(() => import('../pages/dashboard/BlogNewPost')));
+// const BlogPosts = Loadable(lazy(() => import('../pages/dashboard/BlogPosts')));
+// const BlogPost = Loadable(lazy(() => import('../pages/dashboard/BlogPost')));
+// const BlogNewPost = Loadable(lazy(() => import('../pages/dashboard/BlogNewPost')));
 const UserProfile = Loadable(lazy(() => import('../pages/dashboard/UserProfile')));
 const UserCards = Loadable(lazy(() => import('../pages/dashboard/UserCards')));
 const UserList = Loadable(lazy(() => import('../pages/dashboard/UserList')));

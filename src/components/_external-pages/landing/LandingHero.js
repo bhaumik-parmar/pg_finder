@@ -13,7 +13,7 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 //
 import { varFadeIn, varFadeInUp, varWrapEnter, varFadeInRight } from '../../animate';
 import 'firebase/compat/firestore';
-import db from '../../../config';
+import { db } from '../../../config';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(motion.div)(({ theme }) => ({

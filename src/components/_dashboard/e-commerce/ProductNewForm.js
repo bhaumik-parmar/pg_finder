@@ -2,6 +2,7 @@ import { React, useState, useCallback } from 'react';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useNavigate } from 'react-router-dom';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
@@ -25,6 +26,7 @@ import {
 // hook
 import useAuth from '../../../hooks/useAuth';
 // import fakeRequest from '../../../utils/fakeRequest';
+import { storage } from '../../../config';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 //
@@ -53,10 +55,6 @@ const AMENITIES_OPTION = [
 ];
 
 const ROOM_OPTION = ['Double Sharing', 'Triple Sharing', '3+ Sharing'];
-// { group: 'Clothing', classify: ['Shirts', 'T-shirts', 'Jeans', 'Leather'] },
-// { group: 'Tailored', classify: ['Suits', 'Blazers', 'Trousers', 'Waistcoats'] },
-// { group: 'Accessories', classify: ['Shoes', 'Backpacks and bags', 'Bracelets', 'Face masks'] }
-// ];
 
 const HOUSE_RULES_OPTION = [
   'Notice Period',
@@ -86,7 +84,7 @@ ProductNewForm.propTypes = {
 export default function ProductNewForm({ isEdit, currentProduct }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const { user, newPG } = useAuth();
+  const { user, newPG, pg } = useAuth();
   const [checked, setChecked] = useState('');
 
   const toggleChecked = () => {
@@ -109,20 +107,20 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      name: currentProduct?.name || '',
-      description: currentProduct?.description || '',
-      images: currentProduct?.images || [],
+      name: pg?.name || '',
+      description: pg?.description || '',
+      images: pg?.images || [],
       owner: user?.displayName || '',
-      add: currentProduct?.add || '',
-      price: currentProduct?.price || '',
-      // priceSale: currentProduct?.priceSale || '',
-      house_rules: currentProduct?.house_rules || [],
-      status: Boolean(currentProduct?.status !== 'Filled'),
+      add: pg?.add || '',
+      price: pg?.price || '',
+      // priceSale: pg?.priceSale || '',
+      house_rules: pg?.house_rules || [],
+      status: Boolean(pg?.status !== 'Filled'),
       // taxes: true,
-      gender: currentProduct?.gender || GENDER_OPTION[2],
-      rooms: currentProduct?.rooms || [],
-      food: currentProduct?.food || [],
-      amenities: currentProduct?.amenities || []
+      gender: pg?.gender || GENDER_OPTION[2],
+      rooms: pg?.rooms || [],
+      food: pg?.food || [],
+      amenities: pg?.amenities || []
     },
     validationSchema: NewProductSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
@@ -131,6 +129,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
         await newPG(
           values.name,
           values.description,
+          values.images,
           values.owner,
           values.add,
           values.price,
@@ -157,14 +156,26 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
-      setFieldValue(
-        'images',
-        acceptedFiles.map((file) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file)
-          })
-        )
-      );
+      const file = acceptedFiles[0];
+      if (file) {
+        const storageRef = ref(storage, `PGImages/${file.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+        uploadTask.on('state_changed', (error) => console.log(error));
+        const getStore = () => {
+          getDownloadURL(storageRef).then((downloadURL) => {
+            console.log('File available at', downloadURL);
+            setFieldValue(
+              'images',
+              acceptedFiles.map((file) =>
+                Object.assign(file, {
+                  preview: URL.createObjectURL(file)
+                })
+              )
+            );
+          });
+        };
+        getStore();
+      }
     },
     [setFieldValue]
   );

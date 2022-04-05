@@ -47,7 +47,8 @@ const AuthContext = createContext({
   loginWithFaceBook: () => Promise.resolve(),
   loginWithTwitter: () => Promise.resolve(),
   logout: () => Promise.resolve(),
-  newPG: () => Promise.resolve()
+  newPG: () => Promise.resolve(),
+  deletePG: () => Promise.resolve()
 });
 
 AuthProvider.propTypes = {
@@ -210,14 +211,14 @@ function AuthProvider({ children }) {
     });
   };
 
-  const paymentMethod = async (paymentMethod) => {
+  const paymentMethod = async (payment) => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         const paymentMethodRef = firebase.firestore().collection('Payment').doc();
         paymentMethodRef
           .set({
             uid: user.uid,
-            paymentMethod
+            payment
           })
           .then(() => {
             console.log('PG booking successful');
@@ -229,23 +230,19 @@ function AuthProvider({ children }) {
     });
   };
 
-  const payment = async (cardName, cardNumber, cardExpiredMonth, cardExpiredYear, cardCvv) => {
+  const payment = async (cardName, cardNumber, cardExpiredMonth, cardExpiredYear) => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         const cardExpiredDate = [cardExpiredMonth, cardExpiredYear].join('/');
         const paymentRef = firebase.firestore().collection('Payment').doc();
         paymentRef
-          .set(
-            {
-              uid: user.id,
-              paymentDate: firebase.firestore.FieldValue.serverTimestamp(),
-              cardName,
-              cardNumber,
-              cardExpiredDate,
-              cardCvv
-            },
-            { merge: true }
-          )
+          .set({
+            paymentDate: firebase.firestore.FieldValue.serverTimestamp(),
+            cardName,
+            cardNumber,
+            cardExpiredDate,
+            uid: user.uid
+          })
           .then(() => {
             console.log('Payment successful');
           })
@@ -256,15 +253,32 @@ function AuthProvider({ children }) {
     });
   };
 
-  const newPG = async (name, description, owner, add, price, houseRules, status, category, rooms, food, amenities) => {
+  const newPG = async (
+    name,
+    description,
+    images,
+    owner,
+    add,
+    price,
+    houseRules,
+    status,
+    category,
+    rooms,
+    food,
+    amenities
+  ) => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         const pgDetailsRef = firebase.firestore().collection('PGdetails').doc();
+        let image = [...images];
+        image = image.map((item) => (image[item] = { ...item }));
         pgDetailsRef
           .set({
             uid: user.uid,
+            publishDate: firebase.firestore.FieldValue.serverTimestamp(),
             name,
             description,
+            image,
             owner,
             add,
             price,
@@ -280,6 +294,24 @@ function AuthProvider({ children }) {
           })
           .catch((error) => {
             console.error('Error add PG: ', error);
+          });
+      }
+    });
+  };
+
+  const deletePG = async (name) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        firebase
+          .firestore()
+          .collection('PGdetails')
+          .where('name', '===', name)
+          .delete()
+          .then(() => {
+            console.log('successfully deleted! ');
+          })
+          .catch((error) => {
+            console.log('Error removing document:', error);
           });
       }
     });
@@ -337,7 +369,8 @@ function AuthProvider({ children }) {
         loginWithTwitter,
         logout,
         resetPassword,
-        newPG
+        newPG,
+        deletePG
       }}
     >
       {children}

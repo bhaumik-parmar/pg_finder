@@ -82,13 +82,7 @@ export default function PaymentNewCardForm({ onCancel }) {
       } else if (values.newCardExpiredYear <= year) {
         enqueueSnackbar('Invalid expire date', { variant: 'error' });
       } else {
-        await payment(
-          values.newCardName,
-          values.newCardNumber,
-          values.newCardExpiredMonth,
-          values.newCardExpiredYear,
-          values.newCardCvv
-        );
+        await payment(values.newCardName, values.newCardNumber, values.newCardExpiredMonth, values.newCardExpiredYear);
         enqueueSnackbar('Payment Successful', {
           variant: 'success',
           action: (key) => (

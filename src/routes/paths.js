@@ -72,14 +72,14 @@ export const PATH_DASHBOARD = {
     checkout: path(ROOTS_DASHBOARD, '/pg-finder/checkout'),
     payment: path(ROOTS_DASHBOARD, '/pg-finder/payment'),
     invoice: path(ROOTS_DASHBOARD, '/e-commerce/invoice')
-  },
-  blog: {
-    root: path(ROOTS_DASHBOARD, '/blog'),
-    posts: path(ROOTS_DASHBOARD, '/blog/posts'),
-    post: path(ROOTS_DASHBOARD, '/blog/post/:title'),
-    postById: path(ROOTS_DASHBOARD, '/blog/post/apply-these-7-secret-techniques-to-improve-event'),
-    newPost: path(ROOTS_DASHBOARD, '/blog/new-post')
   }
+  // blog: {
+  //   root: path(ROOTS_DASHBOARD, '/blog'),
+  //   posts: path(ROOTS_DASHBOARD, '/blog/posts'),
+  //   post: path(ROOTS_DASHBOARD, '/blog/post/:title'),
+  //   postById: path(ROOTS_DASHBOARD, '/blog/post/apply-these-7-secret-techniques-to-improve-event'),
+  //   newPost: path(ROOTS_DASHBOARD, '/blog/new-post')
+  // }
 };
 
 export const PATH_DOCS = 'https://docs-minimals.vercel.app/introduction';
