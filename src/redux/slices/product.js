@@ -1,8 +1,9 @@
 import { sum, map, filter, uniqBy, reject } from 'lodash';
 import { createSlice } from '@reduxjs/toolkit';
 // utils
+import firebase from 'firebase/compat/app';
 import axios from '../../utils/axios';
-
+import 'firebase/compat/firestore';
 // ----------------------------------------------------------------------
 
 const initialState = {
@@ -217,31 +218,80 @@ export const {
 
 // ----------------------------------------------------------------------
 
-export function getProducts() {
-  return async (dispatch) => {
-    dispatch(slice.actions.startLoading());
-    try {
-      const response = await axios.get('/api/products');
-      dispatch(slice.actions.getProductsSuccess(response.data.products));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
-    }
-  };
-}
+// export function getProducts() {
+//   return async (dispatch) => {
+//     dispatch(slice.actions.startLoading());
+//     try {
+//       const response = await axios.get('/api/products');
+//       dispatch(slice.actions.getProductsSuccess(response.data.products));
+//     } catch (error) {
+//       dispatch(slice.actions.hasError(error));
+//     }
+//   };
+// }
 
 // ----------------------------------------------------------------------
 
 export function getProduct(name) {
+  console.log('name', name);
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
-    try {
-      const response = await axios.get('/api/products/product', {
-        params: { name }
-      });
-      dispatch(slice.actions.getProductSuccess(response.data.product));
-    } catch (error) {
-      console.error(error);
-      dispatch(slice.actions.hasError(error));
-    }
+    firebase.auth().onAuthStateChanged((user) => {
+      // const key = `${name.split(' ').join('')}`;
+      // const temp1 = [];
+      if (user) {
+        const docRef = firebase.firestore().collection('PGdetails');
+        docRef
+          .doc(name)
+          .get()
+          .then((doc) => {
+            if (doc.exists) {
+              const data = doc.data();
+              console.log('temp1', data);
+              dispatch(slice.actions.getProductSuccess(data));
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+        // console.log('key :>> ', key);
+      }
+    });
+    console.log('name', name);
+  };
+}
+// return async (dispatch) => {
+//   dispatch(slice.actions.startLoading());
+//   try {
+//     const response = await axios.get('/api/products/product', {
+//       params: { name }
+//     });
+//     dispatch(slice.actions.getProductSuccess(response.data.product));
+//   } catch (error) {
+//     console.error(error);
+//     dispatch(slice.actions.hasError(error));
+//   }
+// };
+export function getProducts() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    firebase.auth().onAuthStateChanged((user) => {
+      const temp = [];
+      if (user) {
+        const docRef = firebase.firestore().collection('PGdetails');
+        docRef
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              console.log(doc.data());
+              temp.push(doc.data());
+            });
+            dispatch(slice.actions.getProductsSuccess(temp));
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    });
   };
 }

@@ -64,8 +64,21 @@ export default function ProductDetailsSumary() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const isMountedRef = useIsMountedRef();
   const { product, checkout } = useSelector((state) => state.product);
-  const { id, name, add, sizes, price, cover, status, colors, available, totalRating, totalReview, inventoryType } =
-    product;
+  const {
+    id,
+    name,
+    owner,
+    add,
+    sizes,
+    price,
+    cover,
+    status,
+    colors,
+    available,
+    totalRating,
+    totalReview,
+    inventoryType
+  } = product;
   const [openConfirm, setOpenConfirm] = useState(false);
   const [open, setOpen] = useState(false);
   const [roomType, setRoomType] = useState('');
@@ -109,7 +122,7 @@ export default function ProductDetailsSumary() {
       cover,
       available,
       price,
-      color: colors[0],
+      // color: colors[0],
       size: sizes[4],
       quantity: available < 1 ? 0 : 1
     },
@@ -160,7 +173,7 @@ export default function ProductDetailsSumary() {
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
               {/* ({fShortenNumber(totalReview)}
               &nbsp; reviews) */}
-              Bhaumik Parmar
+              {owner}
             </Typography>
           </Stack>
 
@@ -172,71 +185,6 @@ export default function ProductDetailsSumary() {
               month
             </Typography>
           </Stack>
-          <Divider sx={{ borderStyle: 'dashed' }} />
-
-          <Stack direction="row">
-            <Typography sx={{ mb: 2, mr: 5 }}>
-              AC Rooms <br />
-              <Typography variant="body2" sx={{ color: 'text.secondary', marginLeft: '10px' }}>
-                Available
-              </Typography>
-            </Typography>
-
-            <Typography sx={{ mb: 2, mr: 5 }}>
-              Food Availability <br />
-              <Typography variant="body2" sx={{ color: 'text.secondary', marginLeft: '45px' }}>
-                Veg
-              </Typography>
-            </Typography>
-
-            <Typography sx={{ mb: 2, mr: 5 }}>
-              Electricity Charges <br />
-              <Typography variant="body2" sx={{ color: 'text.secondary', marginLeft: '10px' }}>
-                Including In Rent
-              </Typography>
-            </Typography>
-
-            <Typography sx={{ mb: 1, mr: 5 }}>
-              Power Backup <br />
-              <Typography variant="body2" sx={{ color: 'text.secondary', marginLeft: '18px' }}>
-                Available
-              </Typography>
-            </Typography>
-          </Stack>
-
-          <Divider sx={{ borderStyle: 'dashed' }} />
-
-          <Stack direction="row">
-            <Typography sx={{ mb: 2, mr: 7 }}>
-              Parking <br />
-              <Typography variant="body2" sx={{ color: 'text.secondary', marginLeft: 'px' }}>
-                Available
-              </Typography>
-            </Typography>
-
-            <Typography sx={{ mb: 1, mr: 4 }}>
-              Preferred Tenants <br />
-              <Typography variant="body2" sx={{ color: 'text.secondary', marginLeft: '50px' }}>
-                All
-              </Typography>
-            </Typography>
-
-            <Typography sx={{ mb: 1, mr: 6 }}>
-              Total No. of Beds <br />
-              <Typography variant="body2" sx={{ color: 'text.secondary', marginLeft: '50px' }}>
-                110
-              </Typography>
-            </Typography>
-
-            <Typography sx={{ mb: 1, mr: 5 }}>
-              Operating Since <br />
-              <Typography variant="body2" sx={{ color: 'text.secondary', marginLeft: '40px' }}>
-                2018
-              </Typography>
-            </Typography>
-          </Stack>
-
-          <Divider sx={{ borderStyle: 'dashed' }} />
 
           <Stack direction="row">
             <Typography sx={{ mb: 3 }}>Address:&nbsp;&nbsp;</Typography>

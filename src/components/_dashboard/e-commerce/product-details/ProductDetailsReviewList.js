@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 import roundThumbUp from '@iconify/icons-ic/round-thumb-up';
 import roundVerified from '@iconify/icons-ic/round-verified';
 import checkmarkFill from '@iconify/icons-eva/checkmark-fill';
@@ -18,7 +20,31 @@ ReviewItem.propTypes = {
 
 function ReviewItem({ review }) {
   const [isHelpful, setHelpfuls] = useState(false);
+  const [reviews, setReviews] = useState([]);
   const { name, rating, comment, helpful, postedAt, avatarUrl, isPurchased } = review;
+
+  const getReviews = async () => {
+    firebase.auth().onAuthStateChanged((user) => {
+      const temp = [];
+      if (user) {
+        const docRef = firebase.firestore().collection('Feedback');
+        docRef
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              console.log(doc.data());
+              temp.push(doc.data());
+            });
+            setReviews(temp);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    });
+  };
+
+  useEffect(() => getReviews(), []);
 
   const handleClickHelpful = () => {
     setHelpfuls((prev) => !prev);
@@ -65,18 +91,18 @@ function ReviewItem({ review }) {
         </Box>
 
         <div>
-          <Rating size="small" value={rating} precision={0.1} readOnly />
+          {/* <Rating size="small" value={rating} precision={0.1} readOnly /> */}
 
-          {isPurchased && (
+          {/* {isPurchased && (
             <Typography variant="caption" sx={{ my: 1, display: 'flex', alignItems: 'center', color: 'primary.main' }}>
               <Icon icon={roundVerified} width={16} height={16} />
               &nbsp;Verified purchase
             </Typography>
-          )}
+          )} */}
 
           <Typography variant="body2">{comment}</Typography>
 
-          <Stack mt={1} direction="row" alignItems="center" flexWrap="wrap">
+          {/* <Stack mt={1} direction="row" alignItems="center" flexWrap="wrap">
             {!isHelpful && (
               <Typography variant="body2" sx={{ mr: 1 }}>
                 Was this review helpful to you?
@@ -91,7 +117,7 @@ function ReviewItem({ review }) {
             >
               {isHelpful ? 'Helpful' : 'Thank'}({fShortenNumber(!isHelpful ? helpful : helpful + 1)})
             </Button>
-          </Stack>
+          </Stack> */}
         </div>
       </ListItem>
     </>
@@ -112,9 +138,9 @@ export default function ProductDetailsReviewList({ product }) {
           <ReviewItem key={review.id} review={review} />
         ))}
       </List>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+      {/* <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Pagination count={10} color="primary" />
-      </Box>
+      </Box> */}
     </Box>
   );
 }

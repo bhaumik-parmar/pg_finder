@@ -36,7 +36,7 @@ export const FILTER_GENDER_OPTIONS = ['Boys', 'Girls', 'Both'];
 export const FILTER_ROOM_OPTIONS = ['Double Sharing', 'Triple Sharing', '3+ Sharing'];
 export const FILTER_FOOD_OPTIONS = ['Food Provided', ' Non Veg Allowed', 'Self Cooking Kitchen'];
 export const FILTER_AMENITIES_OPTIONS = ['Ac', 'Power Backup', 'Washing Machine', 'Wifi', 'Room Cleaning', 'Parking'];
-export const FILTER_RATING_OPTIONS = ['up4Star', 'up3Star', 'up2Star', 'up1Star'];
+// export const FILTER_RATING_OPTIONS = ['up4Star', 'up3Star', 'up2Star', 'up1Star'];
 export const FILTER_PRICE_OPTIONS = [
   { value: 'below', label: 'Below ₹7000' },
   { value: 'between', label: 'Between ₹7000 - ₹9000' },
@@ -226,7 +226,7 @@ export default function ShopFilterSidebar({ isOpenFilter, onResetFilter, onOpenF
                   </FormGroup>
                 </div> */}
 
-                <div>
+                {/* <div>
                   <Typography variant="subtitle1" gutterBottom>
                     Rating
                   </Typography>
@@ -258,7 +258,7 @@ export default function ShopFilterSidebar({ isOpenFilter, onResetFilter, onOpenF
                       />
                     ))}
                   </RadioGroup>
-                </div>
+                </div> */}
               </Stack>
             </Scrollbar>
 

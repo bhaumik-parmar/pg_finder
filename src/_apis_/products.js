@@ -63,7 +63,32 @@ const PG_ADD = [
 const PG_DESCRIPTION =
   ' A professionally managed PG home. A safe neighborhood, this PG offers various modern amenities for your comfort, such as AC, Power Backup, Wi-Fi etc. This PG has single, double, triple occupancy types. This PG is nearby major commercial and educational hubs. Please contact the seller to book this fast selling high in demand PG stay.';
 
-const PRODUCT_COLOR = ['#00AB55', '#000000', '#FFFFFF', '#FFC0CB', '#FF4842', '#1890FF', '#94D82D', '#FFC107'];
+const PG_OWNER = [
+  'Bhaumik Parmar',
+  'Bharat Singh Rao',
+  'Anu Labana',
+  'asshu',
+  'Sajjan Purohit',
+  'Yash bansal',
+  ' Bhargav',
+  ' Dhyey Pradhan',
+  'vikram',
+  ' Divy shah ',
+  'krishan kumar',
+  'parth',
+  'Rajesh ',
+  'sanjay patel',
+  'Karan',
+  'sanjay gondaliya ',
+  'Suresh Solanki',
+  'Jigar Karani ',
+  'Dhaval Modi ',
+  'Mukesh Parmar ',
+  ' Sunil Patel',
+  ' Krishan ',
+  'Bhaumik B. Shah',
+  ' Gaurav yadav'
+];
 
 const PRODUCT_TAGS = ['Dangal', 'The Sting', '2001: A Space Odyssey', "Singin' in the Rain"];
 
@@ -83,6 +108,7 @@ const products = [...Array(24)].map((_, index) => ({
   cover: mockData.image.product(index),
   images: [...Array(8)].map((_, index) => mockData.image.product(index)),
   name: PRODUCT_NAME[index],
+  owner: PG_OWNER[index],
   add: PG_ADD[index],
   code: `38BEE27${index}`,
   sku: `WW75K521${index}YW/SV`,
@@ -106,14 +132,14 @@ const products = [...Array(24)].map((_, index) => ({
     helpful: random(9999),
     postedAt: mockData.time(index)
   })),
-  colors:
-    (index === 1 && PRODUCT_COLOR.slice(0, 2)) ||
-    (index === 2 && PRODUCT_COLOR.slice(1, 3)) ||
-    (index === 3 && PRODUCT_COLOR.slice(2, 4)) ||
-    (index === 4 && PRODUCT_COLOR.slice(3, 6)) ||
-    (index === 23 && PRODUCT_COLOR.slice(4, 6)) ||
-    (index === 24 && PRODUCT_COLOR.slice(5, 6)) ||
-    PRODUCT_COLOR,
+  // colors:
+  //   (index === 1 && PRODUCT_COLOR.slice(0, 2)) ||
+  //   (index === 2 && PRODUCT_COLOR.slice(1, 3)) ||
+  //   (index === 3 && PRODUCT_COLOR.slice(2, 4)) ||
+  //   (index === 4 && PRODUCT_COLOR.slice(3, 6)) ||
+  //   (index === 23 && PRODUCT_COLOR.slice(4, 6)) ||
+  //   (index === 24 && PRODUCT_COLOR.slice(5, 6)) ||
+  //   PRODUCT_COLOR,
   status: index % 3 ? sample(['boys', 'boys', 'boys', 'boys&girls']) : 'girls',
   inventoryType: sample(['Available', 'Available']),
   sizes: PRODUCT_SIZE,

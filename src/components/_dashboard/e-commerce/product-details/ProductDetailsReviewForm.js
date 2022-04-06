@@ -6,9 +6,7 @@ import { useSnackbar } from 'notistack';
 import { styled } from '@mui/material/styles';
 import { Button, Rating, TextField, Typography, FormHelperText, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-// utils
-import fakeRequest from '../../../../utils/fakeRequest';
-import { db } from '../../../../config';
+import useAuth from '../../../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 
@@ -27,7 +25,7 @@ ProductDetailsReviewForm.propTypes = {
 
 export default function ProductDetailsReviewForm({ onClose, ...other }) {
   const { enqueueSnackbar } = useSnackbar();
-
+  const { user, feedback } = useAuth();
   const ReviewSchema = Yup.object().shape({
     rating: Yup.mixed().required('Rating is required'),
     review: Yup.string().required('Review is required'),
@@ -39,23 +37,18 @@ export default function ProductDetailsReviewForm({ onClose, ...other }) {
     initialValues: {
       rating: null,
       review: '',
-      name: '',
-      email: ''
+      name: user.displayName,
+      email: user.email
     },
     validationSchema: ReviewSchema,
     onSubmit: async (values, { resetForm, setSubmitting }) => {
-      await fakeRequest(500);
+      // await fakeRequest(500);
       // alert(JSON.stringify(values, null, 2));
       onClose();
       resetForm();
       setSubmitting(false);
-      db.collection('Feedback').add({
-        rating: values.rating,
-        review: values.review,
-        name: values.name,
-        email: values.email
-      });
-      enqueueSnackbar('Verify success', { variant: 'success' });
+      await feedback(values.rating, values.review, values.name, values.email);
+      enqueueSnackbar('Feedback submitted successful', { variant: 'success' });
     }
   });
 

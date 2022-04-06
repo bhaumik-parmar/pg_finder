@@ -43,6 +43,7 @@ const AuthContext = createContext({
   bookPG: () => Promise.resolve(),
   paymentMethod: () => Promise.resolve(),
   payment: () => Promise.resolve(),
+  feedback: () => Promise.resolve(),
   loginWithGoogle: () => Promise.resolve(),
   loginWithFaceBook: () => Promise.resolve(),
   loginWithTwitter: () => Promise.resolve(),
@@ -253,6 +254,29 @@ function AuthProvider({ children }) {
     });
   };
 
+  const feedback = async (rating, review, name, email) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        const paymentRef = firebase.firestore().collection('Feedback').doc();
+        paymentRef
+          .set({
+            feedbackDate: firebase.firestore.FieldValue.serverTimestamp(),
+            rating,
+            review,
+            name,
+            email,
+            uid: user.uid
+          })
+          .then(() => {
+            console.log('Feedback give successful');
+          })
+          .catch((error) => {
+            console.error('Error give feedback: ', error);
+          });
+      }
+    });
+  };
+
   const newPG = async (
     name,
     description,
@@ -269,7 +293,8 @@ function AuthProvider({ children }) {
   ) => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        const pgDetailsRef = firebase.firestore().collection('PGdetails').doc();
+        const key = `${name.split(' ').join('')}`;
+        const pgDetailsRef = firebase.firestore().collection('PGdetails').doc(key);
         let image = [...images];
         image = image.map((item) => (image[item] = { ...item }));
         pgDetailsRef
@@ -301,11 +326,12 @@ function AuthProvider({ children }) {
 
   const deletePG = async (name) => {
     firebase.auth().onAuthStateChanged((user) => {
+      const key = `${name.split(' ').join('')}`;
       if (user) {
         firebase
           .firestore()
           .collection('PGdetails')
-          .where('name', '===', name)
+          .doc(key)
           .delete()
           .then(() => {
             console.log('successfully deleted! ');
@@ -347,7 +373,7 @@ function AuthProvider({ children }) {
           name: currentProduct?.name || '',
           description: currentProduct?.description || '',
           images: currentProduct?.images || [],
-          owner: auth?.displayName || '',
+          owner: currentProduct?.displayName || '',
           add: currentProduct?.add || '',
           price: currentProduct?.price || '',
           house_rules: currentProduct?.house_rules || [],
@@ -364,6 +390,7 @@ function AuthProvider({ children }) {
         bookPG,
         paymentMethod,
         payment,
+        feedback,
         loginWithGoogle,
         loginWithFaceBook,
         loginWithTwitter,

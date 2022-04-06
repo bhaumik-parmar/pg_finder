@@ -85,7 +85,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { user, newPG, pg } = useAuth();
-  const [checked, setChecked] = useState('');
+  const [checked, setChecked] = useState(false);
 
   const toggleChecked = () => {
     setChecked((prev) => !prev);
@@ -98,7 +98,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     rooms: Yup.array().min(1, 'Room type is required'),
     amenities: Yup.array().min(1, 'Amenity is required'),
     owner: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Owner name is required'),
-    add: Yup.string().min(20, 'Too Short!').max(100, 'Too Long!').required('Address is required'),
+    add: Yup.string().min(15, 'Too Short!').max(100, 'Too Long!').required('Address is required'),
     food: Yup.array().min(1, 'Food amenity is required'),
     house_rules: Yup.array().min(1, 'House Rule is required'),
     price: Yup.number().required('Price is required')
@@ -110,12 +110,12 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
       name: pg?.name || '',
       description: pg?.description || '',
       images: pg?.images || [],
-      owner: user?.displayName || '',
+      owner: pg?.displayName || '',
       add: pg?.add || '',
       price: pg?.price || '',
       // priceSale: pg?.priceSale || '',
       house_rules: pg?.house_rules || [],
-      status: Boolean(pg?.status !== 'Filled'),
+      status: false,
       // taxes: true,
       gender: pg?.gender || GENDER_OPTION[2],
       rooms: pg?.rooms || [],
@@ -141,6 +141,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
           values.amenities
         );
         resetForm();
+        console.log('values.status', values.status);
         setSubmitting(false);
         enqueueSnackbar(!isEdit ? 'Add PG successful' : 'Update PG successful', { variant: 'success' });
         navigate(PATH_DASHBOARD.eCommerce.list);
@@ -168,7 +169,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
               'images',
               acceptedFiles.map((file) =>
                 Object.assign(file, {
-                  preview: URL.createObjectURL(file)
+                  preview: downloadURL
                 })
               )
             );
@@ -288,8 +289,8 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
             <Stack spacing={3}>
               <Card sx={{ p: 3 }}>
                 <FormControlLabel
-                  control={<Switch {...getFieldProps('status')} checked={checked} onChange={toggleChecked} />}
-                  label={`${checked ? 'Available' : 'Filled'}`}
+                  control={<Switch {...getFieldProps('status')} checked={values.status} />}
+                  label={`${values.status ? 'Available' : 'Filled'}`}
                   sx={{ mb: 2 }}
                 />
 

@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import { Link as ScrollLink } from 'react-scroll';
 import edit2Fill from '@iconify/icons-eva/edit-2-fill';
+import { useEffect, useState } from 'react';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 // material
 import { styled } from '@mui/material/styles';
 import { Grid, Rating, Button, Typography, LinearProgress, Stack } from '@mui/material';
@@ -64,6 +67,30 @@ ProductDetailsReviewOverview.propTypes = {
 
 export default function ProductDetailsReviewOverview({ product, onOpen }) {
   const { totalRating, totalReview, ratings } = product;
+  const { review, setReview } = useState();
+
+  const getReviews = async () => {
+    firebase.auth().onAuthStateChanged((user) => {
+      const temp = [];
+      if (user) {
+        const docRef = firebase.firestore().collection('Feedback').doc(user.uid);
+        docRef
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              console.log(doc.data());
+              temp.push(doc.data());
+            });
+            setReview(temp);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    });
+  };
+
+  useEffect(() => getReviews(), []);
 
   const total = sumBy(ratings, (star) => star.starCount);
 

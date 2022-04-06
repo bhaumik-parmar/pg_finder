@@ -127,11 +127,11 @@ export default function EcommerceProductDetails() {
             </Card>
 
             {/* Room Type */}
-            <Card style={{ marginTop: '1vw' }}>
+            {/* <Card style={{ marginTop: '1vw' }}>
               <Grid container>
                 <RoomType />
               </Grid>
-            </Card>
+            </Card> */}
 
             {/* Amenities */}
             <Card style={{ marginTop: '1vw' }}>

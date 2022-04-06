@@ -30,17 +30,19 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
-  const { name, cover, add, price, colors, status, priceSale } = product;
-  const linkTo = `${PATH_DASHBOARD.eCommerce.root}/pg/${paramCase(name)}`;
+  const { name, image, add, price, status, category } = product;
+  const key = name.split(' ').join('');
+  // const linkTo = `${PATH_DASHBOARD.eCommerce.root}/pg/${paramCase(name)}`;
+  const linkTo = `${PATH_DASHBOARD.eCommerce.root}/pg/${key}`;
 
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
-        {status && (
+        {category && (
           <Label
             variant="filled"
             // eslint-disable-next-line prettier/prettier
-            color={(status === 'girls' && 'error') || (status === 'boys&girls' && 'warning') || 'info'}
+            color={(category === 'Girls' && 'error') || (category === 'Both' && 'warning') || 'info'}
             sx={{
               top: 16,
               right: 16,
@@ -49,10 +51,22 @@ export default function ShopProductCard({ product }) {
               textTransform: 'uppercase'
             }}
           >
-            {status}
+            {/* <Label
+            variant="filled"
+            // eslint-disable-next-line prettier/prettier
+            color={status ? 'info': 'error'}
+            sx={{
+              top: 16,
+              right: 16,
+              zIndex: 9,
+              position: 'absolute',
+              textTransform: 'uppercase'
+            }}
+          > */}
+            {category}
           </Label>
         )}
-        <ProductImgStyle alt={name} src={cover} />
+        <ProductImgStyle alt={name} src={image[0].preview} />
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
@@ -66,10 +80,17 @@ export default function ShopProductCard({ product }) {
           <Label
             variant="outlined"
             // eslint-disable-next-line prettier/prettier
-            color='success'
+            color={status ? 'success' : 'error'}
+          >
+            {status ? 'Available' : 'filled'}
+          </Label>
+          {/* <Label
+            variant="outlined"
+            // eslint-disable-next-line prettier/prettier
+            color="success"
           >
             Available
-          </Label>
+          </Label> */}
           <Typography variant="subtitle1">
             <Typography
               component="span"

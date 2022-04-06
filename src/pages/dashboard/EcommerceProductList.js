@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react';
 import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // material
 import { useTheme, styled } from '@mui/material/styles';
 import {
@@ -103,7 +103,8 @@ function applySortFilter(array, comparator, query) {
 export default function EcommerceProductList() {
   const { themeStretch } = useSettings();
   const theme = useTheme();
-  const { user, deletePG } = useAuth();
+  const { deletePG } = useAuth();
+  const navigate = useNavigate();
   // const dispatch = useDispatch();
   const [products, setProducts] = useState([]);
   // const { products } = useSelector((state) => state.product);
@@ -194,9 +195,10 @@ export default function EcommerceProductList() {
     setFilterName(event.target.value);
   };
 
-  const handleDeleteProduct = async (pgID) => {
+  const handleDeleteProduct = async (name) => {
     // dispatch(deleteProduct(productId));
-    await deletePG(pgID);
+    await deletePG(name);
+    navigate('/dashboard/pg-finder/list');
   };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - products.length) : 0;
@@ -315,7 +317,7 @@ export default function EcommerceProductList() {
                         </TableCell>
 
                         <TableCell align="right">
-                          <ProductMoreMenu onDelete={() => handleDeleteProduct(id)} productName={name} />
+                          <ProductMoreMenu onDelete={() => handleDeleteProduct(name)} productName={name} />
                         </TableCell>
                       </TableRow>
                     );
