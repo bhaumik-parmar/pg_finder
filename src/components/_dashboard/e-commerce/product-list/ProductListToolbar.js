@@ -74,11 +74,12 @@ export default function ProductListToolbar({ numSelected, filterName, onFilterNa
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <Icon icon={roundFilterList} />
-          </IconButton>
-        </Tooltip>
+        ''
+        // <Tooltip title="Filter list">
+        //   <IconButton>
+        //     <Icon icon={roundFilterList} />
+        //   </IconButton>
+        // </Tooltip>
       )}
     </RootStyle>
   );

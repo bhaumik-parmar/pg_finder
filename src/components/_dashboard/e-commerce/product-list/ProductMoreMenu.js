@@ -67,7 +67,7 @@ export default function ProductMoreMenu({ onDelete, productName }) {
             aria-describedby="alert-dialog-description"
           >
             <DialogContent>
-              <DialogContentText id="alert-dialog-description">Are you sure you want to logout?</DialogContentText>
+              <DialogContentText id="alert-dialog-description">Are you sure you want to delete PG?</DialogContentText>
             </DialogContent>
             <DialogActions>
               <Button onClick={onDelete} autoFocus color="error" variant="contained">

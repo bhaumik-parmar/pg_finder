@@ -105,9 +105,9 @@ export default function EcommerceProductList() {
   const theme = useTheme();
   const { deletePG } = useAuth();
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
-  const [products, setProducts] = useState([]);
-  // const { products } = useSelector((state) => state.product);
+  const dispatch = useDispatch();
+  // const [products, setProducts] = useState([]);
+  const { products } = useSelector((state) => state.product);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -115,42 +115,9 @@ export default function EcommerceProductList() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [orderBy, setOrderBy] = useState('createdAt');
 
-  // const getPGs = async () => {
-  //   const docRef = await firebase.firestore().collection('Registration').doc(user.uid);
-  //   docRef
-  //     .get()
-  //     .then((doc) => {
-  //       if (doc.exists) {
-  //         const data = doc.data();
-  //         console.log('data :>> ', data);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // };
-  const getPGs = async () => {
-    firebase.auth().onAuthStateChanged((user) => {
-      const temp = [];
-      if (user) {
-        const docRef = firebase.firestore().collection('PGdetails');
-        docRef
-          .get()
-          .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              console.log(doc.data());
-              temp.push(doc.data());
-            });
-            setProducts(temp);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-    });
-  };
-
-  useEffect(() => getPGs(), []);
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -161,6 +128,7 @@ export default function EcommerceProductList() {
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = products.map((n) => n.name);
+      console.log('newSelected', newSelecteds);
       setSelected(newSelecteds);
       return;
     }
@@ -179,7 +147,9 @@ export default function EcommerceProductList() {
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
     }
+
     setSelected(newSelected);
+    console.log('newSelected', newSelected);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -193,11 +163,12 @@ export default function EcommerceProductList() {
 
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
+    console.log('event', event.target.value);
   };
 
   const handleDeleteProduct = async (name) => {
-    // dispatch(deleteProduct(productId));
-    await deletePG(name);
+    dispatch(deleteProduct(name));
+    // await deletePG(name);
     navigate('/dashboard/pg-finder/list');
   };
 
@@ -233,7 +204,12 @@ export default function EcommerceProductList() {
         />
 
         <Card style={{ width: '1300px' }}>
-          <ProductListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+          <ProductListToolbar
+            numSelected={selected.length}
+            filterName={filterName}
+            onFilterName={handleFilterByName}
+            deletePG={handleDeleteProduct}
+          />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -249,7 +225,7 @@ export default function EcommerceProductList() {
                 />
                 <TableBody>
                   {filteredProducts.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, owner, add, cover, price, createdAt, status } = row;
+                    const { id, name, owner, add, cover, price, createdAt, publishDate, status } = row;
 
                     const isItemSelected = selected.indexOf(name) !== -1;
 
@@ -262,9 +238,9 @@ export default function EcommerceProductList() {
                         selected={isItemSelected}
                         aria-checked={isItemSelected}
                       >
-                        <TableCell padding="checkbox">
+                        {/* <TableCell padding="checkbox">
                           <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
-                        </TableCell>
+                        </TableCell> */}
                         <TableCell style={{ minWidth: 160 }}>
                           <Box
                             sx={{
@@ -293,6 +269,7 @@ export default function EcommerceProductList() {
                           </Box>
                         </TableCell>
                         {/* <TableCell style={{ minWidth: 160 }}>{fDate(createdAt)}</TableCell> */}
+                        {/* <TableCell style={{ minWidth: 160 }}>{publishDate}</TableCell> */}
                         <TableCell style={{ minWidth: 160 }}>
                           <Label
                             variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}

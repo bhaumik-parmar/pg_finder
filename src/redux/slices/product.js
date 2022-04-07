@@ -206,7 +206,7 @@ export const {
   onBackStep,
   onNextStep,
   deleteCart,
-  deleteProduct,
+  // deleteProduct,
   createBilling,
   applyShipping,
   applyDiscount,
@@ -290,6 +290,28 @@ export function getProducts() {
           })
           .catch((error) => {
             console.error(error);
+          });
+      }
+    });
+  };
+}
+
+export function deleteProduct(name) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    firebase.auth().onAuthStateChanged((user) => {
+      const key = `${name.split(' ').join('')}`;
+      if (user) {
+        firebase
+          .firestore()
+          .collection('PGdetails')
+          .doc(key)
+          .delete()
+          .then(() => {
+            console.log('successfully deleted! ');
+          })
+          .catch((error) => {
+            console.log('Error removing document:', error);
           });
       }
     });

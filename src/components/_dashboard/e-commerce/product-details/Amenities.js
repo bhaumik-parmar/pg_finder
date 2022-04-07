@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react';
 // material
 import { styled } from '@mui/material/styles';
 import { Stack, Typography } from '@mui/material';
+import { useSelector } from '../../../../redux/store';
 
 // ----------------------------------------------------------------------
 
@@ -16,6 +17,8 @@ const RootStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function ProductDetailsSumary() {
+  const { product } = useSelector((state) => state.product);
+  const { amenities } = product;
   return (
     <RootStyle>
       <Typography variant="h5" style={{ 'text-decoration': 'underline' }}>

@@ -28,9 +28,6 @@ import MainFooter from '../../layouts/main/MainFooter';
 
 function applyFilter(products, sortBy, filters) {
   // SORT BY
-  if (sortBy === 'featured') {
-    products = orderBy(products, ['sold'], ['desc']);
-  }
   if (sortBy === 'newest') {
     products = orderBy(products, ['createdAt'], ['desc']);
   }
@@ -67,17 +64,17 @@ function applyFilter(products, sortBy, filters) {
       return _product.price > 9000;
     });
   }
-  if (filters.rating) {
-    products = filter(products, (_product) => {
-      const convertRating = (value) => {
-        if (value === 'up4Star') return 4;
-        if (value === 'up3Star') return 3;
-        if (value === 'up2Star') return 2;
-        return 1;
-      };
-      return _product.totalRating > convertRating(filters.rating);
-    });
-  }
+  // if (filters.rating) {
+  //   products = filter(products, (_product) => {
+  //     const convertRating = (value) => {
+  //       if (value === 'up4Star') return 4;
+  //       if (value === 'up3Star') return 3;
+  //       if (value === 'up2Star') return 2;
+  //       return 1;
+  //     };
+  //     return _product.totalRating > convertRating(filters.rating);
+  //   });
+  // }
   return products;
 }
 

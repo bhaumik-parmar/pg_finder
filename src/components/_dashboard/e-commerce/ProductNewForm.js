@@ -84,7 +84,7 @@ ProductNewForm.propTypes = {
 export default function ProductNewForm({ isEdit, currentProduct }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const { user, newPG, pg } = useAuth();
+  const { newPG } = useAuth();
   const [checked, setChecked] = useState(false);
 
   const toggleChecked = () => {
@@ -107,20 +107,20 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      name: pg?.name || '',
-      description: pg?.description || '',
-      images: pg?.images || [],
-      owner: pg?.displayName || '',
-      add: pg?.add || '',
-      price: pg?.price || '',
+      name: currentProduct?.name || '',
+      description: currentProduct?.description || '',
+      images: currentProduct?.image || [],
+      owner: currentProduct?.owner || '',
+      add: currentProduct?.add || '',
+      price: currentProduct?.price || '',
       // priceSale: pg?.priceSale || '',
-      house_rules: pg?.house_rules || [],
-      status: false,
+      house_rules: currentProduct?.houseRules || [],
+      status: currentProduct?.status || false,
       // taxes: true,
-      gender: pg?.gender || GENDER_OPTION[2],
-      rooms: pg?.rooms || [],
-      food: pg?.food || [],
-      amenities: pg?.amenities || []
+      gender: currentProduct?.gender || GENDER_OPTION[2],
+      rooms: currentProduct?.rooms || [],
+      food: currentProduct?.food || [],
+      amenities: currentProduct?.amenities || []
     },
     validationSchema: NewProductSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {

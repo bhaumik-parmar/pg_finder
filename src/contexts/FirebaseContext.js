@@ -36,6 +36,7 @@ const reducer = (state, action) => {
 const AuthContext = createContext({
   ...initialState,
   method: 'firebase',
+  roleFetch: () => Promise.resolve(),
   login: () => Promise.resolve(),
   register: () => Promise.resolve(),
   updateProfile: () => Promise.resolve(),
@@ -90,6 +91,29 @@ function AuthProvider({ children }) {
     []
   );
 
+  const roleFetch = async (email, role) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      const key = `${email}${role ?? ''}`;
+      // const temp1 = [];
+      if (user) {
+        const docRef = firebase.firestore().collection('Registration');
+        docRef
+          .doc(key)
+          .get()
+          .then((doc) => {
+            if (doc.exists) {
+              const data = doc.data();
+              console.log('temp1', data);
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+        // console.log('key :>> ', key);
+      }
+    });
+  };
+
   const login = (email, password) => firebase.auth().signInWithEmailAndPassword(email, password);
 
   const loginWithGoogle = () => {
@@ -115,7 +139,7 @@ function AuthProvider({ children }) {
         firebase
           .firestore()
           .collection('Registration')
-          .doc(res.user.uid)
+          .doc(`${email}customer`)
           .set({
             uid: res.user.uid,
             firstName,
@@ -123,7 +147,8 @@ function AuthProvider({ children }) {
             email,
             phone,
             password,
-            displayName: `${firstName} ${lastName}`
+            displayName: `${firstName} ${lastName}`,
+            role: 'customer'
           });
       });
 
@@ -324,26 +349,25 @@ function AuthProvider({ children }) {
     });
   };
 
-  const deletePG = async (name) => {
-    firebase.auth().onAuthStateChanged((user) => {
-      const key = `${name.split(' ').join('')}`;
-      if (user) {
-        firebase
-          .firestore()
-          .collection('PGdetails')
-          .doc(key)
-          .delete()
-          .then(() => {
-            console.log('successfully deleted! ');
-          })
-          .catch((error) => {
-            console.log('Error removing document:', error);
-          });
-      }
-    });
-  };
+  // const deletePG = async (name) => {
+  //   firebase.auth().onAuthStateChanged((user) => {
+  //     const key = `${name.split(' ').join('')}`;
+  //     if (user) {
+  //       firebase
+  //         .firestore()
+  //         .collection('PGdetails')
+  //         .doc(key)
+  //         .delete()
+  //         .then(() => {
+  //           console.log('successfully deleted! ');
+  //         })
+  //         .catch((error) => {
+  //           console.log('Error removing document:', error);
+  //         });
+  //     }
+  //   });
+  // };
   const auth = { ...state.user };
-  const currentProduct = { ...state.pg };
 
   return (
     <AuthContext.Provider
@@ -368,21 +392,7 @@ function AuthProvider({ children }) {
           about: profile?.about || '',
           isPublic: profile?.isPublic || false
         },
-        pg: {
-          id: auth.uid,
-          name: currentProduct?.name || '',
-          description: currentProduct?.description || '',
-          images: currentProduct?.images || [],
-          owner: currentProduct?.displayName || '',
-          add: currentProduct?.add || '',
-          price: currentProduct?.price || '',
-          house_rules: currentProduct?.house_rules || [],
-          status: Boolean(currentProduct?.status !== 'Filled'),
-          gender: currentProduct?.gender || [],
-          rooms: currentProduct?.rooms || [],
-          food: currentProduct?.food || [],
-          amenities: currentProduct?.amenities || []
-        },
+        roleFetch,
         login,
         register,
         updateProfile,
@@ -396,8 +406,8 @@ function AuthProvider({ children }) {
         loginWithTwitter,
         logout,
         resetPassword,
-        newPG,
-        deletePG
+        newPG
+        // deletePG
       }}
     >
       {children}

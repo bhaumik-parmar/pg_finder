@@ -7,31 +7,34 @@ import { fCurrency } from '../../../../utils/formatNumber';
 
 export default function RoomType() {
   const { product } = useSelector((state) => state.product);
-  const { price } = product;
+  const { price, rooms } = product;
   const roomInfoArray = [
     {
-      RoomName: 'Double Sharing',
-      Price: fCurrency(price + 1000),
-      RoomAvailable: '7'
+      RoomName: rooms[0],
+      Price: price + 1000,
+      RoomAvailable: '5'
     },
     {
-      RoomName: 'Triple Sharing',
-      Price: fCurrency(price + 500),
+      RoomName: rooms[1],
+      Price: price + 500,
       RoomAvailable: '4'
     },
     {
-      RoomName: '3+ Sharing',
-      Price: fCurrency(price),
-      RoomAvailable: '5'
+      RoomName: rooms[2],
+      Price: price,
+      RoomAvailable: '7'
     }
   ];
   return (
     <Grid container direction="row" spacing={1} justifyContent="space-around">
-      {roomInfoArray.map(({ RoomName, Price, RoomAvailable }, count) => (
-        <Grid item key={count} lg={2}>
-          <RoomInfo room={RoomName} price={Price} roomAvailable={RoomAvailable} key={count} />
-        </Grid>
-      ))}
+      {roomInfoArray.map(
+        ({ RoomName, Price, RoomAvailable }, count) =>
+          RoomName && (
+            <Grid item key={count} lg={2}>
+              <RoomInfo room={RoomName} price={Price} roomAvailable={RoomAvailable} key={count} />
+            </Grid>
+          )
+      )}
     </Grid>
   );
 }

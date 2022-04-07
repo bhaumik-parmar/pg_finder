@@ -69,15 +69,16 @@ export default function ProductDetailsSumary() {
     name,
     owner,
     add,
-    sizes,
+    // sizes,
     price,
     cover,
     status,
-    colors,
-    available,
+    category,
+    // colors,
+    // available,
     totalRating,
-    totalReview,
-    inventoryType
+    totalReview
+    // status
   } = product;
   const [openConfirm, setOpenConfirm] = useState(false);
   const [open, setOpen] = useState(false);
@@ -114,24 +115,24 @@ export default function ProductDetailsSumary() {
   //   dispatch(onGotoStep(0));
   // };
 
-  const formik = useFormik({
-    enableReinitialize: true,
-    initialValues: {
-      id,
-      name,
-      cover,
-      available,
-      price,
-      // color: colors[0],
-      size: sizes[4],
-      quantity: available < 1 ? 0 : 1
-    },
-    onSubmit: () => {
-      navigate(PATH_DASHBOARD.eCommerce.checkout);
-    }
-  });
+  // const formik = useFormik({
+  //   enableReinitialize: true,
+  //   // initialValues: {
+  //   //   id,
+  //   //   name,
+  //   //   cover,
+  //   //   // available,
+  //   //   price
+  //   //   // color: colors[0],
+  //   //   // size: sizes[4],
+  //   //   // quantity: available < 1 ? 0 : 1
+  //   // },
+  //   onSubmit: () => {
+  //     navigate(PATH_DASHBOARD.eCommerce.checkout);
+  //   }
+  // });
 
-  const { values, touched, errors, getFieldProps, handleSubmit } = formik;
+  // const { values, touched, errors, getFieldProps, handleSubmit } = formik;
 
   // const handleAddCart = () => {
   //   onAddCart({
@@ -142,83 +143,80 @@ export default function ProductDetailsSumary() {
 
   return (
     <RootStyle>
-      <FormikProvider value={formik}>
-        <Form autoComplete="off" noValidate>
-          <Label
-            variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-            color={inventoryType === 'Available' ? 'success' : 'error'}
-            sx={{ textTransform: 'uppercase' }}
-          >
-            {sentenceCase(inventoryType)}
-          </Label>
-          <Typography
-            variant="overline"
-            sx={{
-              mt: 2,
-              mb: 1,
-              display: 'block',
-              color: status === 'sale' ? 'error.main' : 'info.main'
-            }}
-          >
-            {status}
-          </Typography>
+      {/* <FormikProvider value={formik}> */}
+      {/* <Form autoComplete="off" noValidate> */}
+      <Label variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'} color={status ? 'success' : 'error'}>
+        {sentenceCase(status ? 'Available' : 'Filled')}
+      </Label>
+      <Typography>
+        <Label
+          variant="filled"
+          color={(category === 'Girls' && 'error') || (category === 'Both' && 'warning') || 'info'}
+          sx={{
+            mt: 2,
+            mb: 1
+          }}
+        >
+          {sentenceCase(category)}
+        </Label>
+      </Typography>
 
-          <Typography variant="h5" paragraph>
-            {name}
-          </Typography>
+      <Typography variant="h5" paragraph>
+        {name}
+      </Typography>
 
-          <Stack spacing={0.5} direction="row" alignItems="center" sx={{ mb: 2 }}>
-            {/* <Rating value={totalRating} precision={0.1} readOnly /> */}
-            Owner:&nbsp;
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {/* ({fShortenNumber(totalReview)}
+      <Stack spacing={0.5} direction="row" alignItems="center" sx={{ mb: 2 }}>
+        {/* <Rating value={totalRating} precision={0.1} readOnly /> */}
+        Owner:&nbsp;
+        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+          {/* ({fShortenNumber(totalReview)}
               &nbsp; reviews) */}
-              {owner}
-            </Typography>
-          </Stack>
+          {owner}
+        </Typography>
+      </Stack>
 
-          <Stack direction="row">
-            <Typography variant="h4" sx={{ mb: 3 }}>
-              ₹&nbsp;{fCurrency(price)}/
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'text.secondary', paddingTop: '6px' }}>
-              month
-            </Typography>
-          </Stack>
+      <Stack direction="row">
+        <Typography variant="h4" sx={{ mb: 3 }}>
+          ₹&nbsp;{fCurrency(price)}/
+        </Typography>
+        <Typography variant="body2" sx={{ color: 'text.secondary', paddingTop: '6px' }}>
+          month
+        </Typography>
+      </Stack>
 
-          <Stack direction="row">
-            <Typography sx={{ mb: 3 }}>Address:&nbsp;&nbsp;</Typography>
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {add}
-            </Typography>
-          </Stack>
+      <Stack direction="row">
+        <Typography sx={{ mb: 3 }}>Address:&nbsp;&nbsp;</Typography>
+        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+          {add}
+        </Typography>
+      </Stack>
 
-          <Divider sx={{ borderStyle: 'dashed' }} />
+      <Divider sx={{ borderStyle: 'dashed' }} />
 
-          <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 5 }}>
-            <Button
-              fullWidth
-              size="large"
-              variant="contained"
-              startIcon={<Icon icon={twotoneLibraryBooks} width={30} height={30} />}
-              onClick={() => {
-                navigate('/dashboard/pg-finder/checkout');
-                localStorage.setItem('PG Name', JSON.stringify({ name }));
-              }}
-            >
-              Book Now
-            </Button>
-          </Stack>
+      <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 5 }}>
+        <Button
+          fullWidth
+          size="large"
+          variant="contained"
+          startIcon={<Icon icon={twotoneLibraryBooks} width={30} height={30} />}
+          onClick={() => {
+            navigate('/dashboard/pg-finder/checkout');
+            localStorage.setItem('PG Name', JSON.stringify({ name }));
+          }}
+        >
+          Book Now
+        </Button>
+      </Stack>
 
-          {/* <Box sx={{ mt: 3, textAlign: 'center' }}>
+      {/* <Box sx={{ mt: 3, textAlign: 'center' }}>
             {SOCIALS.map((social) => (
               <Tooltip key={social.name} title={social.name}>
                 <MIconButton>{social.icon}</MIconButton>
               </Tooltip>
             ))}
           </Box> */}
-        </Form>
-      </FormikProvider>
+      {/* </Form> */}
+      {/* </FormikProvider> */}
     </RootStyle>
   );
 }
