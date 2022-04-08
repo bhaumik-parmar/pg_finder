@@ -91,28 +91,28 @@ function AuthProvider({ children }) {
     []
   );
 
-  const roleFetch = async (email, role) => {
-    firebase.auth().onAuthStateChanged((user) => {
-      const key = `${email}${role ?? ''}`;
-      // const temp1 = [];
-      if (user) {
-        const docRef = firebase.firestore().collection('Registration');
-        docRef
-          .doc(key)
-          .get()
-          .then((doc) => {
-            if (doc.exists) {
-              const data = doc.data();
-              console.log('temp1', data);
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-        // console.log('key :>> ', key);
-      }
-    });
-  };
+  // const roleFetch = async (email, role) => {
+  //   firebase.auth().onAuthStateChanged((user) => {
+  //     const key = `${email}${role ?? ''}`;
+  //     // const temp1 = [];
+  //     if (user) {
+  //       const docRef = firebase.firestore().collection('Registration');
+  //       docRef
+  //         .doc(key)
+  //         .get()
+  //         .then((doc) => {
+  //           if (doc.exists) {
+  //             const data = doc.data();
+  //             console.log('temp1', data);
+  //           }
+  //         })
+  //         .catch((error) => {
+  //           console.error(error);
+  //         });
+  //       // console.log('key :>> ', key);
+  //     }
+  //   });
+  // };
 
   const login = (email, password) => firebase.auth().signInWithEmailAndPassword(email, password);
 
@@ -139,7 +139,7 @@ function AuthProvider({ children }) {
         firebase
           .firestore()
           .collection('Registration')
-          .doc(`${email}customer`)
+          .doc(res.user.uid)
           .set({
             uid: res.user.uid,
             firstName,
@@ -392,7 +392,7 @@ function AuthProvider({ children }) {
           about: profile?.about || '',
           isPublic: profile?.isPublic || false
         },
-        roleFetch,
+        // roleFetch,
         login,
         register,
         updateProfile,

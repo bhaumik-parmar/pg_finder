@@ -32,7 +32,7 @@ export const SORT_BY_OPTIONS = [
   { value: 'priceDesc', label: 'Price: High-Low' },
   { value: 'priceAsc', label: 'Price: Low-High' }
 ];
-export const FILTER_GENDER_OPTIONS = ['Boys', 'Girls', 'Both'];
+export const FILTER_GENDER_OPTIONS = ['Boys', 'Girls'];
 export const FILTER_ROOM_OPTIONS = ['Double Sharing', 'Triple Sharing', '3+ Sharing'];
 export const FILTER_FOOD_OPTIONS = ['Food Provided', ' Non Veg Allowed', 'Self Cooking Kitchen'];
 export const FILTER_AMENITIES_OPTIONS = ['Ac', 'Power Backup', 'Washing Machine', 'Wifi', 'Room Cleaning', 'Parking'];

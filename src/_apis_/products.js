@@ -149,7 +149,7 @@ const products = [...Array(24)].map((_, index) => ({
   sold: random(999),
   createdAt: mockData.time(index),
   rooms: sample(['Double Sharing', 'Triple Sharing', '3+ Sharing']),
-  gender: sample(['Boys', 'Girls', 'Both']),
+  gender: sample(['Boys', 'Girls']),
   food: sample(['Food Provided', 'Non Veg allowed', 'Self Cooking Kitchen']),
   amenities: sample(['Ac', 'Power backup', 'Washing Machine', 'Wifi', 'Room cleaning', 'Parking'])
 }));

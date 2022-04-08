@@ -42,7 +42,7 @@ export default function ShopProductCard({ product }) {
           <Label
             variant="filled"
             // eslint-disable-next-line prettier/prettier
-            color={(category === 'Girls' && 'error') || (category === 'Both' && 'warning') || 'info'}
+            color={(category === 'Girls' && 'error')  || 'info'}
             sx={{
               top: 16,
               right: 16,

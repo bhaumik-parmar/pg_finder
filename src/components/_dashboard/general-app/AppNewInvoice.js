@@ -40,7 +40,7 @@ import { MIconButton } from '../../@material-extend';
 const MOCK_INVOICES = [...Array(5)].map((_, index) => ({
   id: mockData.id(index),
   price: mockData.number.price(index),
-  category: (index === 0 && 'Android') || (index === 2 && 'Mac') || 'Windows',
+  category: (index === 0 && 'Girls') || (index === 2 && 'Boys'),
   status: (index === 0 && 'paid') || (index === 2 && 'out_of_date') || 'in_progress'
 }));
 

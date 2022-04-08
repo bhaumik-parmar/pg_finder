@@ -36,7 +36,7 @@ import db from '../../../config';
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
-  const { login, roleFetch } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const { role } = useParams();
   const isMountedRef = useIsMountedRef();
@@ -57,8 +57,6 @@ export default function LoginForm() {
     validationSchema: LoginSchema,
     onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
       try {
-        const roleFetcher = await roleFetch(values.email, role);
-        console.log('roleFe', roleFetcher);
         await login(values.email, values.password).then((response) => {
           if (role === 'customer') {
             navigate('/dashboard/pg-finder/home');

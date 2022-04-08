@@ -70,7 +70,7 @@ const HeroImgStyle = styled(motion.img)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function LandingHero() {
-  const role = ['pg_owner', 'customer'];
+  const role = ['Admin', 'customer'];
   const navigate = useNavigate();
 
   function users(data) {
@@ -104,7 +104,7 @@ export default function LandingHero() {
                     style={{ width: '10vw', height: '3vw' }}
                     onClick={() => users(role[0])}
                   >
-                    <Typography variant="h4">PG Owner</Typography>
+                    <Typography variant="h4">Admin</Typography>
                   </LoadingButton>
                 </motion.div>
                 <motion.div variants={varFadeInRight} style={{ marginLeft: '3vw' }}>

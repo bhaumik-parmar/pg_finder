@@ -115,6 +115,7 @@ export default function CheckoutCart({ handleClick }) {
             .then((doc) => {
               if (doc.exists) {
                 const data = doc.data();
+                console.log('data', data);
                 formik.setFieldValue('firstName', data?.firstName);
                 formik.setFieldValue('lastName', data?.lastName);
                 formik.setFieldValue('phone', data?.phone);

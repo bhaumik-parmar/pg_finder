@@ -35,7 +35,7 @@ import { UploadMultiFile } from '../../upload';
 
 // ----------------------------------------------------------------------
 
-const GENDER_OPTION = ['Boys', 'Girls', 'Both'];
+const GENDER_OPTION = ['Boys', 'Girls'];
 
 const FOOD_OPTION = ['Food Provided', ' Non Veg Allowed', 'Self Cooking Kitchen'];
 
@@ -57,8 +57,6 @@ const AMENITIES_OPTION = [
 const ROOM_OPTION = ['Double Sharing', 'Triple Sharing', '3+ Sharing'];
 
 const HOUSE_RULES_OPTION = [
-  'Notice Period',
-  'Gate Closing Time',
   'Visitor Entry',
   'Non-Veg Food',
   'Opposite Gender',

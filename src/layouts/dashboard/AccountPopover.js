@@ -29,12 +29,12 @@ import MyAvatar from '../../components/MyAvatar';
 import MenuPopover from '../../components/MenuPopover';
 
 // ----------------------------------------------------------------------
-
+const role = localStorage.getItem('role');
 const MENU_OPTIONS = [
   {
     label: 'Home',
     icon: homeFill,
-    linkTo: PATH_DASHBOARD.eCommerce.shop
+    linkTo: role === 'customer' ? PATH_DASHBOARD.eCommerce.shop : PATH_DASHBOARD.general.app
   },
   {
     label: 'Profile',

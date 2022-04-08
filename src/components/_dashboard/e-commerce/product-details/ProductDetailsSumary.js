@@ -151,7 +151,7 @@ export default function ProductDetailsSumary() {
       <Typography>
         <Label
           variant="filled"
-          color={(category === 'Girls' && 'error') || (category === 'Both' && 'warning') || 'info'}
+          color={(category === 'Girls' && 'error') || 'info'}
           sx={{
             mt: 2,
             mb: 1
