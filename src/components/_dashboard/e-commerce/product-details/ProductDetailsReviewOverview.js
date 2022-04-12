@@ -69,28 +69,26 @@ export default function ProductDetailsReviewOverview({ product, onOpen }) {
   const { totalRating, totalReview, ratings } = product;
   const { review, setReview } = useState();
 
-  const getReviews = async () => {
-    firebase.auth().onAuthStateChanged((user) => {
-      const temp = [];
-      if (user) {
-        const docRef = firebase.firestore().collection('Feedback').doc(user.uid);
-        docRef
-          .get()
-          .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              console.log(doc.data());
-              temp.push(doc.data());
+  useEffect(
+    () =>
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          const docRef = firebase.firestore().collection('Feedback').doc();
+          docRef
+            .get()
+            .then((doc) => {
+              if (doc.exists) {
+                const data = doc.data();
+                console.log('data', data);
+              }
+            })
+            .catch((error) => {
+              console.error(error);
             });
-            setReview(temp);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-    });
-  };
-
-  useEffect(() => getReviews(), []);
+        }
+      }),
+    []
+  );
 
   const total = sumBy(ratings, (star) => star.starCount);
 
@@ -110,7 +108,7 @@ export default function ProductDetailsReviewOverview({ product, onOpen }) {
         </Typography>
       </GridStyle>
 
-      <GridStyle item xs={12} md={4}>
+      {/* <GridStyle item xs={12} md={4}>
         <Stack spacing={1.5} sx={{ width: 1 }}>
           {ratings
             .slice(0)
@@ -119,7 +117,7 @@ export default function ProductDetailsReviewOverview({ product, onOpen }) {
               <ProgressItem key={rating.name} star={rating} total={total} />
             ))}
         </Stack>
-      </GridStyle>
+      </GridStyle> */}
 
       <GridStyle item xs={12} md={4}>
         <ScrollLink to="move_add_review" spy smooth offset={-200}>

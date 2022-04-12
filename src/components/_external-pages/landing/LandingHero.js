@@ -74,6 +74,7 @@ export default function LandingHero() {
   const navigate = useNavigate();
 
   function users(data) {
+    console.log('data', data);
     // db.collection('Role').add({ role: data });
     navigate(`/auth/login/${data}`);
     localStorage.setItem('role', data);

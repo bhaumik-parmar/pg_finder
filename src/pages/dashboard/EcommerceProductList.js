@@ -50,7 +50,7 @@ import {
 const TABLE_HEAD = [
   { id: 'name', label: 'PG' },
   { id: 'owner', label: 'Owner Name' },
-  // { id: 'date', label: 'Published Date' },
+  { id: 'date', label: 'Published Date' },
   { id: 'status', label: 'Status' },
   { id: 'price', label: 'Price' },
   { id: 'add', label: 'Address' },
@@ -103,7 +103,7 @@ function applySortFilter(array, comparator, query) {
 export default function EcommerceProductList() {
   const { themeStretch } = useSettings();
   const theme = useTheme();
-  const { deletePG } = useAuth();
+  // const { deletePG } = useAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // const [products, setProducts] = useState([]);
@@ -268,8 +268,7 @@ export default function EcommerceProductList() {
                             </Typography>
                           </Box>
                         </TableCell>
-                        {/* <TableCell style={{ minWidth: 160 }}>{fDate(createdAt)}</TableCell> */}
-                        {/* <TableCell style={{ minWidth: 160 }}>{publishDate}</TableCell> */}
+                        <TableCell style={{ minWidth: 160 }}>{publishDate.toDate().toDateString()}</TableCell>
                         <TableCell style={{ minWidth: 160 }}>
                           <Label
                             variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}

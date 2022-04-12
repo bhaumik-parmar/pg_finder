@@ -33,9 +33,9 @@ export default function InvoiceToolbar({ invoice }) {
   return (
     <>
       <Stack mb={5} direction="row" justifyContent="flex-end" spacing={1.5}>
-        <Button color="error" size="small" variant="contained" endIcon={<Icon icon={shareFill} />}>
+        {/* <Button color="error" size="small" variant="contained" endIcon={<Icon icon={shareFill} />}>
           Share
-        </Button>
+        </Button> */}
 
         <Button
           color="info"

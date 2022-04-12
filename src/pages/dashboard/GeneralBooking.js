@@ -5,17 +5,17 @@ import useSettings from '../../hooks/useSettings';
 // components
 import Page from '../../components/Page';
 import {
-  BookingTotal,
-  BookingCheckIn,
-  BookingDetails,
-  BookingCheckOut,
-  BookingBookedRoom,
-  BookingTotalIncomes,
-  BookingRoomAvailable,
-  BookingNewestBooking,
-  BookingCheckInWidgets,
-  BookingCustomerReviews,
-  BookingReservationStats
+  // BookingTotal,
+  // BookingCheckIn,
+  BookingDetails
+  // BookingCheckOut,
+  // BookingBookedRoom,
+  // BookingTotalIncomes,
+  // BookingRoomAvailable,
+  // BookingNewestBooking,
+  // BookingCheckInWidgets,
+  // BookingCustomerReviews,
+  // BookingReservationStats
 } from '../../components/_dashboard/general-booking';
 
 // ----------------------------------------------------------------------
@@ -26,7 +26,7 @@ export default function GeneralBooking() {
   return (
     <Page title="General: Banking | Minimal-UI">
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Grid container spacing={3}>
+        {/* <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
             <BookingTotal />
           </Grid>
@@ -69,12 +69,12 @@ export default function GeneralBooking() {
 
           <Grid item xs={12}>
             <BookingNewestBooking />
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={12}>
-            <BookingDetails />
-          </Grid>
+        <Grid item xs={12}>
+          <BookingDetails />
         </Grid>
+        {/* </Grid> */}
       </Container>
     </Page>
   );

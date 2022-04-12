@@ -10,28 +10,25 @@ export default function RoomType() {
   const { price, rooms } = product;
   const roomInfoArray = [
     {
-      RoomName: rooms[0],
-      Price: price + 1000,
-      RoomAvailable: '5'
+      RoomName: rooms[2],
+      Price: price + 1000
     },
     {
       RoomName: rooms[1],
-      Price: price + 500,
-      RoomAvailable: '4'
+      Price: price + 500
     },
     {
-      RoomName: rooms[2],
-      Price: price,
-      RoomAvailable: '7'
+      RoomName: rooms[0],
+      Price: price
     }
   ];
   return (
     <Grid container direction="row" spacing={1} justifyContent="space-around">
       {roomInfoArray.map(
-        ({ RoomName, Price, RoomAvailable }, count) =>
+        ({ RoomName, Price }, count) =>
           RoomName && (
             <Grid item key={count} lg={2}>
-              <RoomInfo room={RoomName} price={Price} roomAvailable={RoomAvailable} key={count} />
+              <RoomInfo room={RoomName} price={Price} key={count} />
             </Grid>
           )
       )}

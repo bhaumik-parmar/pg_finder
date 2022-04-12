@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { format } from 'date-fns';
 import { sentenceCase } from 'change-case';
 import { Icon } from '@iconify/react';
@@ -10,6 +10,7 @@ import downloadFill from '@iconify/icons-eva/download-fill';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 import arrowIosForwardFill from '@iconify/icons-eva/arrow-ios-forward-fill';
+import firebase from 'firebase/compat/app';
 // material
 import { useTheme } from '@mui/material/styles';
 import {
@@ -128,6 +129,29 @@ export default function BookingDetails() {
   const handleClickShare = () => {};
   const handleClickDelete = () => {};
 
+  useEffect(
+    () =>
+      firebase.auth().onAuthStateChanged((user) => {
+        const temp = [];
+        if (user) {
+          const docRef = firebase.firestore().collection('BookPG');
+          docRef
+            .get()
+            .then((querySnapshot) => {
+              querySnapshot.forEach((doc) => {
+                // console.log(doc.data());
+                temp.push(doc.data());
+                console.log('temp', temp);
+              });
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      }),
+    []
+  );
+
   return (
     <>
       <Card>
@@ -137,12 +161,12 @@ export default function BookingDetails() {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ minWidth: 240 }}>Booker</TableCell>
-                  <TableCell sx={{ minWidth: 160 }}>Check In</TableCell>
-                  <TableCell sx={{ minWidth: 160 }}>Check Out</TableCell>
-                  <TableCell sx={{ minWidth: 120 }}>Status</TableCell>
-                  <TableCell sx={{ minWidth: 200 }}>Phone</TableCell>
+                  <TableCell sx={{ minWidth: 240 }}>PG Name</TableCell>
+                  <TableCell sx={{ minWidth: 160 }}>Booking Date</TableCell>
                   <TableCell sx={{ minWidth: 120 }}>Room Type</TableCell>
+                  {/* <TableCell sx={{ minWidth: 160 }}>Check Out</TableCell>
+                  <TableCell sx={{ minWidth: 120 }}>Status</TableCell>
+                  <TableCell sx={{ minWidth: 200 }}>Phone</TableCell> */}
                   <TableCell />
                 </TableRow>
               </TableHead>
@@ -157,9 +181,9 @@ export default function BookingDetails() {
                     </TableCell>
 
                     <TableCell>{format(new Date(row.checkIn), 'dd MMM yyyy')}</TableCell>
-                    <TableCell>{format(new Date(row.checkOut), 'dd MMM yyyy')}</TableCell>
+                    {/* <TableCell>{format(new Date(row.checkOut), 'dd MMM yyyy')}</TableCell> */}
 
-                    <TableCell>
+                    {/* <TableCell>
                       <Label
                         variant={isLight ? 'ghost' : 'filled'}
                         color={
@@ -168,9 +192,9 @@ export default function BookingDetails() {
                       >
                         {sentenceCase(row.status)}
                       </Label>
-                    </TableCell>
+                    </TableCell> */}
 
-                    <TableCell>{row.phoneNumber}</TableCell>
+                    {/* <TableCell>{row.phoneNumber}</TableCell> */}
                     <TableCell sx={{ textTransform: 'capitalize' }}>{row.roomType}</TableCell>
 
                     <TableCell align="right">
@@ -179,6 +203,7 @@ export default function BookingDetails() {
                         onPrint={handleClickPrint}
                         onShare={handleClickShare}
                         onDelete={handleClickDelete}
+                        h
                       />
                     </TableCell>
                   </TableRow>

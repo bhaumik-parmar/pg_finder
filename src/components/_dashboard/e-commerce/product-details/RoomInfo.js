@@ -21,13 +21,6 @@ export const RoomInfo = ({ price, room, roomAvailable }) => (
               month
             </Typography>
           </Stack>
-
-          <Stack direction="row">
-            <Typography variant="boby2" sx={{ color: 'text.secondary', mb: 2 }}>
-              Rooms Available:
-            </Typography>
-            <Typography>&nbsp;{roomAvailable}</Typography>
-          </Stack>
         </Box>
       </Grid>
     </Grid>

@@ -81,6 +81,7 @@ export default function CheckoutPayment({ handleBack, handleClick }) {
     } else if (payment === 'credit_card') {
       navigate('/dashboard/pg-finder/payment');
     } else {
+      navigate('/dashboard/pg-finder/invoice');
       enqueueSnackbar('Booking successful', {
         variant: 'success',
         action: (key) => (
@@ -89,7 +90,6 @@ export default function CheckoutPayment({ handleBack, handleClick }) {
           </MIconButton>
         )
       });
-      handleClick();
     }
   };
 

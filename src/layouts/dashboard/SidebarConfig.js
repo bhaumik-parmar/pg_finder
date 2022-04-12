@@ -2,6 +2,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InfoIcon from '@mui/icons-material/Info';
 import ContactPageIcon from '@mui/icons-material/ContactPage';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useLocation } from 'react-router';
 // routes
 import { PATH_DASHBOARD, PATH_PAGE } from '../../routes/paths';
@@ -113,6 +114,11 @@ const sidebarConfigCustomer = [
         title: 'Home',
         path: PATH_DASHBOARD.eCommerce.shop,
         icon: <HomeIcon />
+      },
+      {
+        title: 'Your Book PG',
+        path: PATH_DASHBOARD.eCommerce.booking,
+        icon: <ShoppingCartIcon />
       },
       {
         title: 'About Us',

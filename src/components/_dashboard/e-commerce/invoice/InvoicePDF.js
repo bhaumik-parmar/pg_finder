@@ -72,33 +72,41 @@ InvoicePDF.propTypes = {
 };
 
 export default function InvoicePDF({ invoice }) {
-  const { id, items, taxes, status, discount, invoiceTo, invoiceFrom } = invoice;
-  const subTotal = sum(items.map((item) => item.price * item.qty));
-  const total = subTotal - discount + taxes;
+  const { id, items, date, taxes, status, discount, invoiceTo, invoiceFrom } = invoice;
+  // const subTotal = sum(items.map((item) => item.price * item.qty));
+  // const total = subTotal - discount + taxes;
 
   return (
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={[styles.gridContainer, styles.mb40]}>
-          <Image source="/static/brand/logo_full.jpg" style={{ height: 32 }} />
-          <View style={{ alignItems: 'right', flexDirection: 'column' }}>
-            <Text style={styles.h3}>{status}</Text>
-            <Text>INV-{id}</Text>
+          <Image src="/static/illustrations/favicon-96x96.png" style={{ height: 32 }} />
+          <View style={styles.col4}>
+            <Text className="text-24 font-800 logo-text" color="common.black">
+              PG
+            </Text>
+            <Text className="text-16 tracking-widest -mt-8 font-700" color="textSecondary">
+              Finder
+            </Text>
+          </View>
+          <View style={styles.col6}>
+            <Text style={styles.body1}>{invoiceFrom.name}</Text>
+            <Text style={styles.body1}>{invoiceFrom.address}</Text>
+          </View>
+          <View style={{ flexDirection: 'column' }}>
+            {/* <Text style={styles.h3}>{status}</Text> */}
+            <Text>Invoice No.: {id}</Text>
           </View>
         </View>
 
         <View style={[styles.gridContainer, styles.mb40]}>
-          <View style={styles.col6}>
-            <Text style={[styles.overline, styles.mb8]}>Invoice from</Text>
-            <Text style={styles.body1}>{invoiceFrom.name}</Text>
-            <Text style={styles.body1}>{invoiceFrom.address}</Text>
-            <Text style={styles.body1}>{invoiceFrom.phone}</Text>
+          <View style={{ alignItems: 'left', flexDirection: 'column' }}>
+            <Text style={styles.body1}>Date: {date}</Text>
           </View>
           <View style={styles.col6}>
-            <Text style={[styles.overline, styles.mb8]}>Invoice to</Text>
-            <Text style={styles.body1}>{invoiceTo.name}</Text>
-            <Text style={styles.body1}>{invoiceTo.address}</Text>
-            <Text style={styles.body1}>{invoiceTo.phone}</Text>
+            <Text style={styles.body1}>Name: {invoiceTo.name}</Text>
+            <Text style={styles.body1}>Address: {invoiceTo.address}</Text>
+            <Text style={styles.body1}>Phone: {invoiceTo.phone}</Text>
           </View>
         </View>
 
@@ -108,16 +116,10 @@ export default function InvoicePDF({ invoice }) {
           <View style={styles.tableHeader}>
             <View style={styles.tableRow}>
               <View style={styles.tableCell_1}>
-                <Text style={styles.subtitle2}>#</Text>
+                <Text style={styles.subtitle2}>PG Name</Text>
               </View>
               <View style={styles.tableCell_2}>
                 <Text style={styles.subtitle2}>Description</Text>
-              </View>
-              <View style={styles.tableCell_3}>
-                <Text style={styles.subtitle2}>Qty</Text>
-              </View>
-              <View style={styles.tableCell_3}>
-                <Text style={styles.subtitle2}>Unit price</Text>
               </View>
               <View style={[styles.tableCell_3, styles.alignRight]}>
                 <Text style={styles.subtitle2}>Total</Text>
@@ -126,60 +128,15 @@ export default function InvoicePDF({ invoice }) {
           </View>
 
           <View style={styles.tableBody}>
-            {items.map((item, index) => (
-              <View style={styles.tableRow} key={item.id}>
-                <View style={styles.tableCell_1}>
-                  <Text>{index + 1}</Text>
-                </View>
-                <View style={styles.tableCell_2}>
-                  <Text style={styles.subtitle2}>{item.title}</Text>
-                  <Text>{item.description}</Text>
-                </View>
-                <View style={styles.tableCell_3}>
-                  <Text>{item.qty}</Text>
-                </View>
-                <View style={styles.tableCell_3}>
-                  <Text>{item.price}</Text>
-                </View>
-                <View style={[styles.tableCell_3, styles.alignRight]}>
-                  <Text>{fCurrency(item.price * item.qty)}</Text>
-                </View>
+            <View style={styles.tableRow}>
+              <View style={styles.tableCell_1}>
+                <Text>{items.title}</Text>
               </View>
-            ))}
-
-            <View style={[styles.tableRow, styles.noBorder]}>
-              <View style={styles.tableCell_1} />
-              <View style={styles.tableCell_2} />
-              <View style={styles.tableCell_3} />
-              <View style={styles.tableCell_3}>
-                <Text>Subtotal</Text>
+              <View textAlign="left" style={styles.tableCell_2}>
+                <Text>{items.description}</Text>
               </View>
               <View style={[styles.tableCell_3, styles.alignRight]}>
-                <Text>{fCurrency(subTotal)}</Text>
-              </View>
-            </View>
-
-            <View style={[styles.tableRow, styles.noBorder]}>
-              <View style={styles.tableCell_1} />
-              <View style={styles.tableCell_2} />
-              <View style={styles.tableCell_3} />
-              <View style={styles.tableCell_3}>
-                <Text>Discount</Text>
-              </View>
-              <View style={[styles.tableCell_3, styles.alignRight]}>
-                <Text>{fCurrency(-discount)}</Text>
-              </View>
-            </View>
-
-            <View style={[styles.tableRow, styles.noBorder]}>
-              <View style={styles.tableCell_1} />
-              <View style={styles.tableCell_2} />
-              <View style={styles.tableCell_3} />
-              <View style={styles.tableCell_3}>
-                <Text>Taxes</Text>
-              </View>
-              <View style={[styles.tableCell_3, styles.alignRight]}>
-                <Text>{fCurrency(taxes)}</Text>
+                <Text>{items.price}</Text>
               </View>
             </View>
 
@@ -191,7 +148,7 @@ export default function InvoicePDF({ invoice }) {
                 <Text style={styles.h4}>Total</Text>
               </View>
               <View style={[styles.tableCell_3, styles.alignRight]}>
-                <Text style={styles.h4}>{fCurrency(total)}</Text>
+                <Text style={styles.h4}>{items.price}</Text>
               </View>
             </View>
           </View>

@@ -55,10 +55,15 @@ import useIsMountedRef from '../../../../hooks/useIsMountedRef';
 // ----------------------------------------------------------------------
 
 export default function CheckoutCart({ handleClick }) {
-  const { bookPG } = useAuth();
-  const [roomType, setRoomType] = useState('3+ Sharing');
+  const roomInfo = JSON.parse(localStorage.getItem('Room Types'));
+  console.log('RoomInfo :>> ', roomInfo);
+  const room = roomInfo[2];
+  // console.log('room :>> ', `${room.RoomName} : ${room.Price}`, room);
+  const { bookPG, user } = useAuth();
+  const [roomType, setRoomType] = useState(`${room.RoomName} - ${room.Price}`);
   const [profession, setProfession] = useState('Student');
   const [open, setOpen] = useState(false);
+
   // const navigate = useNavigate();
   const CustomerDetailSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -79,11 +84,12 @@ export default function CheckoutCart({ handleClick }) {
       .matches(/^[6-9]\d{9}$/gi, 'Invalid phone number')
   });
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: ''
+      firstName: user?.firstName,
+      lastName: user?.lastName,
+      email: user?.email,
+      phone: user?.phone
     },
     validationSchema: CustomerDetailSchema,
     // enableReinitialize: true,
@@ -105,32 +111,31 @@ export default function CheckoutCart({ handleClick }) {
     }
   });
 
-  useEffect(
-    () =>
-      firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          const docRef = firebase.firestore().collection('Registration').doc(user.uid);
-          docRef
-            .get()
-            .then((doc) => {
-              if (doc.exists) {
-                const data = doc.data();
-                console.log('data', data);
-                formik.setFieldValue('firstName', data?.firstName);
-                formik.setFieldValue('lastName', data?.lastName);
-                formik.setFieldValue('phone', data?.phone);
-                formik.setFieldValue('email', data?.email);
-              }
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        }
-      }),
-    []
-  );
+  // useEffect(
+  //   () =>
+  //     firebase.auth().onAuthStateChanged((user) => {
+  //       if (user) {
+  //         const docRef = firebase.firestore().collection('Registration').doc(user.uid);
+  //         docRef
+  //           .get()
+  //           .then((doc) => {
+  //             if (doc.exists) {
+  //               const data = doc.data();
+  //               console.log('data', data);
+  //               formik.setFieldValue('firstName', data?.firstName);
+  //               formik.setFieldValue('lastName', data?.lastName);
+  //               formik.setFieldValue('phone', data?.phone);
+  //               formik.setFieldValue('email', data?.email);
+  //             }
+  //           })
+  //           .catch((error) => {
+  //             console.error(error);
+  //           });
+  //       }
+  //     }),
+  //   []
+  // );
   // console.log('data ', data);
-
   const handleChangeDropdownBox = (event) => {
     setRoomType(event.target.value);
   };
@@ -224,12 +229,17 @@ export default function CheckoutCart({ handleClick }) {
                   onClose={handleClose}
                   onOpen={handleOpen}
                   label="Room Type"
-                  defaultValue="3+ Sharing"
+                  defaultValue={`${room.RoomName} - ${room.Price}`}
                   onChange={handleChangeDropdownBox}
                 >
-                  <MenuItem value="3+ Sharing">3+ Sharing </MenuItem>
+                  {roomInfo.map(({ RoomName, Price }, count) => (
+                    <MenuItem key={count} value={`${RoomName} - ${Price}`}>
+                      {`${RoomName} - ${Price}`}
+                    </MenuItem>
+                  ))}
+                  {/* <MenuItem value="3+ Sharing">3+ Sharing </MenuItem>
                   <MenuItem value="Triple Sharing">Triple Sharing</MenuItem>
-                  <MenuItem value="Double Sharing">Double Sharing</MenuItem>
+                  <MenuItem value="Double Sharing">Double Sharing</MenuItem> */}
                 </Select>
               </FormControl>
             </Stack>

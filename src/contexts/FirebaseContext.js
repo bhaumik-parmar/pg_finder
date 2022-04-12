@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { createContext, useEffect, useReducer, useState } from 'react';
+import { useSelector } from 'react-redux';
 import firebase from 'firebase/compat/app';
 import 'firebase/auth';
 // import product from 'src/redux/slices/product';
@@ -60,6 +61,7 @@ AuthProvider.propTypes = {
 function AuthProvider({ children }) {
   const [profile, setProfile] = useState(null);
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { product } = useSelector((state) => state.product);
 
   useEffect(
     () =>
@@ -225,7 +227,8 @@ function AuthProvider({ children }) {
             email,
             phone,
             profession,
-            roomType
+            roomType,
+            PGname: product?.name
           })
           .then(() => {
             console.log('Customer details submitted');

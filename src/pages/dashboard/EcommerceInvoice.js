@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { random, sum } from 'lodash';
 // material
@@ -16,7 +17,11 @@ import {
   Typography,
   TableContainer
 } from '@mui/material';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 // routes
+import { useSelector } from 'react-redux';
+import useAuth from '../../hooks/useAuth';
 import { PATH_DASHBOARD } from '../../routes/paths';
 // utils
 import { fCurrency } from '../../utils/formatNumber';
@@ -32,34 +37,6 @@ import { InvoiceToolbar } from '../../components/_dashboard/e-commerce/invoice';
 
 // ----------------------------------------------------------------------
 
-const INVOICE = {
-  id: mockData.id(1),
-  taxes: 5,
-  discount: 10,
-  status: 'paid',
-  invoiceFrom: {
-    name: 'Kathlyn Hauck',
-    address: 'DieSachbearbeiter Choriner Straße 49 10435 Berlin',
-    company: 'Durgan Group',
-    email: 'Dion.collins23@gmail.com',
-    phone: '227-940-9869'
-  },
-  invoiceTo: {
-    name: 'Lesly Reichel',
-    address: 'Keas 69 Str. 15234, Chalandri Athens, Greece',
-    company: 'Stracke LLC',
-    email: 'kurt_durgan46@hotmail.com',
-    phone: '261-433-6689'
-  },
-  items: [...Array(3)].map((_, index) => ({
-    id: uuidv4(),
-    title: mockData.text.title(index),
-    description: mockData.text.description(index),
-    qty: random(5),
-    price: mockData.number.price(index)
-  }))
-};
-
 const RowResultStyle = styled(TableRow)(({ theme }) => ({
   '& td': {
     paddingTop: theme.spacing(1),
@@ -71,19 +48,43 @@ const RowResultStyle = styled(TableRow)(({ theme }) => ({
 
 export default function EcommerceInvoice() {
   const { themeStretch } = useSettings();
+  const { user } = useAuth();
+  const { product } = useSelector((state) => state.product);
+  console.log('product', product);
+  // const { price, rooms } = product;
+  const date = new Date();
+  const INVOICE = {
+    id: uuidv4(),
+    status: 'paid',
+    date: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`,
+    invoiceFrom: {
+      name: product?.name,
+      address: product?.add
+    },
+    invoiceTo: {
+      name: user?.displayName,
+      address: user?.address,
+      phone: user?.phone
+    },
+    items: {
+      title: product?.name,
+      description: product?.description,
+      price: fCurrency(product?.price)
+    }
+  };
 
-  const subTotal = sum(INVOICE.items.map((item) => item.price * item.qty));
-  const total = subTotal - INVOICE.discount + INVOICE.taxes;
+  // const subTotal = sum(INVOICE.items.map((item) => item.price * item.qty));
+  // const total = subTotal - INVOICE.discount + INVOICE.taxes;
 
   return (
-    <Page title="Ecommerce: Invoice | Minimal-UI">
+    <Page title="PG Finder | Invoice  ">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Invoice Details"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
+            { name: 'Home', href: PATH_DASHBOARD.eCommerce.root },
             {
-              name: 'E-Commerce',
+              name: 'PG',
               href: PATH_DASHBOARD.eCommerce.root
             },
             { name: 'Invoice' }
@@ -94,34 +95,42 @@ export default function EcommerceInvoice() {
 
         <Card sx={{ pt: 5, px: 5 }}>
           <Grid container>
-            <Grid item xs={12} sm={6} sx={{ mb: 5 }}>
-              <Box component="img" alt="logo" src="/static/brand/logo_full.svg" sx={{ height: 48 }} />
+            <Grid item xs={10} sm={3} sx={{ mb: 5 }}>
+              <div style={{ display: 'flex', textDecoration: 'none' }}>
+                <Box component="img" alt="logo" src="/static/illustrations/favicon-96x96.png" sx={{ height: 48 }} />
+                <Box style={{ marginLeft: '10px' }}>
+                  <Typography className="text-24 font-800 logo-text" color="common.black">
+                    PG
+                  </Typography>
+                  <Typography className="text-16 tracking-widest -mt-8 font-700" color="textSecondary">
+                    Finder
+                  </Typography>
+                </Box>
+              </div>
             </Grid>
 
-            <Grid item xs={12} sm={6} sx={{ mb: 5 }}>
+            <Grid item xs={10} sm={4} sx={{ mb: 5 }}>
               <Box sx={{ textAlign: { sm: 'right' } }}>
-                <Label color="success" sx={{ textTransform: 'uppercase', mb: 1 }}>
-                  {INVOICE.status}
-                </Label>
-                <Typography variant="h6">INV-{INVOICE.id}</Typography>
+                <Typography variant="h4">{INVOICE.invoiceFrom.name}</Typography>
+                <Typography variant="h6">{INVOICE.invoiceFrom.address}</Typography>
+              </Box>
+            </Grid>
+
+            <Grid item xs={12} sm={14} sx={{ mb: 5 }}>
+              <Box sx={{ textAlign: { sm: 'right' } }}>
+                {/* <Label color="success" sx={{ textTransform: 'uppercase', mb: 1 }}>
+                  unpaid
+                </Label> */}
+                <Typography variant="h6">Invoice No.: {INVOICE.id}</Typography>
+              </Box>
+              <Box sx={{ textAlign: { sm: 'left' } }}>
+                <Typography variant="body1">Date: {INVOICE.date}</Typography>
               </Box>
             </Grid>
 
             <Grid item xs={12} sm={6} sx={{ mb: 5 }}>
-              <Typography paragraph variant="overline" sx={{ color: 'text.disabled' }}>
-                Invoice from
-              </Typography>
-              <Typography variant="body2">{INVOICE.invoiceFrom.name}</Typography>
-              <Typography variant="body2">{INVOICE.invoiceFrom.address}</Typography>
-              <Typography variant="body2">Phone: {INVOICE.invoiceFrom.phone}</Typography>
-            </Grid>
-
-            <Grid item xs={12} sm={6} sx={{ mb: 5 }}>
-              <Typography paragraph variant="overline" sx={{ color: 'text.disabled' }}>
-                Invoice to
-              </Typography>
-              <Typography variant="body2">{INVOICE.invoiceTo.name}</Typography>
-              <Typography variant="body2">{INVOICE.invoiceTo.address}</Typography>
+              <Typography variant="body2">Name: {INVOICE.invoiceTo.name} </Typography>
+              <Typography variant="body2">Address:{INVOICE.invoiceTo.address}</Typography>
               <Typography variant="body2">Phone: {INVOICE.invoiceTo.phone}</Typography>
             </Grid>
           </Grid>
@@ -136,73 +145,33 @@ export default function EcommerceInvoice() {
                   }}
                 >
                   <TableRow>
-                    <TableCell width={40}>#</TableCell>
+                    <TableCell width={40}>PG Name</TableCell>
                     <TableCell align="left">Description</TableCell>
-                    <TableCell align="left">Qty</TableCell>
-                    <TableCell align="right">Unit price</TableCell>
                     <TableCell align="right">Total</TableCell>
                   </TableRow>
                 </TableHead>
 
                 <TableBody>
-                  {INVOICE.items.map((row, index) => (
-                    <TableRow
-                      key={index}
-                      sx={{
-                        borderBottom: (theme) => `solid 1px ${theme.palette.divider}`
-                      }}
-                    >
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell align="left">
-                        <Box sx={{ maxWidth: 560 }}>
-                          <Typography variant="subtitle2">{row.title}</Typography>
-                          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                            {row.description}
-                          </Typography>
-                        </Box>
-                      </TableCell>
-                      <TableCell align="left">{row.qty}</TableCell>
-                      <TableCell align="right">{fCurrency(row.price)}</TableCell>
-                      <TableCell align="right">{fCurrency(row.price * row.qty)}</TableCell>
-                    </TableRow>
-                  ))}
-
-                  <RowResultStyle>
-                    <TableCell colSpan={3} />
-                    <TableCell align="right">
-                      <Box sx={{ mt: 2 }} />
-                      <Typography variant="body1">Subtotal</Typography>
+                  <TableRow
+                    sx={{
+                      borderBottom: (theme) => `solid 1px ${theme.palette.divider}`
+                    }}
+                  >
+                    <TableCell align="left">
+                      <Box sx={{ maxWidth: 1000 }}>
+                        <Typography variant="subtitle2">{INVOICE.items.title}</Typography>
+                      </Box>
                     </TableCell>
-                    <TableCell align="right" width={120}>
-                      <Box sx={{ mt: 2 }} />
-                      <Typography variant="body1">{fCurrency(subTotal)}</Typography>
-                    </TableCell>
-                  </RowResultStyle>
-                  <RowResultStyle>
-                    <TableCell colSpan={3} />
-                    <TableCell align="right">
-                      <Typography variant="body1">Discount</Typography>
-                    </TableCell>
-                    <TableCell align="right" width={120}>
-                      <Typography sx={{ color: 'error.main' }}>{fCurrency(-INVOICE.discount)}</Typography>
-                    </TableCell>
-                  </RowResultStyle>
-                  <RowResultStyle>
-                    <TableCell colSpan={3} />
-                    <TableCell align="right">
-                      <Typography variant="body1">Taxes</Typography>
-                    </TableCell>
-                    <TableCell align="right" width={120}>
-                      <Typography variant="body1">{fCurrency(INVOICE.taxes)}</Typography>
-                    </TableCell>
-                  </RowResultStyle>
+                    <TableCell align="left">{INVOICE.items.description}</TableCell>
+                    <TableCell align="right">{INVOICE.items.price}</TableCell>
+                  </TableRow>
                   <RowResultStyle>
                     <TableCell colSpan={3} />
                     <TableCell align="right">
                       <Typography variant="h6">Total</Typography>
                     </TableCell>
                     <TableCell align="right" width={140}>
-                      <Typography variant="h6">{fCurrency(total)}</Typography>
+                      <Typography variant="h6">{INVOICE.items.price}</Typography>
                     </TableCell>
                   </RowResultStyle>
                 </TableBody>

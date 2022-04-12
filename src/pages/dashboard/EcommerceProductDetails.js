@@ -175,12 +175,13 @@ export default function EcommerceProductDetails() {
                 <Box sx={{ px: 3, bgcolor: 'background.neutral' }}>
                   <TabList onChange={handleChangeTab}>
                     <Tab disableRipple value="1" label="Description" />
-                    {/* <Tab
+                    <Tab
                       disableRipple
                       value="2"
-                      label={`Review (${product.reviews.length})`}
+                      label="Review"
+                      // label={`Review (${product.reviews.length})`}
                       sx={{ '& .MuiTab-wrapper': { whiteSpace: 'nowrap' } }}
-                    /> */}
+                    />
                   </TabList>
                 </Box>
 

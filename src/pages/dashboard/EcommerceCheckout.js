@@ -131,7 +131,7 @@ export default function EcommerceCheckout() {
         </Grid>
         {step === 0 && <CheckoutCart handleClick={() => setStep(1)} />}
         {step === 1 && (
-          <CheckoutPayment handleBack={() => setStep(0)} handleClick={() => navigate('/dashboard/pg-finder/home')} />
+          <CheckoutPayment handleBack={() => setStep(0)} handleClick={() => navigate('/dashboard/pg-finder/invoice')} />
         )}
         {/* <CheckoutOrderComplete open={isComplete} /> */}
       </Container>

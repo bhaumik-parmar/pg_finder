@@ -69,6 +69,7 @@ export default function ProductDetailsSumary() {
     name,
     owner,
     add,
+    rooms,
     // sizes,
     price,
     cover,
@@ -86,6 +87,22 @@ export default function ProductDetailsSumary() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const roomInfoArray = [
+    {
+      RoomName: rooms[2],
+      Price: price + 1000
+    },
+    {
+      RoomName: rooms[1],
+      Price: price + 500
+    },
+    {
+      RoomName: rooms[0],
+      Price: price
+    }
+  ];
+
   const handleSubmitData = () => {
     enqueueSnackbar('Data Submitted Successfully', {
       variant: 'success',
@@ -202,6 +219,7 @@ export default function ProductDetailsSumary() {
           onClick={() => {
             navigate('/dashboard/pg-finder/checkout');
             localStorage.setItem('PG Name', JSON.stringify({ name }));
+            localStorage.setItem('Room Types', JSON.stringify(roomInfoArray));
           }}
         >
           Book Now

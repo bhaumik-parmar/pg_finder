@@ -94,6 +94,7 @@ export default function Router() {
             { path: 'product/:name/edit', element: <EcommerceProductCreate /> },
             { path: 'checkout', element: <EcommerceCheckout /> },
             { path: 'payment', element: <Payment /> },
+            { path: 'booking', element: <GeneralBooking /> },
             { path: 'invoice', element: <EcommerceInvoice /> }
           ]
         },
