@@ -268,7 +268,7 @@ export default function EcommerceProductList() {
                             </Typography>
                           </Box>
                         </TableCell>
-                        <TableCell style={{ minWidth: 160 }}>{publishDate.toDate().toDateString()}</TableCell>
+                        <TableCell style={{ minWidth: 160 }}>{publishDate?.toDate()?.toDateString()}</TableCell>
                         <TableCell style={{ minWidth: 160 }}>
                           <Label
                             variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}

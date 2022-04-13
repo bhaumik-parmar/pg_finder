@@ -11,7 +11,7 @@ import { Box, Tab, Card, Grid, Divider, Skeleton, Container, Typography } from '
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getProduct } from '../../redux/slices/product';
+import { getProduct, getReviews } from '../../redux/slices/product';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
@@ -91,6 +91,10 @@ export default function EcommerceProductDetails() {
   useEffect(() => {
     dispatch(getProduct(name));
   }, [dispatch, name]);
+
+  useEffect(() => {
+    dispatch(getReviews());
+  }, [dispatch]);
 
   const handleChangeTab = (event, newValue) => {
     setValue(newValue);
@@ -181,6 +185,7 @@ export default function EcommerceProductDetails() {
                       label="Review"
                       // label={`Review (${product.reviews.length})`}
                       sx={{ '& .MuiTab-wrapper': { whiteSpace: 'nowrap' } }}
+                      // onClick={()=>({})} /* Call the get reviews function and pass the pg name for database query ad the the response in the below section */
                     />
                   </TabList>
                 </Box>
@@ -193,7 +198,7 @@ export default function EcommerceProductDetails() {
                   </Box>
                 </TabPanel>
                 <TabPanel value="2">
-                  <ProductDetailsReview product={product} />
+                  <ProductDetailsReview product={product} /> {/* This is the section for the review */}
                 </TabPanel>
               </TabContext>
             </Card>

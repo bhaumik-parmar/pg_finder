@@ -68,28 +68,7 @@ ProductDetailsReviewOverview.propTypes = {
 export default function ProductDetailsReviewOverview({ product, onOpen }) {
   const { totalRating, totalReview, ratings } = product;
   const { review, setReview } = useState();
-
-  useEffect(
-    () =>
-      firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          const docRef = firebase.firestore().collection('Feedback').doc();
-          docRef
-            .get()
-            .then((doc) => {
-              if (doc.exists) {
-                const data = doc.data();
-                console.log('data', data);
-              }
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        }
-      }),
-    []
-  );
-
+  console.log('product', product);
   const total = sumBy(ratings, (star) => star.starCount);
 
   return (

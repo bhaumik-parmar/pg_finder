@@ -26,7 +26,7 @@ export default function ProductDetailsSumary() {
       <Stack direction="row" sx={{ mt: 1 }}>
         <Stack>
           <Stack sx={{ ml: 5 }}>
-            <Icon icon="simple-line-icons:calender" height={32} width={32} />
+            <Icon icon="simple-line-icons:calender" height={30} width={30} />
           </Stack>
           <Typography sx={{ mx: 3 }}>Notice Period</Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary', textAlign: 'center' }}>

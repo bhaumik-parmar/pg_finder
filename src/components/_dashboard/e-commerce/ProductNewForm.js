@@ -82,7 +82,7 @@ ProductNewForm.propTypes = {
 export default function ProductNewForm({ isEdit, currentProduct }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const { newPG } = useAuth();
+  const { newPG, updatePG } = useAuth();
   const [checked, setChecked] = useState(false);
 
   const toggleChecked = () => {
@@ -115,7 +115,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
       house_rules: currentProduct?.houseRules || [],
       status: currentProduct?.status || false,
       // taxes: true,
-      gender: currentProduct?.gender || GENDER_OPTION[2],
+      gender: currentProduct?.category || GENDER_OPTION[2],
       rooms: currentProduct?.rooms || [],
       food: currentProduct?.food || [],
       amenities: currentProduct?.amenities || []
@@ -124,22 +124,40 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
         // await fakeRequest(500);
-        await newPG(
-          values.name,
-          values.description,
-          values.images,
-          values.owner,
-          values.add,
-          values.price,
-          values.house_rules,
-          values.status,
-          values.gender,
-          values.rooms,
-          values.food,
-          values.amenities
-        );
+        if (isEdit) {
+          await newPG(
+            values.name,
+            values.description,
+            values.images,
+            values.owner,
+            values.add,
+            values.price,
+            values.house_rules,
+            values.status,
+            values.gender,
+            values.rooms,
+            values.food,
+            values.amenities
+          );
+        } else {
+          await updatePG(
+            values.name,
+            values.description,
+            values.images,
+            values.owner,
+            values.add,
+            values.price,
+            values.house_rules,
+            values.status,
+            values.gender,
+            values.rooms,
+            values.food,
+            values.amenities
+          );
+        }
         resetForm();
         console.log('values.status', values.status);
+        console.log('values.isedit', isEdit);
         setSubmitting(false);
         enqueueSnackbar(!isEdit ? 'Add PG successful' : 'Update PG successful', { variant: 'success' });
         navigate(PATH_DASHBOARD.eCommerce.list);

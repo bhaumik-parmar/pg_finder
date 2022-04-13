@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import { format } from 'date-fns';
 import { sentenceCase } from 'change-case';
 import { Icon } from '@iconify/react';
-import { Link as RouterLink } from 'react-router-dom';
+
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import shareFill from '@iconify/icons-eva/share-fill';
 import printerFill from '@iconify/icons-eva/printer-fill';
 import downloadFill from '@iconify/icons-eva/download-fill';
@@ -29,8 +30,14 @@ import {
   TableHead,
   CardHeader,
   Typography,
-  TableContainer
+  TableContainer,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogActions
 } from '@mui/material';
+import { useDispatch } from '../../../redux/store';
+import { deleteBookPG } from '../../../redux/slices/product';
 // utils
 import mockData from '../../../utils/mock-data';
 //
@@ -40,16 +47,16 @@ import { MIconButton } from '../../@material-extend';
 
 // ----------------------------------------------------------------------
 
-const MOCK_BOOKINGS = [...Array(5)].map((_, index) => ({
-  id: mockData.id(index),
-  name: mockData.name.fullName(index),
-  avatar: mockData.image.avatar(index),
-  checkIn: mockData.time(index),
-  checkOut: mockData.time(index),
-  phoneNumber: mockData.phoneNumber(index),
-  status: (index === 1 && 'pending') || (index === 3 && 'un_paid') || 'paid',
-  roomType: (index === 1 && 'double') || (index === 3 && 'king') || 'single'
-}));
+// const MOCK_BOOKINGS = [...Array(5)].map((_, index) => ({
+//   id: mockData.id(index),
+//   name: mockData.name.fullName(index),
+//   avatar: mockData.image.avatar(index),
+//   checkIn: mockData.time(index),
+//   checkOut: mockData.time(index),
+//   phoneNumber: mockData.phoneNumber(index),
+//   status: (index === 1 && 'pending') || (index === 3 && 'un_paid') || 'paid',
+//   roomType: (index === 1 && 'double') || (index === 3 && 'king') || 'single'
+// }));
 
 // ----------------------------------------------------------------------
 
@@ -63,6 +70,7 @@ MoreMenuButton.propTypes = {
 function MoreMenuButton({ onDownload, onPrint, onShare, onDelete }) {
   const menuRef = useRef(null);
   const [open, setOpen] = useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -90,30 +98,58 @@ function MoreMenuButton({ onDownload, onPrint, onShare, onDelete }) {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem onClick={onDownload}>
+        {/* <MenuItem onClick={onDownload}>
           <Icon icon={downloadFill} width={20} height={20} />
           <Typography variant="body2" sx={{ ml: 2 }}>
             Download
-          </Typography>
-        </MenuItem>
-        <MenuItem onClick={onPrint}>
-          <Icon icon={printerFill} width={20} height={20} />
-          <Typography variant="body2" sx={{ ml: 2 }}>
+            </Typography>
+            </MenuItem>
+            <MenuItem onClick={onPrint}>
+            <Icon icon={printerFill} width={20} height={20} />
+            <Typography variant="body2" sx={{ ml: 2 }}>
             Print
-          </Typography>
+            </Typography>
         </MenuItem>
         <MenuItem onClick={onShare}>
-          <Icon icon={shareFill} width={20} height={20} />
-          <Typography variant="body2" sx={{ ml: 2 }}>
-            Share
-          </Typography>
+        <Icon icon={shareFill} width={20} height={20} />
+        <Typography variant="body2" sx={{ ml: 2 }}>
+        Share
+        </Typography>
         </MenuItem>
-        <Divider />
-        <MenuItem onClick={onDelete} sx={{ color: 'error.main' }}>
+      <Divider /> */}
+        {/* onClick={onDelete} */}
+        <MenuItem onClick={() => setOpenConfirm(true)} sx={{ color: 'error.main' }}>
           <Icon icon={trash2Outline} width={20} height={20} />
           <Typography variant="body2" sx={{ ml: 2 }}>
             Delete
           </Typography>
+          <Dialog
+            open={openConfirm}
+            onClose={() => setOpenConfirm(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Are you sure you want to cancel this booking?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={onDelete} autoFocus color="error" variant="contained">
+                Confirm
+              </Button>
+              <Button
+                onClick={() => {
+                  handleClose();
+                  setOpenConfirm(false);
+                }}
+                color="info"
+                variant="outlined"
+              >
+                Cancel
+              </Button>
+            </DialogActions>
+          </Dialog>
         </MenuItem>
       </Menu>
     </>
@@ -123,12 +159,17 @@ function MoreMenuButton({ onDownload, onPrint, onShare, onDelete }) {
 export default function BookingDetails() {
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [bookData, setBookData] = useState([]);
 
-  const handleClickDownload = () => {};
-  const handleClickPrint = () => {};
-  const handleClickShare = () => {};
-  const handleClickDelete = () => {};
-
+  // const handleClickDownload = () => {};
+  // const handleClickPrint = () => {};
+  // const handleClickShare = () => {};
+  const handleClickDelete = (name, uid) => {
+    dispatch(deleteBookPG(name, uid));
+    navigate('/dashboard/pg-finder/home');
+  };
   useEffect(
     () =>
       firebase.auth().onAuthStateChanged((user) => {
@@ -142,6 +183,7 @@ export default function BookingDetails() {
                 // console.log(doc.data());
                 temp.push(doc.data());
                 console.log('temp', temp);
+                setBookData(temp);
               });
             })
             .catch((error) => {
@@ -171,19 +213,21 @@ export default function BookingDetails() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {MOCK_BOOKINGS.map((row) => (
-                  <TableRow key={row.id}>
-                    <TableCell>
-                      <Stack direction="row" alignItems="center" spacing={2}>
-                        <Avatar alt={row.name} src={row.avatar} />
-                        <Typography variant="subtitle2">{row.name}</Typography>
-                      </Stack>
-                    </TableCell>
+                {bookData.map((row) => {
+                  const { uid, PGname, bookDate, roomType } = row;
+                  return (
+                    <TableRow key={row.id}>
+                      <TableCell>
+                        <Stack direction="row" alignItems="center" spacing={2}>
+                          {/* <Avatar alt={row.name} src={row.avatar} /> */}
+                          <Typography variant="subtitle2">{PGname}</Typography>
+                        </Stack>
+                      </TableCell>
 
-                    <TableCell>{format(new Date(row.checkIn), 'dd MMM yyyy')}</TableCell>
-                    {/* <TableCell>{format(new Date(row.checkOut), 'dd MMM yyyy')}</TableCell> */}
+                      <TableCell>{bookDate.toDate().toDateString()}</TableCell>
+                      {/* <TableCell>{format(new Date(row.checkOut), 'dd MMM yyyy')}</TableCell> */}
 
-                    {/* <TableCell>
+                      {/* <TableCell>
                       <Label
                         variant={isLight ? 'ghost' : 'filled'}
                         color={
@@ -194,20 +238,20 @@ export default function BookingDetails() {
                       </Label>
                     </TableCell> */}
 
-                    {/* <TableCell>{row.phoneNumber}</TableCell> */}
-                    <TableCell sx={{ textTransform: 'capitalize' }}>{row.roomType}</TableCell>
+                      {/* <TableCell>{row.phoneNumber}</TableCell> */}
+                      <TableCell sx={{ textTransform: 'capitalize' }}>{roomType}</TableCell>
 
-                    <TableCell align="right">
-                      <MoreMenuButton
-                        onDownload={handleClickDownload}
-                        onPrint={handleClickPrint}
-                        onShare={handleClickShare}
-                        onDelete={handleClickDelete}
-                        h
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
+                      <TableCell align="right">
+                        <MoreMenuButton
+                          // onDownload={handleClickDownload}
+                          // onPrint={handleClickPrint}
+                          // onShare={handleClickShare}
+                          onDelete={() => handleClickDelete(PGname, uid)}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </TableContainer>

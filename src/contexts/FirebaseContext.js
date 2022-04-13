@@ -51,6 +51,7 @@ const AuthContext = createContext({
   loginWithTwitter: () => Promise.resolve(),
   logout: () => Promise.resolve(),
   newPG: () => Promise.resolve(),
+  updatePG: () => Promise.resolve(),
   deletePG: () => Promise.resolve()
 });
 
@@ -216,8 +217,12 @@ function AuthProvider({ children }) {
 
   const bookPG = async (firstName, lastName, email, phone, profession, roomType) => {
     firebase.auth().onAuthStateChanged((user) => {
+      const Pgname = product?.name;
+      const key = `${Pgname.split(' ').join('')}`;
+      const key2 = user.uid;
+      const mainKey = key + key2;
       if (user) {
-        const customerDetailsRef = firebase.firestore().collection('BookPG').doc();
+        const customerDetailsRef = firebase.firestore().collection('BookPG').doc(mainKey);
         customerDetailsRef
           .set({
             uid: user.uid,
@@ -289,6 +294,7 @@ function AuthProvider({ children }) {
         paymentRef
           .set({
             feedbackDate: firebase.firestore.FieldValue.serverTimestamp(),
+            PGname: product?.name,
             rating,
             review,
             name,
@@ -352,6 +358,55 @@ function AuthProvider({ children }) {
     });
   };
 
+  const updatePG = async (
+    name,
+    description,
+    images,
+    owner,
+    add,
+    price,
+    houseRules,
+    status,
+    category,
+    rooms,
+    food,
+    amenities
+  ) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        const key = `${name.split(' ').join('')}`;
+        const pgDetailsRef = firebase.firestore().collection('PGdetails').doc(key);
+        let image = [...images];
+        image = image.map((item) => (image[item] = { ...item }));
+        pgDetailsRef
+          .update(
+            {
+              uid: user.uid,
+              publishDate: firebase.firestore.FieldValue.serverTimestamp(),
+              name,
+              description,
+              image,
+              owner,
+              add,
+              price,
+              houseRules,
+              status,
+              category,
+              rooms,
+              food,
+              amenities
+            },
+            { merge: true }
+          )
+          .then(() => {
+            console.log('Update PG successful');
+          })
+          .catch((error) => {
+            console.error('Error update PG: ', error);
+          });
+      }
+    });
+  };
   // const deletePG = async (name) => {
   //   firebase.auth().onAuthStateChanged((user) => {
   //     const key = `${name.split(' ').join('')}`;
@@ -409,7 +464,8 @@ function AuthProvider({ children }) {
         loginWithTwitter,
         logout,
         resetPassword,
-        newPG
+        newPG,
+        updatePG
         // deletePG
       }}
     >

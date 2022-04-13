@@ -83,6 +83,7 @@ export default function EcommerceShop() {
   const dispatch = useDispatch();
   const [openFilter, setOpenFilter] = useState(false);
   const { products, sortBy, filters } = useSelector((state) => state.product);
+  console.log('state?.filters', filters);
   const filteredProducts = applyFilter(products, sortBy, filters);
 
   const formik = useFormik({

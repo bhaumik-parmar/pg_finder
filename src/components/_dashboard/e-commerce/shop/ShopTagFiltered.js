@@ -70,6 +70,7 @@ export default function ShopTagFiltered({ formik, filters, isShowReset, isDefaul
 
   const handleRemoveRooms = (value) => {
     const newValue = filter(rooms, (_item) => _item !== value);
+    console.log('newValue', newValue);
     handleSubmit();
     setFieldValue('rooms', newValue);
   };

@@ -31,11 +31,11 @@ import MenuPopover from '../../components/MenuPopover';
 // ----------------------------------------------------------------------
 const role = localStorage.getItem('role');
 const MENU_OPTIONS = [
-  {
-    label: 'Home',
-    icon: homeFill,
-    linkTo: role === 'customer' ? PATH_DASHBOARD.eCommerce.shop : PATH_DASHBOARD.general.app
-  },
+  // {
+  //   label: 'Home',
+  //   icon: homeFill,
+  //   linkTo: role === 'customer' ? PATH_DASHBOARD.eCommerce.shop : PATH_DASHBOARD.general.app
+  // },
   {
     label: 'Profile',
     icon: personFill,

@@ -59,6 +59,12 @@ const slice = createSlice({
       state.product = action.payload;
     },
 
+    // GET REVIEWS
+    getReviewsSuccess(state, action) {
+      state.isLoading = false;
+      state.products = action.payload;
+    },
+
     // DELETE PRODUCT
     deleteProduct(state, action) {
       state.products = reject(state.products, { id: action.payload });
@@ -70,7 +76,7 @@ const slice = createSlice({
     },
 
     filterProducts(state, action) {
-      state.filters.gender = action.payload.gender;
+      state.filters.category = action.payload.category;
       state.filters.rooms = action.payload.rooms;
       state.filters.food = action.payload.food;
       state.filters.amenities = action.payload.amenities;
@@ -312,6 +318,60 @@ export function deleteProduct(name) {
           })
           .catch((error) => {
             console.log('Error removing document:', error);
+          });
+      }
+    });
+  };
+}
+
+export function deleteBookPG(name, uid) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    firebase.auth().onAuthStateChanged((user) => {
+      const key = `${name.split(' ').join('')}`;
+      const key2 = uid;
+      const mainKey = key + key2;
+      if (user) {
+        firebase
+          .firestore()
+          .collection('BookPG')
+          .doc(mainKey)
+          .delete()
+          .then(() => {
+            console.log('successfully booking canceled! ');
+          })
+          .catch((error) => {
+            console.log('Error cancel booking:', error);
+          });
+      }
+    });
+  };
+}
+
+export function getReviews() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    firebase.auth().onAuthStateChanged((user) => {
+      const temp = [];
+      if (user) {
+        const docRef = firebase.firestore().collection('Feedback');
+        docRef
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              console.log('feedback', doc.data());
+              // console.log('dispatch', docRef);
+              // if(doc.data().PGname === pgname){
+              // temp.push(doc.data());
+              // }
+              // }
+              temp.push(doc.data());
+            });
+            console.log('temp', temp);
+            dispatch(slice.actions.getReviewsSuccess(temp));
+          })
+          .catch((error) => {
+            console.error(error);
           });
       }
     });
