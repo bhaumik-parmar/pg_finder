@@ -1,5 +1,7 @@
 import { map, filter } from 'lodash';
 import { createSlice } from '@reduxjs/toolkit';
+import firebase from 'firebase/compat/app';
+
 // utils
 import axios from '../../utils/axios';
 
@@ -209,8 +211,28 @@ export function getUserList() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/user/manage-users');
-      dispatch(slice.actions.getUserListSuccess(response.data.users));
+      firebase.auth().onAuthStateChanged((user) => {
+        const temp = [];
+        if (user) {
+          const docRef = firebase.firestore().collection('Registration');
+          docRef
+            .where('role', '==', 'customer')
+            .get()
+            .then((querySnapshot) => {
+              querySnapshot.forEach((doc) => {
+                console.log(doc.data());
+                temp.push(doc.data());
+                console.log('temp:', temp);
+              });
+              dispatch(slice.actions.getUserListSuccess(temp));
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      });
+      // const response = await axios.get('/api/user/manage-users');
+      // dispatch(slice.actions.getUserListSuccess(response.data.users));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

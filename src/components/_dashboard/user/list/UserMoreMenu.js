@@ -45,7 +45,7 @@ export default function UserMoreMenu({ onDelete, userName }) {
           <ListItemText primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
 
-        <MenuItem
+        {/* <MenuItem
           component={RouterLink}
           to={`${PATH_DASHBOARD.user.root}/${paramCase(userName)}/edit`}
           sx={{ color: 'text.secondary' }}
@@ -54,7 +54,7 @@ export default function UserMoreMenu({ onDelete, userName }) {
             <Icon icon={editFill} width={24} height={24} />
           </ListItemIcon>
           <ListItemText primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
-        </MenuItem>
+        </MenuItem> */}
       </Menu>
     </>
   );
