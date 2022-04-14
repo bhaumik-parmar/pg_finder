@@ -20,11 +20,11 @@ import useSettings from '../../hooks/useSettings';
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import {
-  AccountGeneral,
-  AccountBilling,
-  AccountSocialLinks,
-  AccountNotifications,
-  AccountChangePassword
+  AccountGeneral
+  // AccountBilling,
+  // AccountSocialLinks,
+  // AccountNotifications,
+  // AccountChangePassword
 } from '../../components/_dashboard/user/account';
 
 // ----------------------------------------------------------------------
@@ -32,7 +32,7 @@ import {
 export default function UserAccount() {
   const { themeStretch } = useSettings();
   const { navigate } = useNavigate();
-  const [currentTab, setCurrentTab] = useState('general');
+  const [currentTab, setCurrentTab] = useState('profile');
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -45,10 +45,10 @@ export default function UserAccount() {
 
   const ACCOUNT_TABS = [
     {
-      value: 'general',
+      value: 'profile',
       icon: <Icon icon={roundAccountBox} width={20} height={20} />,
       component: <AccountGeneral />
-    },
+    }
     // {
     //   value: 'billing',
     //   icon: <Icon icon={roundReceipt} width={20} height={20} />,
@@ -64,11 +64,11 @@ export default function UserAccount() {
     //   icon: <Icon icon={shareFill} width={20} height={20} />,
     //   component: <AccountSocialLinks />
     // },
-    {
-      value: 'change_password',
-      icon: <Icon icon={roundVpnKey} width={20} height={20} />,
-      component: <AccountChangePassword />
-    }
+    // {
+    //   value: 'change_password',
+    //   icon: <Icon icon={roundVpnKey} width={20} height={20} />,
+    //   component: <AccountChangePassword />
+    // }
   ];
 
   const handleChangeTab = (event, newValue) => {

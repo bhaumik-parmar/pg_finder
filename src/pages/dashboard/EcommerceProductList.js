@@ -187,7 +187,7 @@ export default function EcommerceProductList() {
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
               name: 'Manage PG',
-              href: PATH_DASHBOARD.eCommerce.root
+              href: PATH_DASHBOARD.eCommerce.list
             },
             { name: 'PG List' }
           ]}

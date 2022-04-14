@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router';
 import { LoadingButton } from '@mui/lab';
 // material
 import { Button, Typography, TextField, Stack } from '@mui/material';
+import useAuth from '../../../hooks/useAuth';
+import useIsMountedRef from '../../../hooks/useIsMountedRef';
 //
 import { varFadeInUp, MotionInView } from '../../animate';
 import { MIconButton } from '../../@material-extend';
@@ -17,6 +19,8 @@ import { MIconButton } from '../../@material-extend';
 
 export default function ContactForm() {
   const navigate = useNavigate();
+  const { user, contactUs } = useAuth();
+  const isMountedRef = useIsMountedRef();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const ContactSchema = Yup.object().shape({
     name: Yup.string()
@@ -29,40 +33,39 @@ export default function ContactForm() {
     msg: Yup.string().required('Message required')
   });
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      name: '',
-      email: '',
+      name: user?.displayName,
+      email: user?.email,
       sub: '',
       msg: ''
     },
     validationSchema: ContactSchema,
-    onSubmit: () => {
-      // try {
-      enqueueSnackbar('Data Submitted', {
-        variant: 'success',
-        action: (key) => (
-          <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-            <Icon icon={closeFill} />
-          </MIconButton>
-        )
-      });
-      navigate('/dashboard/e-commerce/shop');
+    onSubmit: async (values, { setSubmitting, setErrors }) => {
+      try {
+        await contactUs(values.name, values.email, values.sub, values.msg);
+        enqueueSnackbar('Contact message Submitted', {
+          variant: 'success',
+          action: (key) => (
+            <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+              <Icon icon={closeFill} />
+            </MIconButton>
+          )
+        });
+
+        if (isMountedRef.current) {
+          setSubmitting(false);
+          navigate('/dashboard/pg-finder/home');
+        }
+      } catch (error) {
+        console.error(error);
+        if (isMountedRef.current) {
+          setErrors({ afterSubmit: error.message });
+          setSubmitting(false);
+        }
+      }
     }
   });
-
-  // if (isMountedRef.current) {
-  //       setSubmitting(false);
-  //       navigate('/auth/login/customer');
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     if (isMountedRef.current) {
-  //       setErrors({ afterSubmit: error.message });
-  //       setSubmitting(false);
-  //     }
-  //   }
-  // }
-  // });
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 

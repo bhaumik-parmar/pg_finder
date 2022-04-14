@@ -41,7 +41,7 @@ const AuthContext = createContext({
   login: () => Promise.resolve(),
   register: () => Promise.resolve(),
   updateProfile: () => Promise.resolve(),
-  changePassword: () => Promise.resolve(),
+  // changePassword: () => Promise.resolve(),
   bookPG: () => Promise.resolve(),
   paymentMethod: () => Promise.resolve(),
   payment: () => Promise.resolve(),
@@ -52,7 +52,8 @@ const AuthContext = createContext({
   logout: () => Promise.resolve(),
   newPG: () => Promise.resolve(),
   updatePG: () => Promise.resolve(),
-  deletePG: () => Promise.resolve()
+  deletePG: () => Promise.resolve(),
+  contactUs: () => Promise.resolve()
 });
 
 AuthProvider.propTypes = {
@@ -149,7 +150,6 @@ function AuthProvider({ children }) {
             lastName,
             email,
             phone,
-            password,
             displayName: `${firstName} ${lastName}`,
             role: 'customer'
           });
@@ -163,26 +163,26 @@ function AuthProvider({ children }) {
     await firebase.auth().sendPasswordResetEmail(email);
   };
 
-  const changePassword = async (password) => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        const passwdRef = firebase.firestore().collection('Registration').doc(user.uid);
-        passwdRef
-          .update(
-            {
-              password
-            },
-            { merge: true }
-          )
-          .then(() => {
-            console.log('Password changed');
-          })
-          .catch((error) => {
-            console.error('Error updating document: ', error);
-          });
-      }
-    });
-  };
+  // const changePassword = async (password) => {
+  //   firebase.auth().onAuthStateChanged((user) => {
+  //     if (user) {
+  //       const passwdRef = firebase.firestore().collection('Registration').doc(user.uid);
+  //       passwdRef
+  //         .update(
+  //           {
+  //             password
+  //           },
+  //           { merge: true }
+  //         )
+  //         .then(() => {
+  //           console.log('Password changed');
+  //         })
+  //         .catch((error) => {
+  //           console.error('Error updating document: ', error);
+  //         });
+  //     }
+  //   });
+  // };
 
   const updateProfile = async ({ displayName, email, phone, photoURL, address, city, zipCode, about }) => {
     firebase.auth().onAuthStateChanged((user) => {
@@ -407,6 +407,29 @@ function AuthProvider({ children }) {
       }
     });
   };
+
+  const contactUs = async (name, email, subject, message) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        const contactRef = firebase.firestore().collection('Contactus').doc();
+        contactRef
+          .set({
+            date: firebase.firestore.FieldValue.serverTimestamp(),
+            uid: user.uid,
+            name,
+            email,
+            subject,
+            message
+          })
+          .then(() => {
+            console.log('Send contact message successful');
+          })
+          .catch((error) => {
+            console.error('Error send message: ', error);
+          });
+      }
+    });
+  };
   // const deletePG = async (name) => {
   //   firebase.auth().onAuthStateChanged((user) => {
   //     const key = `${name.split(' ').join('')}`;
@@ -454,7 +477,7 @@ function AuthProvider({ children }) {
         login,
         register,
         updateProfile,
-        changePassword,
+        // changePassword,
         bookPG,
         paymentMethod,
         payment,
@@ -465,7 +488,8 @@ function AuthProvider({ children }) {
         logout,
         resetPassword,
         newPG,
-        updatePG
+        updatePG,
+        contactUs
         // deletePG
       }}
     >

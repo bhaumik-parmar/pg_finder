@@ -89,15 +89,16 @@ export default function EcommerceProductDetails() {
   const { product, error } = useSelector((state) => state.product);
 
   useEffect(() => {
-    dispatch(getProduct(name));
+    getPGdetails(name);
   }, [dispatch, name]);
-
-  useEffect(() => {
-    dispatch(getReviews());
-  }, [dispatch]);
 
   const handleChangeTab = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const getPGdetails = async () => {
+    await dispatch(getProduct(name));
+    await dispatch(getReviews(product?.name));
   };
 
   return (
@@ -183,6 +184,7 @@ export default function EcommerceProductDetails() {
                       disableRipple
                       value="2"
                       label="Review"
+                      // onClick={() => getReviewName(product.name)}
                       // label={`Review (${product.reviews.length})`}
                       sx={{ '& .MuiTab-wrapper': { whiteSpace: 'nowrap' } }}
                       // onClick={()=>({})} /* Call the get reviews function and pass the pg name for database query ad the the response in the below section */

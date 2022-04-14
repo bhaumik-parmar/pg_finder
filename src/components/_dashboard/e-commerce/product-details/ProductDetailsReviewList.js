@@ -21,30 +21,7 @@ ReviewItem.propTypes = {
 function ReviewItem({ review }) {
   const [isHelpful, setHelpfuls] = useState(false);
   const [reviews, setReviews] = useState([]);
-  const { name, rating, comment, helpful, postedAt, avatarUrl, isPurchased } = review;
-
-  const getReviews = async () => {
-    firebase.auth().onAuthStateChanged((user) => {
-      const temp = [];
-      if (user) {
-        const docRef = firebase.firestore().collection('Feedback');
-        docRef
-          .get()
-          .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              console.log(doc.data());
-              temp.push(doc.data());
-            });
-            setReviews(temp);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-    });
-  };
-
-  useEffect(() => getReviews(), []);
+  // const { name, rating, comment, helpful, postedAt, avatarUrl, isPurchased } = review;
 
   const handleClickHelpful = () => {
     setHelpfuls((prev) => !prev);
@@ -71,27 +48,27 @@ function ReviewItem({ review }) {
             flexDirection: { sm: 'column' }
           }}
         >
-          <Avatar
-            src={avatarUrl}
+          {/* <Avatar
+            // src={avatarUrl}
             sx={{
               mr: { xs: 2, sm: 0 },
               mb: { sm: 2 },
               width: { md: 64 },
               height: { md: 64 }
             }}
-          />
+          /> */}
           <div>
             <Typography variant="subtitle2" noWrap>
-              {name}
+              {review?.name}
             </Typography>
             <Typography variant="caption" sx={{ color: 'text.secondary' }} noWrap>
-              {fDate(postedAt)}
+              {review?.date}
             </Typography>
           </div>
         </Box>
 
         <div>
-          {/* <Rating size="small" value={rating} precision={0.1} readOnly /> */}
+          <Rating size="small" value={review?.rating} precision={0.1} readOnly />
 
           {/* {isPurchased && (
             <Typography variant="caption" sx={{ my: 1, display: 'flex', alignItems: 'center', color: 'primary.main' }}>
@@ -100,7 +77,7 @@ function ReviewItem({ review }) {
             </Typography>
           )} */}
 
-          <Typography variant="body2">{comment}</Typography>
+          <Typography variant="body2">{review?.review}</Typography>
 
           {/* <Stack mt={1} direction="row" alignItems="center" flexWrap="wrap">
             {!isHelpful && (
@@ -129,18 +106,16 @@ ProductDetailsReviewList.propTypes = {
 };
 
 export default function ProductDetailsReviewList({ product }) {
-  const { reviews } = product;
-
   return (
     <Box sx={{ pt: 3, px: 2, pb: 5 }}>
-      {/* <List disablePadding>
-        {reviews.map((review) => (
-          <ReviewItem key={review.id} review={review} />
+      <List disablePadding>
+        {product?.review?.map((item, count) => (
+          <ReviewItem key={count} review={item} />
         ))}
-      </List> */}
-      {/* <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+      </List>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Pagination count={10} color="primary" />
-      </Box> */}
+      </Box>
     </Box>
   );
 }

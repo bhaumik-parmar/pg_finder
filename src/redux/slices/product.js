@@ -40,6 +40,10 @@ const slice = createSlice({
     startLoading(state) {
       state.isLoading = true;
     },
+    // // START LOADING
+    // getReviews(state) {
+    //   state.R = true;
+    // },
 
     // HAS ERROR
     hasError(state, action) {
@@ -62,7 +66,7 @@ const slice = createSlice({
     // GET REVIEWS
     getReviewsSuccess(state, action) {
       state.isLoading = false;
-      state.products = action.payload;
+      state.product.review = action.payload;
     },
 
     // DELETE PRODUCT
@@ -348,7 +352,8 @@ export function deleteBookPG(name, uid) {
   };
 }
 
-export function getReviews() {
+export function getReviews(name) {
+  console.log('namepgproduct', name);
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     firebase.auth().onAuthStateChanged((user) => {
@@ -356,19 +361,21 @@ export function getReviews() {
       if (user) {
         const docRef = firebase.firestore().collection('Feedback');
         docRef
+          .where('PGname', '==', name)
           .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
               console.log('feedback', doc.data());
-              // console.log('dispatch', docRef);
-              // if(doc.data().PGname === pgname){
-              // temp.push(doc.data());
-              // }
-              // }
               temp.push(doc.data());
             });
-            console.log('temp', temp);
-            dispatch(slice.actions.getReviewsSuccess(temp));
+            const reviews = temp?.map((item) => ({
+              date: item?.feedbackDate?.toDate()?.toDateString(),
+              name: item?.name,
+              rating: item?.rating,
+              review: item?.review
+            }));
+            console.log('temp', reviews);
+            dispatch(slice.actions.getReviewsSuccess(reviews));
           })
           .catch((error) => {
             console.error(error);

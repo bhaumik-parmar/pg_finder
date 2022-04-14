@@ -1,5 +1,6 @@
 import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import InfoIcon from '@mui/icons-material/Info';
 import ContactPageIcon from '@mui/icons-material/ContactPage';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -39,17 +40,15 @@ const sidebarConfigAdmin = [
         path: PATH_DASHBOARD.general.app,
         icon: <HomeIcon />
       },
-      { title: 'Manage PG', path: PATH_DASHBOARD.eCommerce.list, icon: <SettingsIcon /> },
-
       {
-        title: 'About Us',
-        path: PATH_PAGE.about,
-        icon: <InfoIcon />
+        title: 'Manage User',
+        path: PATH_DASHBOARD.eCommerce.userlist,
+        icon: <ManageAccountsIcon />
       },
       {
-        title: 'Contact Us',
-        path: PATH_PAGE.contact,
-        icon: <ContactPageIcon />
+        title: 'Manage PG',
+        path: PATH_DASHBOARD.eCommerce.list,
+        icon: <SettingsIcon />
       }
     ]
   }

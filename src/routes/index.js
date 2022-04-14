@@ -90,6 +90,7 @@ export default function Router() {
             { path: 'home', element: <EcommerceShop /> },
             { path: 'pg/:name', element: <EcommerceProductDetails /> },
             { path: 'list', element: <EcommerceProductList /> },
+            { path: 'user/list', element: <UserList /> },
             { path: 'pg/new', element: <EcommerceProductCreate /> },
             { path: 'product/:name/edit', element: <EcommerceProductCreate /> },
             { path: 'checkout', element: <EcommerceCheckout /> },
@@ -104,7 +105,7 @@ export default function Router() {
             { element: <Navigate to="/dashboard/user/profile" replace /> },
             { path: 'profile', element: <UserProfile /> },
             { path: 'cards', element: <UserCards /> },
-            { path: 'list', element: <UserList /> },
+            // { path: 'list', element: <UserList /> },
             { path: 'new', element: <UserCreate /> },
             { path: ':name/edit', element: <UserCreate /> },
             { path: 'account', element: <UserAccount /> }

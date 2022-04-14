@@ -39,14 +39,14 @@ ProgressItem.propTypes = {
   total: PropTypes.number
 };
 
-function ProgressItem({ star, total }) {
-  const { name, starCount, reviewCount } = star;
+function ProgressItem({ star }) {
+  // const { name, starCount, reviewCount } = star;
   return (
     <Stack direction="row" alignItems="center" spacing={1.5}>
-      <Typography variant="subtitle2">{name}</Typography>
+      <Typography variant="subtitle2">{`${star?.i} Star`}</Typography>
       <LinearProgress
         variant="determinate"
-        value={(starCount / total) * 100}
+        value={star?.percan}
         sx={{
           mx: 2,
           flexGrow: 1,
@@ -54,7 +54,7 @@ function ProgressItem({ star, total }) {
         }}
       />
       <Typography variant="body2" sx={{ color: 'text.secondary', minWidth: 64, textAlign: 'right' }}>
-        {fShortenNumber(reviewCount)}
+        {fShortenNumber(star?.star)}
       </Typography>
     </Stack>
   );
@@ -66,10 +66,25 @@ ProductDetailsReviewOverview.propTypes = {
 };
 
 export default function ProductDetailsReviewOverview({ product, onOpen }) {
-  const { totalRating, totalReview, ratings } = product;
-  const { review, setReview } = useState();
-  console.log('product', product);
-  const total = sumBy(ratings, (star) => star.starCount);
+  // const { totalRating, totalReview, ratings } = product;
+  console.log(
+    'product',
+    product?.review?.reduce((prev, current) => current?.rating + prev, 0),
+    product?.review?.length
+  );
+  const rat = product?.review?.reduce((prev, current) => current?.rating + prev, 0);
+  const ratLength = product?.review?.length;
+  const ratingArr = product?.review?.map((item) => item?.rating);
+  const Arr = [];
+  const numro = 6;
+  for (let i = 1; i < numro; i += 1) {
+    const star = ratingArr?.filter((item) => item === i).length;
+    const percan = (star / ratingArr?.length) * 100;
+    Arr.push({ i, star, percan });
+  }
+  // console.log('Arr :>> ', rat / ratLength.toFixed(2));
+  // const rating = product?.review?.reduce((prev, current) => current + prev) / product?.review?.length;
+  // const total = sumBy(ratings, (star) => star.starCount);
 
   return (
     <Grid container>
@@ -78,25 +93,22 @@ export default function ProductDetailsReviewOverview({ product, onOpen }) {
           Average rating
         </Typography>
         <Typography variant="h2" gutterBottom sx={{ color: 'error.main' }}>
-          {totalRating}/5
+          {(rat / ratLength)?.toFixed(1)}/5
         </Typography>
-        <RatingStyle readOnly value={totalRating} precision={0.1} />
+        <RatingStyle readOnly value={ratLength} precision={0.1} />
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          ({fShortenNumber(totalReview)}
+          ({fShortenNumber(ratLength)}
           &nbsp;reviews)
         </Typography>
       </GridStyle>
 
-      {/* <GridStyle item xs={12} md={4}>
+      <GridStyle item xs={12} md={4}>
         <Stack spacing={1.5} sx={{ width: 1 }}>
-          {ratings
-            .slice(0)
-            .reverse()
-            .map((rating) => (
-              <ProgressItem key={rating.name} star={rating} total={total} />
-            ))}
+          {Arr?.map((item, count) => (
+            <ProgressItem key={count} star={item} />
+          ))}
         </Stack>
-      </GridStyle> */}
+      </GridStyle>
 
       <GridStyle item xs={12} md={4}>
         <ScrollLink to="move_add_review" spy smooth offset={-200}>

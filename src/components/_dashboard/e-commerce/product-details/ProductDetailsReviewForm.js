@@ -6,6 +6,8 @@ import { useSnackbar } from 'notistack';
 import { styled } from '@mui/material/styles';
 import { Button, Rating, TextField, Typography, FormHelperText, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import { useDispatch, useSelector } from 'react-redux';
+import product, { getReviews } from '../../../../redux/slices/product';
 import useAuth from '../../../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
@@ -24,6 +26,8 @@ ProductDetailsReviewForm.propTypes = {
 };
 
 export default function ProductDetailsReviewForm({ onClose, ...other }) {
+  const dispatch = useDispatch();
+  const { product } = useSelector((state) => state.product);
   const { enqueueSnackbar } = useSnackbar();
   const { user, feedback } = useAuth();
   const ReviewSchema = Yup.object().shape({
@@ -48,6 +52,7 @@ export default function ProductDetailsReviewForm({ onClose, ...other }) {
       resetForm();
       setSubmitting(false);
       await feedback(values.rating, values.review, values.name, values.email);
+      await dispatch(getReviews(product?.name));
       enqueueSnackbar('Feedback submitted successful', { variant: 'success' });
     }
   });

@@ -154,19 +154,19 @@ export default function UserList() {
           heading="User List"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
-            { name: 'List' }
+            { name: 'User', href: PATH_DASHBOARD.eCommerce.userlist },
+            { name: 'User List' }
           ]}
-          action={
-            <Button
-              variant="contained"
-              component={RouterLink}
-              to={PATH_DASHBOARD.user.newUser}
-              startIcon={<Icon icon={plusFill} />}
-            >
-              New User
-            </Button>
-          }
+          // action={
+          //   <Button
+          //     variant="contained"
+          //     component={RouterLink}
+          //     to={PATH_DASHBOARD.user.newUser}
+          //     startIcon={<Icon icon={plusFill} />}
+          //   >
+          //     New User
+          //   </Button>
+          // }
         />
 
         <Card>
