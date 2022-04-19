@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 // import { Icon } from '@iconify/react';
 // import androidFilled from '@iconify/icons-ant-design/android-filled';
 import { Icon } from '@iconify/react';
@@ -39,6 +40,7 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function AnalyticsWeeklySales() {
+  const navigate = useNavigate();
   const [pgData, setPgData] = useState([]);
   useEffect(
     () =>
@@ -66,7 +68,7 @@ export default function AnalyticsWeeklySales() {
 
   const TOTAL = pgData?.length;
   return (
-    <RootStyle>
+    <RootStyle onClick={() => navigate('/dashboard/pg-finder/list')}>
       <IconWrapperStyle>
         <Icon icon={buildingHouse} width={24} height={24} />
       </IconWrapperStyle>

@@ -12,12 +12,12 @@ import { BaseOptionChart } from '../../charts';
 
 // ----------------------------------------------------------------------
 
-const CHART_HEIGHT = 392;
+const CHART_HEIGHT = 372;
 const LEGEND_HEIGHT = 72;
 
 const ChartWrapperStyle = styled('div')(({ theme }) => ({
   height: CHART_HEIGHT,
-  marginTop: theme.spacing(2),
+  marginTop: theme.spacing(5),
   '& .apexcharts-canvas svg': { height: CHART_HEIGHT },
   '& .apexcharts-canvas svg,.apexcharts-canvas foreignObject': {
     overflow: 'visible'
@@ -33,10 +33,9 @@ const ChartWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function EcommerceSaleByGender() {
+export default function AnalyticsCurrentBookingByProfession() {
   const theme = useTheme();
   const [professionData, setProfessionData] = useState([]);
-
   useEffect(
     () =>
       firebase.auth().onAuthStateChanged((user) => {
@@ -62,82 +61,40 @@ export default function EcommerceSaleByGender() {
     []
   );
 
-  const total = professionData.map((item) => item.profession);
-  console.log('total.length', total.length);
-
-  // const chartOptions = merge(BaseOptionChart(), {
-  // labels: ['Student', 'Working Professional'],
-  // legend: { floating: true, horizontalAlign: 'center' },
-  // fill: {
-  //   type: 'gradient',
-  //   gradient: {
-  //     colorStops: [
-  //       [
-  //         {
-  //           offset: 0,
-  //           color: theme.palette.primary.light
-  //         },
-  //         {
-  //           offset: 100,
-  //           color: theme.palette.primary.main
-  //         }
-  //       ],
-  //       [
-  //         {
-  //           offset: 0,
-  //           color: theme.palette.warning.light
-  //         },
-  //         {
-  //           offset: 100,
-  //           color: theme.palette.warning.main
-  //         }
-  //       ]
-  //     ]
-  //   }
-  // },
-  // plotOptions: {
-  //   radialBar: {
-  //     hollow: { size: '68%' },
-  //     dataLabels: {
-  //       value: { offsetY: 16 },
-  //       total: {
-  //         formatter: () => fNumber(total)
-  //       }
-  //     }
-  //   }
-  // }
-  // }
-  // );
-
-  const options = {
-    chart: {
-      type: 'donut'
-    },
-    labels: ['Student', 'Working Professonal'],
-    responsive: [
-      {
-        breakpoint: 480,
-        options: {
-          chart: {
-            width: 200
-          },
-          legend: {
-            position: 'bottom'
-          }
+  const chartOptions = merge(BaseOptionChart(), {
+    colors: [
+      theme.palette.warning.main,
+      theme.palette.chart.green[0]
+      // theme.palette.chart.violet[0],
+      // theme.palette.chart.yellow[0]
+    ],
+    labels: ['Student', 'Working Professional'],
+    stroke: { colors: [theme.palette.background.paper] },
+    legend: { floating: true, horizontalAlign: 'center' },
+    dataLabels: { enabled: true, dropShadow: { enabled: false } },
+    tooltip: {
+      fillSeriesColor: false,
+      y: {
+        formatter: (seriesName) => fNumber(seriesName),
+        title: {
+          formatter: (seriesName) => `${seriesName}`
         }
       }
-    ]
-  };
+    },
+    plotOptions: {
+      pie: { donut: { labels: { show: false } } }
+    }
+  });
 
-  const student = professionData.filter((item) => item.profession === 'Student');
-  const workingProfessonal = professionData.filter((item) => item.profession === 'Working Professional');
+  const students = professionData.filter((item) => item.profession === 'Student');
+  const workingProfessional = professionData.filter((item) => item.profession === 'Working Professional');
 
-  const series = [student.length, workingProfessonal.length];
+  const CHART_DATA = [students.length, workingProfessional.length];
   return (
     <Card>
-      <CardHeader title="Book PG By Profession" />
+      <CardHeader title="Booking PG By Profession" />
       <ChartWrapperStyle dir="ltr">
-        <ReactApexChart options={options} series={series} type="donut" width={800} />
+        <ReactApexChart type="pie" series={CHART_DATA} options={chartOptions} height={280} />
       </ChartWrapperStyle>
     </Card>
   );

@@ -54,7 +54,8 @@ const TABLE_HEAD = [
   { id: 'status', label: 'Status' },
   { id: 'price', label: 'Price' },
   { id: 'category', label: 'Category' },
-  { id: 'add', label: 'Address' },
+  { id: 'area', label: 'Area' },
+  { id: 'city', label: 'City' },
   { id: '' }
 ];
 
@@ -226,7 +227,7 @@ export default function EcommerceProductList() {
                 />
                 <TableBody>
                   {filteredProducts.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, owner, add, cover, price, category, createdAt, publishDate, status } = row;
+                    const { id, name, owner, area, city, cover, price, category, createdAt, publishDate, status } = row;
 
                     const isItemSelected = selected.indexOf(name) !== -1;
 
@@ -270,7 +271,7 @@ export default function EcommerceProductList() {
                           </Box>
                         </TableCell>
                         <TableCell style={{ minWidth: 160 }}>{publishDate?.toDate()?.toDateString()}</TableCell>
-                        <TableCell style={{ minWidth: 160 }}>
+                        <TableCell style={{ minWidth: 150 }}>
                           <Label
                             variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
                             color={status ? 'success' : 'error'}
@@ -278,8 +279,8 @@ export default function EcommerceProductList() {
                             {sentenceCase(status ? 'Available' : 'Filled')}
                           </Label>
                         </TableCell>
-                        <TableCell style={{ minWidth: 160 }}>{fCurrency(price)}</TableCell>
-                        <TableCell style={{ minWidth: 160 }}>
+                        <TableCell style={{ minWidth: 120 }}>{fCurrency(price)}</TableCell>
+                        <TableCell style={{ minWidth: 120 }}>
                           <Label
                             variant="filled"
                             color={(category === 'Girls' && 'error') || 'info'}
@@ -300,7 +301,20 @@ export default function EcommerceProductList() {
                             }}
                           >
                             <Typography variant="subtitle2" noWrap>
-                              {add}
+                              {area}
+                            </Typography>
+                          </Box>
+                        </TableCell>
+                        <TableCell style={{ minWidth: 150 }}>
+                          <Box
+                            sx={{
+                              py: 2,
+                              display: 'flex',
+                              alignItems: 'center'
+                            }}
+                          >
+                            <Typography variant="subtitle2" noWrap>
+                              {city}
                             </Typography>
                           </Box>
                         </TableCell>

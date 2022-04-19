@@ -68,7 +68,9 @@ export default function ProductDetailsSumary() {
     id,
     name,
     owner,
-    add,
+    area,
+    city,
+    state,
     rooms,
     // sizes,
     price,
@@ -81,6 +83,7 @@ export default function ProductDetailsSumary() {
     totalReview
     // status
   } = product;
+  const add = `${area}, ${city}, ${state}`;
   const [openConfirm, setOpenConfirm] = useState(false);
   const [open, setOpen] = useState(false);
   const [roomType, setRoomType] = useState('');

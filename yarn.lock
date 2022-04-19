@@ -2060,6 +2060,13 @@
   resolved "https://registry.npmjs.org/@iconify/icons-ic/-/icons-ic-1.1.10.tgz"
   integrity sha512-decmjXkGbK7BocYw+T0dDZMOpHqs4JX//aN1+pNbcdjUYu/gK5pir717CoSpX771eCGKmoLWS0VGx0tIC8wqJQ==
 
+"@iconify/icons-icon-park-outline@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@iconify/icons-icon-park-outline/-/icons-icon-park-outline-1.2.1.tgz#9e8582da5500e01968b85e41b62bc33dfacaf594"
+  integrity sha512-nnVCBY/ldbStXfffDODJkNTDpZo+fDL+jPxBOYx2NBdVzWjSRx6FNsuGY9oQtT9WboZBT57lQFJMjRtrFaOdXg==
+  dependencies:
+    "@iconify/types" "^1.0.12"
+
 "@iconify/icons-logos@^1.2.4":
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/@iconify/icons-logos/-/icons-logos-1.2.4.tgz#fbf06ecbf76ca01904cd8d8745dc9fc5cd70d78b"

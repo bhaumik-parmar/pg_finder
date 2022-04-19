@@ -2,6 +2,7 @@ export { default as AnalyticsBugReports } from './AnalyticsBugReports';
 export { default as AnalyticsConversionRates } from './AnalyticsConversionRates';
 export { default as AnalyticsCurrentSubject } from './AnalyticsCurrentSubject';
 export { default as AnalyticsCurrentVisits } from './AnalyticsCurrentVisits';
+export { default as AnalyticsCurrentBookingByProfession } from './AnalyticsCurrentBookingByProfession';
 export { default as AnalyticsItemOrders } from './AnalyticsItemOrders';
 export { default as AnalyticsNewsUpdate } from './AnalyticsNewsUpdate';
 export { default as AnalyticsNewUsers } from './AnalyticsNewUsers';

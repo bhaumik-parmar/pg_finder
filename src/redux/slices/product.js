@@ -267,7 +267,6 @@ export function getProduct(name) {
         // console.log('key :>> ', key);
       }
     });
-    console.log('name', name);
   };
 }
 // return async (dispatch) => {

@@ -30,7 +30,8 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
-  const { name, image, add, price, status, category } = product;
+  const { name, image, area, city, state, price, status, category } = product;
+  const add = `${area}, ${city}, ${state}`;
   const key = name.split(' ').join('');
   // const linkTo = `${PATH_DASHBOARD.eCommerce.root}/pg/${paramCase(name)}`;
   const linkTo = `${PATH_DASHBOARD.eCommerce.root}/pg/${key}`;

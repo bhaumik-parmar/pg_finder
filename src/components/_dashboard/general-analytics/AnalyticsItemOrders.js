@@ -1,9 +1,12 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { Icon } from '@iconify/react';
-import windowsFilled from '@iconify/icons-ant-design/windows-filled';
+import transactionOrder from '@iconify/icons-icon-park-outline/transaction-order';
 // material
 import { alpha, styled } from '@mui/material/styles';
 import { Card, Typography } from '@mui/material';
 // utils
+import firebase from 'firebase/compat/app';
 import { fShortenNumber } from '../../../utils/formatNumber';
 
 // ----------------------------------------------------------------------
@@ -34,17 +37,42 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const TOTAL = 1723315;
-
 export default function AnalyticsItemOrders() {
+  const navigate = useNavigate();
+  const [bookingData, setBookingData] = useState([]);
+  useEffect(
+    () =>
+      firebase.auth().onAuthStateChanged((user) => {
+        const temp = [];
+        if (user) {
+          const docRef = firebase.firestore().collection('BookPG');
+          docRef
+            .get()
+            .then((querySnapshot) => {
+              querySnapshot.forEach((doc) => {
+                // console.log(doc.data());
+                temp.push(doc.data());
+              });
+              console.log('booking', temp);
+              setBookingData(temp);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      }),
+    []
+  );
+
+  const TOTAL = bookingData?.length;
   return (
-    <RootStyle>
+    <RootStyle onClick={() => navigate('/dashboard/pg-finder/pgbookDetails')}>
       <IconWrapperStyle>
-        <Icon icon={windowsFilled} width={24} height={24} />
+        <Icon icon={transactionOrder} width={24} height={24} />
       </IconWrapperStyle>
       <Typography variant="h3">{fShortenNumber(TOTAL)}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-        Item Orders
+        Total PG Booking
       </Typography>
     </RootStyle>
   );

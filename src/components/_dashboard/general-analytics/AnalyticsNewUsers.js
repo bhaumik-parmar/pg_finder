@@ -1,6 +1,7 @@
 // import { Icon } from '@iconify/react';
 // import appleFilled from '@iconify/icons-ant-design/apple-filled';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { Icon } from '@iconify/react';
 import userCircleO from '@iconify/icons-fa/user-circle-o';
 // material
@@ -40,6 +41,7 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function AnalyticsNewUsers() {
+  const navigate = useNavigate();
   const [userData, setUserData] = useState([]);
   useEffect(
     () =>
@@ -68,7 +70,7 @@ export default function AnalyticsNewUsers() {
 
   const TOTAL = userData?.length;
   return (
-    <RootStyle>
+    <RootStyle onClick={() => navigate('/dashboard/pg-finder/user/list')}>
       <IconWrapperStyle>
         <Icon icon={userCircleO} width={24} height={24} />
       </IconWrapperStyle>

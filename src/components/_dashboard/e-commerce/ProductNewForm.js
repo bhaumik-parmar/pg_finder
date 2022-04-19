@@ -96,7 +96,9 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     rooms: Yup.array().min(1, 'Room type is required'),
     amenities: Yup.array().min(1, 'Amenity is required'),
     owner: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Owner name is required'),
-    add: Yup.string().min(15, 'Too Short!').max(100, 'Too Long!').required('Address is required'),
+    area: Yup.string().min(2, 'Too Short!').max(30, 'Too Long!').required('Area is required'),
+    city: Yup.string().min(2, 'Too Short!').max(15, 'Too Long!').required('City is required'),
+    state: Yup.string().min(2, 'Too Short!').max(20, 'Too Long!').required('State is required'),
     food: Yup.array().min(1, 'Food amenity is required'),
     house_rules: Yup.array().min(1, 'House Rule is required'),
     price: Yup.number().required('Price is required')
@@ -109,7 +111,9 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
       description: currentProduct?.description || '',
       images: currentProduct?.image || [],
       owner: currentProduct?.owner || '',
-      add: currentProduct?.add || '',
+      area: currentProduct?.area || '',
+      city: currentProduct?.city || '',
+      state: currentProduct?.state || '',
       price: currentProduct?.price || '',
       // priceSale: pg?.priceSale || '',
       house_rules: currentProduct?.houseRules || [],
@@ -122,15 +126,18 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     },
     validationSchema: NewProductSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
+      console.log('values', values);
       try {
         // await fakeRequest(500);
-        if (isEdit) {
+        if (!isEdit) {
           await newPG(
             values.name,
             values.description,
             values.images,
             values.owner,
-            values.add,
+            values.area,
+            values.city,
+            values.state,
             values.price,
             values.house_rules,
             values.status,
@@ -145,7 +152,9 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
             values.description,
             values.images,
             values.owner,
-            values.add,
+            values.area,
+            values.city,
+            values.state,
             values.price,
             values.house_rules,
             values.status,
@@ -274,6 +283,32 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     </FormHelperText>
                   )}
                 </div>
+
+                <div>
+                  <div>
+                    <Autocomplete
+                      multiple
+                      freeSolo
+                      value={values.food}
+                      onChange={(event, newValue) => {
+                        setFieldValue('food', newValue);
+                      }}
+                      options={FOOD_OPTION.map((option) => option)}
+                      renderTags={(value, getTagProps) =>
+                        value.map((option, index) => (
+                          <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
+                        ))
+                      }
+                      renderInput={(params) => <TextField label="Food" {...params} />}
+                      error={Boolean(touched.food && errors.food)}
+                    />
+                    {touched.food && errors.food && (
+                      <FormHelperText error sx={{ px: 2 }}>
+                        {touched.food && errors.food}
+                      </FormHelperText>
+                    )}
+                  </div>
+                </div>
                 <div>
                   <Autocomplete
                     multiple
@@ -320,12 +355,24 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                   />
                   <TextField
                     fullWidth
-                    label="Address"
-                    multiline
-                    rows={3}
-                    {...getFieldProps('add')}
-                    error={Boolean(touched.add && errors.add)}
-                    helperText={touched.add && errors.add}
+                    label="Area"
+                    {...getFieldProps('area')}
+                    error={Boolean(touched.area && errors.area)}
+                    helperText={touched.area && errors.area}
+                  />
+                  <TextField
+                    fullWidth
+                    label="City"
+                    {...getFieldProps('city')}
+                    error={Boolean(touched.city && errors.city)}
+                    helperText={touched.city && errors.city}
+                  />
+                  <TextField
+                    fullWidth
+                    label="state"
+                    {...getFieldProps('state')}
+                    error={Boolean(touched.state && errors.state)}
+                    helperText={touched.state && errors.state}
                   />
 
                   <div>
@@ -337,32 +384,6 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                         ))}
                       </Stack>
                     </RadioGroup>
-                  </div>
-
-                  <div>
-                    <div>
-                      <Autocomplete
-                        multiple
-                        freeSolo
-                        value={values.food}
-                        onChange={(event, newValue) => {
-                          setFieldValue('food', newValue);
-                        }}
-                        options={FOOD_OPTION.map((option) => option)}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
-                          ))
-                        }
-                        renderInput={(params) => <TextField label="Food" {...params} />}
-                        error={Boolean(touched.food && errors.food)}
-                      />
-                      {touched.food && errors.food && (
-                        <FormHelperText error sx={{ px: 2 }}>
-                          {touched.food && errors.food}
-                        </FormHelperText>
-                      )}
-                    </div>
                   </div>
 
                   <Autocomplete
