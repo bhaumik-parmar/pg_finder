@@ -59,13 +59,14 @@ ShopTagFiltered.propTypes = {
 export default function ShopTagFiltered({ formik, filters, isShowReset, isDefault, onResetFilter }) {
   const theme = useTheme();
   const { values, handleSubmit, setFieldValue, initialValues } = formik;
-  const { gender, rooms, colors, food, amenities, priceRange, rating } = filters;
+  // const { category, rooms, colors, food, amenities, priceRange, rating } = filters;
+  const { category, rooms, food, amenities, priceRange } = filters;
   const isShow = values !== initialValues && !isShowReset;
 
-  const handleRemoveGender = (value) => {
-    const newValue = filter(gender, (_item) => _item !== value);
+  const handleRemoveCategory = (value) => {
+    const newValue = filter(category, (_item) => _item !== value);
     handleSubmit();
-    setFieldValue('gender', newValue);
+    setFieldValue('category', newValue);
   };
 
   const handleRemoveRooms = (value) => {
@@ -87,34 +88,34 @@ export default function ShopTagFiltered({ formik, filters, isShowReset, isDefaul
     setFieldValue('amenities', newValue);
   };
 
-  const handleRemoveColor = (value) => {
-    const newValue = filter(colors, (_item) => _item !== value);
-    handleSubmit();
-    setFieldValue('colors', newValue);
-  };
+  // const handleRemoveColor = (value) => {
+  //   const newValue = filter(colors, (_item) => _item !== value);
+  //   handleSubmit();
+  //   setFieldValue('colors', newValue);
+  // };
 
   const handleRemovePrice = () => {
     handleSubmit();
     setFieldValue('priceRange', '');
   };
 
-  const handleRemoveRating = () => {
-    handleSubmit();
-    setFieldValue('rating', '');
-  };
+  // const handleRemoveRating = () => {
+  //   handleSubmit();
+  //   setFieldValue('rating', '');
+  // };
 
   return (
     <RootStyle>
-      {gender.length > 0 && (
+      {category.length > 0 && (
         <WrapperStyle>
           <LabelStyle>Category:</LabelStyle>
           <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
-            {gender.map((_gender) => (
+            {category.map((_category) => (
               <Chip
-                key={_gender}
-                label={_gender}
+                key={_category}
+                label={_category}
                 size="small"
-                onDelete={() => handleRemoveGender(_gender)}
+                onDelete={() => handleRemoveCategory(_category)}
                 sx={{ m: 0.5 }}
               />
             ))}
@@ -167,7 +168,7 @@ export default function ShopTagFiltered({ formik, filters, isShowReset, isDefaul
         </WrapperStyle>
       )}
 
-      {colors.length > 0 && (
+      {/* {colors.length > 0 && (
         <WrapperStyle>
           <LabelStyle>Colors:</LabelStyle>
           <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
@@ -192,7 +193,7 @@ export default function ShopTagFiltered({ formik, filters, isShowReset, isDefaul
             ))}
           </Stack>
         </WrapperStyle>
-      )}
+      )} */}
 
       {priceRange && (
         <WrapperStyle>
@@ -203,14 +204,14 @@ export default function ShopTagFiltered({ formik, filters, isShowReset, isDefaul
         </WrapperStyle>
       )}
 
-      {rating && (
+      {/* {rating && (
         <WrapperStyle>
           <LabelStyle>Rating:</LabelStyle>
           <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
             <Chip size="small" label={sentenceCase(rating)} onDelete={handleRemoveRating} sx={{ m: 0.5 }} />
           </Stack>
         </WrapperStyle>
-      )}
+      )} */}
 
       {isShow && !isDefault && (
         <Button

@@ -1,10 +1,15 @@
+// import { Icon } from '@iconify/react';
+// import appleFilled from '@iconify/icons-ant-design/apple-filled';
+import { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
-import appleFilled from '@iconify/icons-ant-design/apple-filled';
+import userCircleO from '@iconify/icons-fa/user-circle-o';
 // material
 import { alpha, styled } from '@mui/material/styles';
 import { Card, Typography } from '@mui/material';
 // utils
+import firebase from 'firebase/compat/app';
 import { fShortenNumber } from '../../../utils/formatNumber';
+import 'firebase/compat/firestore';
 
 // ----------------------------------------------------------------------
 
@@ -34,17 +39,42 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const TOTAL = 1352831;
-
 export default function AnalyticsNewUsers() {
+  const [userData, setUserData] = useState([]);
+  useEffect(
+    () =>
+      firebase.auth().onAuthStateChanged((user) => {
+        const temp = [];
+        if (user) {
+          const docRef = firebase.firestore().collection('Registration');
+          docRef
+            .where('role', '==', 'customer')
+            .get()
+            .then((querySnapshot) => {
+              querySnapshot.forEach((doc) => {
+                // console.log(doc.data());
+                temp.push(doc.data());
+              });
+              console.log('temp', temp);
+              setUserData(temp);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      }),
+    []
+  );
+
+  const TOTAL = userData?.length;
   return (
     <RootStyle>
       <IconWrapperStyle>
-        <Icon icon={appleFilled} width={24} height={24} />
+        <Icon icon={userCircleO} width={24} height={24} />
       </IconWrapperStyle>
       <Typography variant="h3">{fShortenNumber(TOTAL)}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-        New Users
+        Total Users
       </Typography>
     </RootStyle>
   );

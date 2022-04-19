@@ -46,6 +46,7 @@ export default function AccountGeneral() {
     validationSchema: UpdateUserSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
+        console.log('...values', { ...values });
         await updateProfile({ ...values });
         enqueueSnackbar('Update success', { variant: 'success' });
         navigate('/dashboard/pg-finder/home');

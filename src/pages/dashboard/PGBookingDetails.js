@@ -36,14 +36,14 @@ import {
   DialogContentText,
   DialogActions
 } from '@mui/material';
-import { useDispatch } from '../../../redux/store';
-import { deleteBookPG } from '../../../redux/slices/product';
+import { useDispatch } from '../../redux/store';
+import { deleteBookPG } from '../../redux/slices/product';
 // utils
-import mockData from '../../../utils/mock-data';
+import mockData from '../../utils/mock-data';
 //
-import Label from '../../Label';
-import Scrollbar from '../../Scrollbar';
-import { MIconButton } from '../../@material-extend';
+import Label from '../../components/Label';
+import Scrollbar from '../../components/Scrollbar';
+import { MIconButton } from '../../components/@material-extend';
 
 // ----------------------------------------------------------------------
 
@@ -156,20 +156,20 @@ function MoreMenuButton({ onDownload, onPrint, onShare, onDelete }) {
   );
 }
 
-export default function BookingDetails() {
+export default function PGBookingDetails() {
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [bookData, setBookData] = useState([]);
+  const [pgBookData, setPGBookData] = useState([]);
 
   // const handleClickDownload = () => {};
   // const handleClickPrint = () => {};
   // const handleClickShare = () => {};
-  const handleClickDelete = (name, uid) => {
-    dispatch(deleteBookPG(name, uid));
-    navigate('/dashboard/pg-finder/home');
-  };
+  // const handleClickDelete = (name, uid) => {
+  //   dispatch(deleteBookPG(name, uid));
+  //   navigate('/dashboard/pg-finder/home');
+  // };
   useEffect(
     () =>
       firebase.auth().onAuthStateChanged((user) => {
@@ -177,14 +177,13 @@ export default function BookingDetails() {
         if (user) {
           const docRef = firebase.firestore().collection('BookPG');
           docRef
-            .where('email', '==', user.email)
             .get()
             .then((querySnapshot) => {
               querySnapshot.forEach((doc) => {
                 // console.log(doc.data());
                 temp.push(doc.data());
                 console.log('temp', temp);
-                setBookData(temp);
+                setPGBookData(temp);
               });
             })
             .catch((error) => {
@@ -204,9 +203,12 @@ export default function BookingDetails() {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ minWidth: 240 }}>PG Name</TableCell>
-                  <TableCell sx={{ minWidth: 160 }}>Booking Date</TableCell>
-                  <TableCell sx={{ minWidth: 120 }}>Room Type</TableCell>
+                  <TableCell sx={{ minWidth: 160 }}>PG Name</TableCell>
+                  <TableCell sx={{ minWidth: 160 }}>E-mail</TableCell>
+                  <TableCell sx={{ minWidth: 120 }}>Phone</TableCell>
+                  <TableCell sx={{ minWidth: 120 }}>Profession</TableCell>
+                  <TableCell sx={{ minWidth: 120 }}>Book Date</TableCell>
+                  <TableCell sx={{ minWidth: 120 }}>Room Tpe</TableCell>
                   {/* <TableCell sx={{ minWidth: 160 }}>Check Out</TableCell>
                   <TableCell sx={{ minWidth: 120 }}>Status</TableCell>
                   <TableCell sx={{ minWidth: 200 }}>Phone</TableCell> */}
@@ -214,8 +216,8 @@ export default function BookingDetails() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {bookData.map((row) => {
-                  const { uid, PGname, bookDate, roomType } = row;
+                {pgBookData.map((row) => {
+                  const { uid, PGname, email, phone, bookDate, profession, roomType } = row;
                   return (
                     <TableRow key={row.id}>
                       <TableCell>
@@ -224,8 +226,11 @@ export default function BookingDetails() {
                           <Typography variant="subtitle2">{PGname}</Typography>
                         </Stack>
                       </TableCell>
-
+                      <TableCell>{email}</TableCell>
+                      <TableCell>{phone}</TableCell>
+                      <TableCell sx={{ textTransform: 'capitalize' }}>{profession}</TableCell>
                       <TableCell>{bookDate.toDate().toDateString()}</TableCell>
+                      <TableCell>{roomType}</TableCell>
                       {/* <TableCell>{format(new Date(row.checkOut), 'dd MMM yyyy')}</TableCell> */}
 
                       {/* <TableCell>
@@ -240,16 +245,15 @@ export default function BookingDetails() {
                     </TableCell> */}
 
                       {/* <TableCell>{row.phoneNumber}</TableCell> */}
-                      <TableCell sx={{ textTransform: 'capitalize' }}>{roomType}</TableCell>
 
-                      <TableCell align="right">
+                      {/* <TableCell align="right">
                         <MoreMenuButton
                           // onDownload={handleClickDownload}
                           // onPrint={handleClickPrint}
                           // onShare={handleClickShare}
                           onDelete={() => handleClickDelete(PGname, uid)}
                         />
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   );
                 })}

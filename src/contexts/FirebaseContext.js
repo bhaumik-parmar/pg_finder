@@ -197,7 +197,7 @@ function AuthProvider({ children }) {
               displayName,
               email,
               phone,
-              photoURL,
+              photoURL: photoURL || null,
               address,
               city,
               zipCode,

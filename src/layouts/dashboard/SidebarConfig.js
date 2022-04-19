@@ -4,6 +4,8 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import InfoIcon from '@mui/icons-material/Info';
 import ContactPageIcon from '@mui/icons-material/ContactPage';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import AppSettingsAltIcon from '@mui/icons-material/AppSettingsAlt';
+import RateReviewIcon from '@mui/icons-material/RateReview';
 import { useLocation } from 'react-router';
 // routes
 import { PATH_DASHBOARD, PATH_PAGE } from '../../routes/paths';
@@ -40,6 +42,10 @@ const sidebarConfigAdmin = [
         path: PATH_DASHBOARD.general.app,
         icon: <HomeIcon />
       },
+      { title: 'e-commerce', path: PATH_DASHBOARD.general.ecommerce, icon: ICONS.ecommerce },
+      { title: 'analytics', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
+      { title: 'banking', path: PATH_DASHBOARD.general.banking, icon: ICONS.banking },
+      { title: 'booking', path: PATH_DASHBOARD.general.booking, icon: ICONS.booking },
       {
         title: 'Manage User',
         path: PATH_DASHBOARD.eCommerce.userlist,
@@ -49,6 +55,16 @@ const sidebarConfigAdmin = [
         title: 'Manage PG',
         path: PATH_DASHBOARD.eCommerce.list,
         icon: <SettingsIcon />
+      },
+      {
+        title: 'Manage Booking Details',
+        path: PATH_DASHBOARD.eCommerce.bookPG,
+        icon: <AppSettingsAltIcon />
+      },
+      {
+        title: 'Manage Feedback',
+        path: PATH_DASHBOARD.eCommerce.feedback,
+        icon: <RateReviewIcon />
       }
     ]
   }

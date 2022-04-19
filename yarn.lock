@@ -2036,10 +2036,24 @@
   resolved "https://registry.npmjs.org/@iconify/icons-ant-design/-/icons-ant-design-1.1.0.tgz"
   integrity sha512-sE4NKXMfN9arTFmfvt4zARoS+hjhd8P0z5osjWYxVkQPCri1RYpF+NRa9MsDh3ScqAcSU9wfUeQ3X4Gf8GrcNQ==
 
+"@iconify/icons-bx@^1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@iconify/icons-bx/-/icons-bx-1.2.3.tgz#9c683339eb887a87bd6ecd32053f9ee26ed2fb02"
+  integrity sha512-L78ckaCU/f0GXJLIgbvpI3wFKgV5Lnnn+Q3IjwU2QzfpXEpdJJZgXGC2aEIpO6DIl0DK2XFiNZ6vMW8fxSG4UA==
+  dependencies:
+    "@iconify/types" "^1.0.12"
+
 "@iconify/icons-eva@^1.1.0":
   version "1.1.0"
   resolved "https://registry.npmjs.org/@iconify/icons-eva/-/icons-eva-1.1.0.tgz"
   integrity sha512-a2wCJw+6UebrsoJ2WhpHUcdr4PJljwk0tdu1GfpjzwVyiJBC7y6sc2h7as1npJPLwgMIc/q8YFJf5iFl7Ik3NA==
+
+"@iconify/icons-fa@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@iconify/icons-fa/-/icons-fa-1.2.1.tgz#a31a744fcbcba29a8e09fec83a0a29c1c621a111"
+  integrity sha512-K8OdZmntX8VNXd7eSLIRhNsGygWY/xB7xzFoV+SPO/iqYu6Ry2aaZIw0CNPrl+20OcbL6axeevgXRMLeVS/1wQ==
+  dependencies:
+    "@iconify/types" "^1.0.12"
 
 "@iconify/icons-ic@^1.1.10":
   version "1.1.10"
@@ -2053,10 +2067,10 @@
   dependencies:
     "@iconify/types" "^1.0.12"
 
-"@iconify/react@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.npmjs.org/@iconify/react/-/react-3.0.1.tgz"
-  integrity sha512-yUskSSR80JzRSWcqNsBAG9AN802XzZgHsex8mTOkMLYcPQC3fk1XwK17ulnY5vf692OafhGCAMccR8TWKFaGdw==
+"@iconify/react@^3.2.1":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@iconify/react/-/react-3.2.1.tgz#d18da31cec58c1aa8fdf4def451cc7e3196d88de"
+  integrity sha512-yKzixjC9ct9RC/aSGo1OGxkG2rpfhlr/urRz6k2YZlIBzn92PBTlqtSx8o8dFYEorr3eUFSCBZFzBy1yw5jsAA==
 
 "@iconify/types@^1.0.12":
   version "1.0.12"

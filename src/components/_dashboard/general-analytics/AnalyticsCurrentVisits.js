@@ -1,8 +1,10 @@
+import { useEffect, useState } from 'react';
 import { merge } from 'lodash';
 import ReactApexChart from 'react-apexcharts';
 // material
 import { useTheme, styled } from '@mui/material/styles';
 import { Card, CardHeader } from '@mui/material';
+import firebase from 'firebase/compat/app';
 // utils
 import { fNumber } from '../../../utils/formatNumber';
 //
@@ -31,19 +33,42 @@ const ChartWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const CHART_DATA = [4344, 5435, 1443, 4443];
-
 export default function AnalyticsCurrentVisits() {
   const theme = useTheme();
+  const [categoryData, setCategoryData] = useState([]);
+  useEffect(
+    () =>
+      firebase.auth().onAuthStateChanged((user) => {
+        const temp = [];
+        if (user) {
+          const docRef = firebase.firestore().collection('PGdetails');
+          docRef
+            .get()
+            .then((querySnapshot) => {
+              querySnapshot.forEach((doc) => {
+                // console.log(doc.data());
+                temp.push(doc.data());
+              });
+              console.log('temp', temp);
+              setCategoryData(temp);
+              // console.log('temp.category:', temp[0].category);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      }),
+    []
+  );
 
   const chartOptions = merge(BaseOptionChart(), {
     colors: [
-      theme.palette.primary.main,
-      theme.palette.chart.blue[0],
-      theme.palette.chart.violet[0],
-      theme.palette.chart.yellow[0]
+      theme.palette.error.main,
+      theme.palette.chart.blue[0]
+      // theme.palette.chart.violet[0],
+      // theme.palette.chart.yellow[0]
     ],
-    labels: ['America', 'Asia', 'Europe', 'Africa'],
+    labels: ['Boys', 'Girls'],
     stroke: { colors: [theme.palette.background.paper] },
     legend: { floating: true, horizontalAlign: 'center' },
     dataLabels: { enabled: true, dropShadow: { enabled: false } },
@@ -61,9 +86,13 @@ export default function AnalyticsCurrentVisits() {
     }
   });
 
+  const boys = categoryData.filter((item) => item.category === 'Boys');
+  const girls = categoryData.filter((item) => item.category === 'Girls');
+
+  const CHART_DATA = [boys.length, girls.length];
   return (
     <Card>
-      <CardHeader title="Current Visits" />
+      <CardHeader title="Category wise PG" />
       <ChartWrapperStyle dir="ltr">
         <ReactApexChart type="pie" series={CHART_DATA} options={chartOptions} height={280} />
       </ChartWrapperStyle>

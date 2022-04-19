@@ -96,6 +96,8 @@ export default function Router() {
             { path: 'checkout', element: <EcommerceCheckout /> },
             { path: 'payment', element: <Payment /> },
             { path: 'booking', element: <GeneralBooking /> },
+            { path: 'pgbookdetails', element: <PGBookingDetails /> },
+            { path: 'feedback', element: <FeedbackDetails /> },
             { path: 'invoice', element: <EcommerceInvoice /> }
           ]
         },
@@ -256,6 +258,8 @@ const EcommerceProductList = Loadable(lazy(() => import('../pages/dashboard/Ecom
 const EcommerceProductCreate = Loadable(lazy(() => import('../pages/dashboard/EcommerceProductCreate')));
 const EcommerceCheckout = Loadable(lazy(() => import('../pages/dashboard/EcommerceCheckout')));
 const EcommerceInvoice = Loadable(lazy(() => import('../pages/dashboard/EcommerceInvoice')));
+const PGBookingDetails = Loadable(lazy(() => import('../pages/dashboard/PGBookingDetails')));
+const FeedbackDetails = Loadable(lazy(() => import('../pages/dashboard/FeedbackDetails')));
 // const BlogPosts = Loadable(lazy(() => import('../pages/dashboard/BlogPosts')));
 // const BlogPost = Loadable(lazy(() => import('../pages/dashboard/BlogPost')));
 // const BlogNewPost = Loadable(lazy(() => import('../pages/dashboard/BlogNewPost')));

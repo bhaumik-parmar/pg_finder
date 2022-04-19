@@ -73,6 +73,8 @@ export const PATH_DASHBOARD = {
     checkout: path(ROOTS_DASHBOARD, '/pg-finder/checkout'),
     payment: path(ROOTS_DASHBOARD, '/pg-finder/payment'),
     booking: path(ROOTS_DASHBOARD, '/pg-finder/booking'),
+    bookPG: path(ROOTS_DASHBOARD, '/pg-finder/pgbookDetails'),
+    feedback: path(ROOTS_DASHBOARD, '/pg-finder/feedback'),
     invoice: path(ROOTS_DASHBOARD, '/pg-finder/invoice')
   }
   // blog: {

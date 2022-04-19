@@ -53,6 +53,7 @@ const TABLE_HEAD = [
   { id: 'date', label: 'Published Date' },
   { id: 'status', label: 'Status' },
   { id: 'price', label: 'Price' },
+  { id: 'category', label: 'Category' },
   { id: 'add', label: 'Address' },
   { id: '' }
 ];
@@ -225,7 +226,7 @@ export default function EcommerceProductList() {
                 />
                 <TableBody>
                   {filteredProducts.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, owner, add, cover, price, createdAt, publishDate, status } = row;
+                    const { id, name, owner, add, cover, price, category, createdAt, publishDate, status } = row;
 
                     const isItemSelected = selected.indexOf(name) !== -1;
 
@@ -278,6 +279,18 @@ export default function EcommerceProductList() {
                           </Label>
                         </TableCell>
                         <TableCell style={{ minWidth: 160 }}>{fCurrency(price)}</TableCell>
+                        <TableCell style={{ minWidth: 160 }}>
+                          <Label
+                            variant="filled"
+                            color={(category === 'Girls' && 'error') || 'info'}
+                            sx={{
+                              mt: 2,
+                              mb: 1
+                            }}
+                          >
+                            {sentenceCase(category)}
+                          </Label>
+                        </TableCell>
                         <TableCell style={{ minWidth: 160 }}>
                           <Box
                             sx={{

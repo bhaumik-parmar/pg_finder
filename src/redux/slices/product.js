@@ -13,13 +13,13 @@ const initialState = {
   product: null,
   sortBy: null,
   filters: {
-    gender: [],
+    category: [],
     rooms: [],
     food: [],
     amenities: [],
-    colors: [],
-    priceRange: '',
-    rating: ''
+    // colors: [],
+    priceRange: ''
+    // rating: ''
   },
   checkout: {
     activeStep: 0,
@@ -84,9 +84,9 @@ const slice = createSlice({
       state.filters.rooms = action.payload.rooms;
       state.filters.food = action.payload.food;
       state.filters.amenities = action.payload.amenities;
-      state.filters.colors = action.payload.colors;
+      // state.filters.colors = action.payload.colors;
       state.filters.priceRange = action.payload.priceRange;
-      state.filters.rating = action.payload.rating;
+      // state.filters.rating = action.payload.rating;
     },
 
     // CHECKOUT

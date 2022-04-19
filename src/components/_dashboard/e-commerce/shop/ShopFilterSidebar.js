@@ -104,7 +104,11 @@ export default function ShopFilterSidebar({ isOpenFilter, onResetFilter, onOpenF
                       <FormControlLabel
                         key={item}
                         control={
-                          <Checkbox {...getFieldProps('gender')} value={item} checked={values.gender.includes(item)} />
+                          <Checkbox
+                            {...getFieldProps('category')}
+                            value={item}
+                            checked={values.category.includes(item)}
+                          />
                         }
                         label={item}
                       />

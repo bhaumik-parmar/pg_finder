@@ -38,21 +38,54 @@ function applyFilter(products, sortBy, filters) {
     products = orderBy(products, ['price'], ['asc']);
   }
   // FILTER PRODUCTS
-  if (filters.gender.length > 0) {
-    products = filter(products, (_product) => includes(filters.gender, _product.gender));
+  if (filters.category.length > 0) {
+    products = filter(products, (_product) => includes(filters.category, _product.category));
   }
   if (filters.rooms.length > 0) {
-    products = filter(products, (_product) => _product.rooms === filters.rooms);
+    products = products.filter((_product) => {
+      let bool = false;
+      for (let i = 0; i <= filters?.rooms?.length - 1; i += 1) {
+        const boolPrev = bool;
+        if (i === 0) {
+          bool = _product.rooms?.includes(filters?.rooms[i]);
+        } else {
+          bool = _product.rooms?.includes(filters?.rooms[i]) && boolPrev;
+        }
+      }
+      return bool;
+    });
   }
   if (filters.food.length > 0) {
-    products = filter(products, (_product) => _product.food === filters.food);
+    products = products.filter((_product) => {
+      let bool = false;
+      for (let i = 0; i <= filters?.food?.length - 1; i += 1) {
+        const boolPrev = bool;
+        if (i === 0) {
+          bool = _product.food?.includes(filters?.food[i]);
+        } else {
+          bool = _product.food?.includes(filters?.food[i]) && boolPrev;
+        }
+      }
+      return bool;
+    });
   }
   if (filters.amenities.length > 0) {
-    products = filter(products, (_product) => _product.amenities === filters.amenities);
+    products = products.filter((_product) => {
+      let bool = false;
+      for (let i = 0; i <= filters?.amenities?.length - 1; i += 1) {
+        const boolPrev = bool;
+        if (i === 0) {
+          bool = _product.amenities?.includes(filters?.amenities[i]);
+        } else {
+          bool = _product.amenities?.includes(filters?.amenities[i]) && boolPrev;
+        }
+      }
+      return bool;
+    });
   }
-  if (filters.colors.length > 0) {
-    products = filter(products, (_product) => _product.colors.some((color) => filters.colors.includes(color)));
-  }
+  // if (filters.colors.length > 0) {
+  //   products = filter(products, (_product) => _product.colors.some((color) => filters.colors.includes(color)));
+  // }
   if (filters.priceRange) {
     products = filter(products, (_product) => {
       if (filters.priceRange === 'below') {
@@ -83,18 +116,18 @@ export default function EcommerceShop() {
   const dispatch = useDispatch();
   const [openFilter, setOpenFilter] = useState(false);
   const { products, sortBy, filters } = useSelector((state) => state.product);
-  console.log('state?.filters', filters);
   const filteredProducts = applyFilter(products, sortBy, filters);
+  console.log('state?.filters', filters, filteredProducts);
 
   const formik = useFormik({
     initialValues: {
-      gender: filters.gender,
+      category: filters.category,
       rooms: filters.rooms,
       food: filters.food,
       amenities: filters.amenities,
-      colors: filters.colors,
-      priceRange: filters.priceRange,
-      rating: filters.rating
+      // colors: filters.colors,
+      priceRange: filters.priceRange
+      // rating: filters.rating
     },
     onSubmit: async (values, { setSubmitting }) => {
       try {
@@ -111,9 +144,9 @@ export default function EcommerceShop() {
 
   const isDefault =
     !values.priceRange &&
-    !values.rating &&
-    values.gender.length === 0 &&
-    values.colors.length === 0 &&
+    // !values.rating &&
+    values.category.length === 0 &&
+    // values.colors.length === 0 &&
     values.rooms.length === 0 &&
     values.food.length === 0 &&
     values.amenities.length === 0;
