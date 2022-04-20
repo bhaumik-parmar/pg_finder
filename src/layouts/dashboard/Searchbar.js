@@ -1,9 +1,13 @@
 import { Icon } from '@iconify/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
 import searchFill from '@iconify/icons-eva/search-fill';
 // material
 import { styled, alpha } from '@mui/material/styles';
 import { Box, Input, Slide, Button, InputAdornment, ClickAwayListener } from '@mui/material';
+import firebase from 'firebase/compat/app';
+import { filter } from 'lodash';
+import { useSelector } from '../../redux/store';
 // components
 import { MIconButton } from '../../components/@material-extend';
 
@@ -34,17 +38,58 @@ const SearchbarStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
+function applySortFilter(array, query) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+
+  if (query) {
+    return filter(array, (_product) => _product.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+  }
+
+  return stabilizedThis.map((el) => el[0]);
+}
 export default function Searchbar() {
   const [isOpen, setOpen] = useState(false);
+  const [pgCityData, setPgCityData] = useState([]);
+  const { products } = useSelector((state) => state.product);
+  const [city, setCity] = useState('');
+  useEffect(
+    () =>
+      firebase.auth().onAuthStateChanged((user) => {
+        const temp = [];
+        if (user) {
+          const docRef = firebase.firestore().collection('PGdetails');
+          docRef
+            .get()
+            .then((querySnapshot) => {
+              querySnapshot.forEach((doc) => {
+                // console.log(doc.data());
+                temp.push(doc.data());
+              });
+              console.log('tempCity:', temp);
+              setPgCityData(temp);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      }),
+    []
+  );
+  // const cities = pgCityData.map((item) => item.city);
+  // console.log('city :>> ', cities);
 
   const handleOpen = () => {
     setOpen((prev) => !prev);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleClose = (e) => {
+    setCity(e.target.value);
+    // setOpen(false);
+    console.log('e.target.value :>> ', e.target.value);
   };
+  const filteredProducts = applySortFilter(products, city);
 
+  const isProductNotFound = filteredProducts.length === 0;
   return (
     <ClickAwayListener onClickAway={handleClose}>
       <div>
@@ -59,7 +104,9 @@ export default function Searchbar() {
             <Input
               autoFocus
               fullWidth
+              value={city}
               disableUnderline
+              onChange={handleClose}
               placeholder="Search…"
               startAdornment={
                 <InputAdornment position="start">
@@ -68,9 +115,9 @@ export default function Searchbar() {
               }
               sx={{ mr: 1, fontWeight: 'fontWeightBold' }}
             />
-            <Button variant="contained" onClick={handleClose}>
+            {/* <Button variant="contained" onClick={handleClose}>
               Search
-            </Button>
+            </Button> */}
           </SearchbarStyle>
         </Slide>
       </div>

@@ -61,9 +61,9 @@ export default function EcommerceSaleByGender() {
       }),
     []
   );
-
+  console.log('first', professionData);
   const total = professionData.map((item) => item.profession);
-  console.log('total.length', total.length);
+  console.log('total.length', total);
 
   // const chartOptions = merge(BaseOptionChart(), {
   // labels: ['Student', 'Working Professional'],

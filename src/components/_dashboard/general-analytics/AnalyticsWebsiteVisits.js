@@ -71,7 +71,7 @@ import { BaseOptionChart } from '../../charts';
 // }
 
 export default function AnalyticsWebsiteVisits() {
-  const [seriesData, setSeriesData] = useState(2022);
+  const [seriesData, setSeriesData] = useState('2022');
   const [yearlyBookingData, setYearlyBookingData] = useState([]);
 
   useEffect(
@@ -99,7 +99,8 @@ export default function AnalyticsWebsiteVisits() {
   );
 
   const handleChangeSeriesData = (event) => {
-    setSeriesData(Number(event.target.value));
+    console.log('event.target.value :>> ', typeof event.target.value);
+    setSeriesData(event.target.value);
   };
 
   const chartOptions = merge(BaseOptionChart(), {
@@ -108,73 +109,33 @@ export default function AnalyticsWebsiteVisits() {
       categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     }
   });
+  // console.log('year', year);
   const year = yearlyBookingData.map((item) => item.bookDate.toDate().getFullYear());
-  console.log('year:>', year.length);
   const y = [...new Set(year)];
-  console.log('object :>> ', y[0]);
-  const month0 = yearlyBookingData.filter((item) => item.bookDate.toDate().getMonth() === 0);
-  const month1 = yearlyBookingData.filter((item) => item.bookDate.toDate().getMonth() === 1);
-  const month2 = yearlyBookingData.filter((item) => item.bookDate.toDate().getMonth() === 2);
-  const month3 = yearlyBookingData.filter((item) => item.bookDate.toDate().getMonth() === 3);
-  const month4 = yearlyBookingData.filter((item) => item.bookDate.toDate().getMonth() === 4);
-  const month5 = yearlyBookingData.filter((item) => item.bookDate.toDate().getMonth() === 5);
-  const month6 = yearlyBookingData.filter((item) => item.bookDate.toDate().getMonth() === 6);
-  const month7 = yearlyBookingData.filter((item) => item.bookDate.toDate().getMonth() === 7);
-  const month8 = yearlyBookingData.filter((item) => item.bookDate.toDate().getMonth() === 8);
-  const month9 = yearlyBookingData.filter((item) => item.bookDate.toDate().getMonth() === 9);
-  const month10 = yearlyBookingData.filter((item) => item.bookDate.toDate().getMonth() === 10);
-  const month11 = yearlyBookingData.filter((item) => item.bookDate.toDate().getMonth() === 11);
-
-  console.log('month :>> ', month3.length);
-
-  const CHART_DATA = [
-    {
-      year: y[0],
-      data: [
-        {
-          data: [
-            month0.length,
-            month1.length,
-            month2.length,
-            month3.length,
-            month4.length,
-            month5.length,
-            month6.length,
-            month7.length,
-            month8.length,
-            month9.length,
-            month10.length,
-            month11.length
-          ]
-        }
-        // { name: 'Total Expenses', data: [10, 34, 13, 56, 77, 88, 99, 77, 45] }
-      ]
-    },
-    {
-      year: 2020,
-      data: [
-        {
-          name: 'Total Income',
-          data: [
-            month0.length,
-            month1.length,
-            month2.length,
-            month3.length,
-            month4.length,
-            month5.length,
-            month6.length,
-            month7.length,
-            month8.length,
-            month9.length,
-            month10.length,
-            month11.length
-          ]
-        }
-        // { name: 'Total Expenses', data: [45, 77, 99, 88, 77, 56, 13, 34, 10] }
-      ]
+  const yearAndMonth = yearlyBookingData.map((item) => ({
+    year: item.bookDate.toDate().getFullYear(),
+    month: item.bookDate.toDate().getMonth()
+  }));
+  const Yearly = y.map((year) => {
+    const yearWise = yearAndMonth.filter((item) => item?.year === year);
+    return { [year]: yearWise };
+  });
+  const Monthly = Yearly?.map((item) => {
+    const data = [];
+    for (let i = 0; i <= 11; i += 1) {
+      const length = Object.values(item)?.[0]?.filter((item) => item?.month === i)?.length ?? 0;
+      data.push(length);
     }
-  ];
-  console.log('data :>> ', CHART_DATA[0].data);
+    return {
+      year: Object.keys(item)?.[0],
+      data: [
+        {
+          data
+        }
+      ]
+    };
+  });
+
   return (
     <Card>
       <CardHeader
@@ -194,7 +155,7 @@ export default function AnalyticsWebsiteVisits() {
               '& .MuiNativeSelect-icon': { top: 4, right: 0, width: 20, height: 20 }
             }}
           >
-            {CHART_DATA.map((option) => (
+            {Monthly.map((option) => (
               <option key={option.year} value={option.year}>
                 {option.year}
               </option>
@@ -203,7 +164,7 @@ export default function AnalyticsWebsiteVisits() {
         }
       />
 
-      {CHART_DATA.map((item) => (
+      {Monthly.map((item) => (
         <Box key={item.year} sx={{ mt: 3, mx: 3 }} dir="ltr">
           {item.year === seriesData && (
             <ReactApexChart type="bar" series={item.data} options={chartOptions} height={364} />

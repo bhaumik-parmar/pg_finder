@@ -26,7 +26,7 @@ export default function AnalyticsConversionRates() {
                 // console.log(doc.data());
                 temp.push(doc.data());
               });
-              console.log('temp:', temp);
+              console.log('tempCity:', temp);
               setPgCityData(temp);
             })
             .catch((error) => {
@@ -36,7 +36,7 @@ export default function AnalyticsConversionRates() {
       }),
     []
   );
-
+  const Cities = [...new Set(pgCityData.map((item) => item.city))];
   const chartOptions = merge(BaseOptionChart(), {
     tooltip: {
       marker: { show: false },
@@ -51,7 +51,7 @@ export default function AnalyticsConversionRates() {
       bar: { horizontal: true, barHeight: '28%', borderRadius: 2 }
     },
     xaxis: {
-      categories: pgCityData.map((item) => item.city)
+      categories: Cities
       // categories: [
       //   'Italy',
       //   'Japan',
@@ -66,11 +66,15 @@ export default function AnalyticsConversionRates() {
       // ]
     }
   });
+  const citiCounts = Cities.map((city) => {
+    const count = pgCityData.filter((item) => item.city === city);
+    return count.length;
+  });
   const gandhidham = pgCityData.filter((item) => item.city === 'Gandhidham');
   const surat = pgCityData.filter((item) => item.city === 'Surat');
   console.log('surat', surat);
-  const CHART_DATA = [{ data: [gandhidham.length, surat.length] }];
-
+  const CHART_DATA = [{ data: citiCounts }];
+  console.log('CHART_DATA:::', CHART_DATA);
   return (
     <Card>
       <CardHeader title="City wise PG" subheader="" />
