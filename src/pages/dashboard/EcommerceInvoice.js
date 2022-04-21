@@ -48,7 +48,7 @@ const RowResultStyle = styled(TableRow)(({ theme }) => ({
 
 export default function EcommerceInvoice() {
   const { themeStretch } = useSettings();
-  const { user } = useAuth();
+  const { user, invoice } = useAuth();
   const { product } = useSelector((state) => state.product);
   console.log('product', product);
   // const { price, rooms } = product;
@@ -59,7 +59,7 @@ export default function EcommerceInvoice() {
     date: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`,
     invoiceFrom: {
       name: product?.name,
-      address: product?.add
+      address: `${product?.area},${product?.city},${product?.state}`
     },
     invoiceTo: {
       name: user?.displayName,
@@ -72,6 +72,18 @@ export default function EcommerceInvoice() {
       price: fCurrency(product?.price)
     }
   };
+  useEffect(async () => {
+    await invoice(
+      INVOICE.id,
+      INVOICE.date,
+      INVOICE.invoiceFrom.name,
+      INVOICE.invoiceFrom.address,
+      INVOICE.items.price,
+      INVOICE.invoiceTo.name,
+      INVOICE.invoiceTo.address,
+      INVOICE.invoiceTo.phone
+    );
+  }, []);
 
   // const subTotal = sum(INVOICE.items.map((item) => item.price * item.qty));
   // const total = subTotal - INVOICE.discount + INVOICE.taxes;
@@ -181,7 +193,7 @@ export default function EcommerceInvoice() {
 
           <Divider sx={{ mt: 5 }} />
 
-          <Grid container>
+          {/* <Grid container>
             <Grid item xs={12} md={9} sx={{ py: 3 }}>
               <Typography variant="subtitle2">NOTES</Typography>
               <Typography variant="body2">
@@ -192,7 +204,7 @@ export default function EcommerceInvoice() {
               <Typography variant="subtitle2">Have a Question?</Typography>
               <Typography variant="body2">support@minimals.cc</Typography>
             </Grid>
-          </Grid>
+          </Grid> */}
         </Card>
       </Container>
     </Page>

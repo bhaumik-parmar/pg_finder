@@ -65,17 +65,17 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/pg-finder'),
     shop: path(ROOTS_DASHBOARD, '/pg-finder/home'),
     product: path(ROOTS_DASHBOARD, '/pg-finder/pg/:name'),
+    checkout: path(ROOTS_DASHBOARD, '/pg-finder/checkout'),
+    payment: path(ROOTS_DASHBOARD, '/pg-finder/payment'),
+    invoice: path(ROOTS_DASHBOARD, '/pg-finder/invoice'),
+    booking: path(ROOTS_DASHBOARD, '/pg-finder/booking'),
     productById: path(ROOTS_DASHBOARD, '/e-commerce/product/nike-air-force-1-ndestrukt'),
     list: path(ROOTS_DASHBOARD, '/pg-finder/list'),
     userlist: path(ROOTS_DASHBOARD, '/pg-finder/user/list'),
     newProduct: path(ROOTS_DASHBOARD, '/pg-finder/pg/new'),
     editById: path(ROOTS_DASHBOARD, '/e-commerce/product/nike-blazer-low-77-vintage/edit'),
-    checkout: path(ROOTS_DASHBOARD, '/pg-finder/checkout'),
-    payment: path(ROOTS_DASHBOARD, '/pg-finder/payment'),
-    booking: path(ROOTS_DASHBOARD, '/pg-finder/booking'),
     bookPG: path(ROOTS_DASHBOARD, '/pg-finder/pgbookDetails'),
-    feedback: path(ROOTS_DASHBOARD, '/pg-finder/feedback'),
-    invoice: path(ROOTS_DASHBOARD, '/pg-finder/invoice')
+    feedback: path(ROOTS_DASHBOARD, '/pg-finder/feedback')
   }
   // blog: {
   //   root: path(ROOTS_DASHBOARD, '/blog'),

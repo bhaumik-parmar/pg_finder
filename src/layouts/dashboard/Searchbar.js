@@ -42,11 +42,12 @@ function applySortFilter(array, query) {
   const stabilizedThis = array.map((el, index) => [el, index]);
 
   if (query) {
-    return filter(array, (_product) => _product.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_product) => _product.city.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
 
   return stabilizedThis.map((el) => el[0]);
 }
+
 export default function Searchbar() {
   const [isOpen, setOpen] = useState(false);
   const [pgCityData, setPgCityData] = useState([]);

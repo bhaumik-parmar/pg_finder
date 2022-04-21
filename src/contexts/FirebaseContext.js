@@ -45,6 +45,7 @@ const AuthContext = createContext({
   bookPG: () => Promise.resolve(),
   paymentMethod: () => Promise.resolve(),
   payment: () => Promise.resolve(),
+  invoice: () => Promise.resolve(),
   feedback: () => Promise.resolve(),
   loginWithGoogle: () => Promise.resolve(),
   loginWithFaceBook: () => Promise.resolve(),
@@ -287,6 +288,41 @@ function AuthProvider({ children }) {
     });
   };
 
+  const invoice = async (
+    invoiceId,
+    invoiceDate,
+    pgName,
+    pgAddress,
+    pgPrice,
+    customerName,
+    customerAddress,
+    customerPhone
+  ) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        const paymentRef = firebase.firestore().collection('Invoice').doc(invoiceId);
+        paymentRef
+          .set({
+            invoiceId,
+            invoiceDate,
+            pgName,
+            pgAddress,
+            pgPrice,
+            customerName,
+            customerAddress,
+            customerPhone,
+            uid: user.uid
+          })
+          .then(() => {
+            console.log('Invoice generated successful');
+          })
+          .catch((error) => {
+            console.error('Error generate invoice: ', error);
+          });
+      }
+    });
+  };
+
   const feedback = async (rating, review, name, email) => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -489,6 +525,7 @@ function AuthProvider({ children }) {
         bookPG,
         paymentMethod,
         payment,
+        invoice,
         feedback,
         loginWithGoogle,
         loginWithFaceBook,
