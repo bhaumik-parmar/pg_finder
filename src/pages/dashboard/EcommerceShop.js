@@ -144,6 +144,7 @@ export default function EcommerceShop() {
 
   const isDefault =
     !values.priceRange &&
+    // values.city.length === 0 &&
     // !values.rating &&
     values.category.length === 0 &&
     // values.colors.length === 0 &&

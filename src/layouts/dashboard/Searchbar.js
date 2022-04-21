@@ -6,7 +6,6 @@ import searchFill from '@iconify/icons-eva/search-fill';
 import { styled, alpha } from '@mui/material/styles';
 import { Box, Input, Slide, Button, InputAdornment, ClickAwayListener } from '@mui/material';
 import firebase from 'firebase/compat/app';
-import { filter } from 'lodash';
 import { useSelector } from '../../redux/store';
 // components
 import { MIconButton } from '../../components/@material-extend';
@@ -36,23 +35,31 @@ const SearchbarStyle = styled('div')(({ theme }) => ({
   }
 }));
 
-// ----------------------------------------------------------------------
-
-function applySortFilter(array, query) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-
-  if (query) {
-    return filter(array, (_product) => _product.city.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+function applyFilter(products, filters) {
+  if (filters.city.length > 0) {
+    products = products.filter((_product) => {
+      let bool = false;
+      for (let i = 0; i <= filters?.city?.length - 1; i += 1) {
+        const boolPrev = bool;
+        if (i === 0) {
+          bool = _product.city?.includes(filters?.city[i]);
+        } else {
+          bool = _product.city?.includes(filters?.city[i]) && boolPrev;
+        }
+      }
+      return bool;
+    });
   }
-
-  return stabilizedThis.map((el) => el[0]);
 }
+// ----------------------------------------------------------------------
 
 export default function Searchbar() {
   const [isOpen, setOpen] = useState(false);
   const [pgCityData, setPgCityData] = useState([]);
-  const { products } = useSelector((state) => state.product);
-  const [city, setCity] = useState('');
+  // const { products, filters } = useSelector((state) => state.product);
+  // const filteredProducts = applyFilter(products, filters);
+  console.log('pgCityData', pgCityData);
+
   useEffect(
     () =>
       firebase.auth().onAuthStateChanged((user) => {
@@ -76,21 +83,27 @@ export default function Searchbar() {
       }),
     []
   );
-  // const cities = pgCityData.map((item) => item.city);
-  // console.log('city :>> ', cities);
+  const cities = pgCityData.map((item) => item.city);
+  console.log('city :>> ', cities);
 
   const handleOpen = () => {
     setOpen((prev) => !prev);
   };
 
   const handleClose = (e) => {
-    setCity(e.target.value);
-    // setOpen(false);
+    // setCity(e.target.value);
+    setOpen(false);
     console.log('e.target.value :>> ', e.target.value);
   };
-  const filteredProducts = applySortFilter(products, city);
 
-  const isProductNotFound = filteredProducts.length === 0;
+  const searchCity = (e) => {
+    const searchArr = pgCityData.filter((item) => item.city.toLowerCase().includes(e.target.value));
+    console.log('searchArr', searchArr);
+    setPgCityData(searchArr);
+  };
+  // const filteredProducts = applySortFilter(products, city);
+
+  // const isProductNotFound = filteredProducts.length === 0;
   return (
     <ClickAwayListener onClickAway={handleClose}>
       <div>
@@ -105,9 +118,8 @@ export default function Searchbar() {
             <Input
               autoFocus
               fullWidth
-              value={city}
               disableUnderline
-              onChange={handleClose}
+              onChange={searchCity}
               placeholder="Search…"
               startAdornment={
                 <InputAdornment position="start">
@@ -116,9 +128,9 @@ export default function Searchbar() {
               }
               sx={{ mr: 1, fontWeight: 'fontWeightBold' }}
             />
-            {/* <Button variant="contained" onClick={handleClose}>
+            <Button variant="contained" onClick={handleClose}>
               Search
-            </Button> */}
+            </Button>
           </SearchbarStyle>
         </Slide>
       </div>

@@ -157,10 +157,10 @@ function MoreMenuButton({ onDownload, onPrint, onShare, onDelete }) {
 }
 
 export default function PGBookingDetails() {
-  const theme = useTheme();
-  const isLight = theme.palette.mode === 'light';
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const theme = useTheme();
+  // const isLight = theme.palette.mode === 'light';
+  // const dispatch = useDispatch();
+  // const navigate = useNavigate();
   const [pgBookData, setPGBookData] = useState([]);
 
   // const handleClickDownload = () => {};

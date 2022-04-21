@@ -37,7 +37,6 @@ const reducer = (state, action) => {
 const AuthContext = createContext({
   ...initialState,
   method: 'firebase',
-  roleFetch: () => Promise.resolve(),
   login: () => Promise.resolve(),
   register: () => Promise.resolve(),
   updateProfile: () => Promise.resolve(),
@@ -95,29 +94,6 @@ function AuthProvider({ children }) {
       }),
     []
   );
-
-  // const roleFetch = async (email, role) => {
-  //   firebase.auth().onAuthStateChanged((user) => {
-  //     const key = `${email}${role ?? ''}`;
-  //     // const temp1 = [];
-  //     if (user) {
-  //       const docRef = firebase.firestore().collection('Registration');
-  //       docRef
-  //         .doc(key)
-  //         .get()
-  //         .then((doc) => {
-  //           if (doc.exists) {
-  //             const data = doc.data();
-  //             console.log('temp1', data);
-  //           }
-  //         })
-  //         .catch((error) => {
-  //           console.error(error);
-  //         });
-  //       // console.log('key :>> ', key);
-  //     }
-  //   });
-  // };
 
   const login = (email, password) => firebase.auth().signInWithEmailAndPassword(email, password);
 

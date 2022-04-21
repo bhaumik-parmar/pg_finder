@@ -22,11 +22,11 @@ export const PATH_AUTH = {
 export const PATH_PAGE = {
   comingSoon: '/coming-soon',
   maintenance: '/maintenance',
-  pricing: '/pricing',
+  // pricing: '/pricing',
   // payment: '/payment',
   about: '/dashboard/pg-finder/about-us',
   contact: '/dashboard/pg-finder/contact-us',
-  faqs: '/faqs',
+  // faqs: '/faqs',
   page404: '/404',
   page500: '/500',
   components: '/components'
@@ -35,32 +35,33 @@ export const PATH_PAGE = {
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
   general: {
-    app: path(ROOTS_DASHBOARD, '/pg-finder/app'),
-    ecommerce: path(ROOTS_DASHBOARD, '/ecommerce'),
-    analytics: path(ROOTS_DASHBOARD, '/analytics'),
-    banking: path(ROOTS_DASHBOARD, '/banking'),
-    booking: path(ROOTS_DASHBOARD, '/booking')
+    app: path(ROOTS_DASHBOARD, '/pg-finder/app')
+    // ecommerce: path(ROOTS_DASHBOARD, '/ecommerce'),
+    // analytics: path(ROOTS_DASHBOARD, '/analytics'),
+    // banking: path(ROOTS_DASHBOARD, '/banking'),
+    // booking: path(ROOTS_DASHBOARD, '/booking')
   },
-  mail: {
-    root: path(ROOTS_DASHBOARD, '/mail'),
-    all: path(ROOTS_DASHBOARD, '/mail/all')
-  },
-  chat: {
-    root: path(ROOTS_DASHBOARD, '/chat'),
-    new: path(ROOTS_DASHBOARD, '/chat/new'),
-    conversation: path(ROOTS_DASHBOARD, '/chat/:conversationKey')
-  },
-  calendar: path(ROOTS_DASHBOARD, '/calendar'),
-  kanban: path(ROOTS_DASHBOARD, '/kanban'),
+  // mail: {
+  //   root: path(ROOTS_DASHBOARD, '/mail'),
+  //   all: path(ROOTS_DASHBOARD, '/mail/all')
+  // },
+  // chat: {
+  //   root: path(ROOTS_DASHBOARD, '/chat'),
+  //   new: path(ROOTS_DASHBOARD, '/chat/new'),
+  //   conversation: path(ROOTS_DASHBOARD, '/chat/:conversationKey')
+  // },
+  // calendar: path(ROOTS_DASHBOARD, '/calendar'),
+  // kanban: path(ROOTS_DASHBOARD, '/kanban'),
   user: {
-    root: path(ROOTS_DASHBOARD, '/user'),
-    profile: path(ROOTS_DASHBOARD, '/user/profile'),
-    cards: path(ROOTS_DASHBOARD, '/user/cards'),
-    // list: path(ROOTS_DASHBOARD, '/user/list'),
-    newUser: path(ROOTS_DASHBOARD, '/user/new'),
-    editById: path(ROOTS_DASHBOARD, '/user/reece-chung/edit'),
+    //   root: path(ROOTS_DASHBOARD, '/user'),
+    //   profile: path(ROOTS_DASHBOARD, '/user/profile'),
+    //   cards: path(ROOTS_DASHBOARD, '/user/cards'),
+    //   // list: path(ROOTS_DASHBOARD, '/user/list'),
+    //   newUser: path(ROOTS_DASHBOARD, '/user/new'),
+    //   editById: path(ROOTS_DASHBOARD, '/user/reece-chung/edit'),
     account: path(ROOTS_DASHBOARD, '/user/account')
   },
+
   eCommerce: {
     root: path(ROOTS_DASHBOARD, '/pg-finder'),
     shop: path(ROOTS_DASHBOARD, '/pg-finder/home'),
@@ -70,10 +71,10 @@ export const PATH_DASHBOARD = {
     invoice: path(ROOTS_DASHBOARD, '/pg-finder/invoice'),
     booking: path(ROOTS_DASHBOARD, '/pg-finder/booking'),
     productById: path(ROOTS_DASHBOARD, '/e-commerce/product/nike-air-force-1-ndestrukt'),
+    editById: path(ROOTS_DASHBOARD, '/e-commerce/product/nike-blazer-low-77-vintage/edit'),
     list: path(ROOTS_DASHBOARD, '/pg-finder/list'),
     userlist: path(ROOTS_DASHBOARD, '/pg-finder/user/list'),
     newProduct: path(ROOTS_DASHBOARD, '/pg-finder/pg/new'),
-    editById: path(ROOTS_DASHBOARD, '/e-commerce/product/nike-blazer-low-77-vintage/edit'),
     bookPG: path(ROOTS_DASHBOARD, '/pg-finder/pgbookDetails'),
     feedback: path(ROOTS_DASHBOARD, '/pg-finder/feedback')
   }

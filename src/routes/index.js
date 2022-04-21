@@ -40,6 +40,8 @@ const Loadable = (Component) => (props) => {
 };
 
 export default function Router() {
+  const x = localStorage.getItem('role');
+  console.log('x', x);
   return useRoutes([
     {
       path: 'auth',
@@ -76,12 +78,12 @@ export default function Router() {
         </AuthGuard>
       ),
       children: [
-        { element: <Navigate to="/dashboard/pg-finder/app" replace /> },
+        { element: x === 'Admin' ? <Navigate to="/dashboard/pg-finder/app" replace /> : '' },
         { path: 'pg-finder/app', element: <GeneralApp /> },
-        { path: 'ecommerce', element: <GeneralEcommerce /> },
-        { path: 'analytics', element: <GeneralAnalytics /> },
-        { path: 'banking', element: <GeneralBanking /> },
-        { path: 'booking', element: <GeneralBooking /> },
+        // { path: 'ecommerce', element: <GeneralEcommerce /> },
+        // { path: 'analytics', element: <GeneralAnalytics /> },
+        // { path: 'banking', element: <GeneralBanking /> },
+        // { path: 'booking', element: <GeneralBooking /> },
 
         {
           path: 'pg-finder',
@@ -105,11 +107,11 @@ export default function Router() {
           path: 'user',
           children: [
             { element: <Navigate to="/dashboard/user/profile" replace /> },
-            { path: 'profile', element: <UserProfile /> },
-            { path: 'cards', element: <UserCards /> },
-            // { path: 'list', element: <UserList /> },
-            { path: 'new', element: <UserCreate /> },
-            { path: ':name/edit', element: <UserCreate /> },
+            // { path: 'profile', element: <UserProfile /> },
+            // { path: 'cards', element: <UserCards /> },
+            // // { path: 'list', element: <UserList /> },
+            // { path: 'new', element: <UserCreate /> },
+            // { path: ':name/edit', element: <UserCreate /> },
             { path: 'account', element: <UserAccount /> }
           ]
         },
@@ -167,7 +169,9 @@ export default function Router() {
         </AuthGuard>
       ),
       children: [
-        { element: <Navigate to="/dashboard/pg-finder/about-us" replace /> },
+        {
+          element: x === 'customer' ? <Navigate to="/dashboard/pg-finder/about-us" replace /> : <NotFound />
+        },
         { path: 'about-us', element: <About /> },
         { path: 'contact-us', element: <Contact /> }
       ]

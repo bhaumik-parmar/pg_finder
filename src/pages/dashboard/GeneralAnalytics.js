@@ -17,7 +17,8 @@ import {
   AnalyticsTrafficBySite,
   AnalyticsCurrentSubject,
   AnalyticsConversionRates,
-  AnalyticsCurrentBookingByProfession
+  AnalyticsCurrentBookingByProfession,
+  AnalyticsInvoices
 } from '../../components/_dashboard/general-analytics';
 
 // ----------------------------------------------------------------------
@@ -62,21 +63,22 @@ export default function GeneralAnalytics() {
             <AnalyticsCurrentBookingByProfession />
           </Grid>
 
-          <Grid item xs={12} md={6} lg={8}>
-            <AnalyticsNewsUpdate />
+          <Grid item xs={12} md={6} lg={12}>
+            {/* <AnalyticsNewsUpdate /> */}
+            <AnalyticsInvoices />
           </Grid>
 
-          <Grid item xs={12} md={6} lg={4}>
+          {/* <Grid item xs={12} md={6} lg={4}>
             <AnalyticsOrderTimeline />
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={12} md={6} lg={4}>
+          {/* <Grid item xs={12} md={6} lg={4}>
             <AnalyticsTrafficBySite />
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={12} md={6} lg={8}>
+          {/* <Grid item xs={12} md={6} lg={8}>
             <AnalyticsTasks />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
     </Page>
