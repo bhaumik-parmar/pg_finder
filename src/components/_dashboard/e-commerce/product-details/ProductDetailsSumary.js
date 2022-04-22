@@ -220,7 +220,7 @@ export default function ProductDetailsSumary() {
           variant="contained"
           startIcon={<Icon icon={twotoneLibraryBooks} width={30} height={30} />}
           onClick={() => {
-            navigate('/dashboard/pg-finder/checkout');
+            navigate('/dashboard/pg-finder/customer/checkout');
             localStorage.setItem('PG Name', JSON.stringify({ name }));
             localStorage.setItem('Room Types', JSON.stringify(roomInfoArray));
           }}

@@ -79,9 +79,9 @@ export default function CheckoutPayment({ handleBack, handleClick }) {
     if (payment === 'google_pay') {
       window.open('https://pay.google.com/');
     } else if (payment === 'credit_card') {
-      navigate('/dashboard/pg-finder/payment');
+      navigate('/dashboard/pg-finder/customer/payment');
     } else {
-      navigate('/dashboard/pg-finder/invoice');
+      navigate('/dashboard/pg-finder/customer/invoice');
       enqueueSnackbar('Booking successful', {
         variant: 'success',
         action: (key) => (

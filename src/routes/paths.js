@@ -24,8 +24,8 @@ export const PATH_PAGE = {
   maintenance: '/maintenance',
   // pricing: '/pricing',
   // payment: '/payment',
-  about: '/dashboard/pg-finder/about-us',
-  contact: '/dashboard/pg-finder/contact-us',
+  about: '/dashboard/pg-finder/customer/about-us',
+  contact: '/dashboard/pg-finder/customer/contact-us',
   // faqs: '/faqs',
   page404: '/404',
   page500: '/500',
@@ -35,7 +35,7 @@ export const PATH_PAGE = {
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
   general: {
-    app: path(ROOTS_DASHBOARD, '/pg-finder/app')
+    app: path(ROOTS_DASHBOARD, '/pg-finder/Admin/app')
     // ecommerce: path(ROOTS_DASHBOARD, '/ecommerce'),
     // analytics: path(ROOTS_DASHBOARD, '/analytics'),
     // banking: path(ROOTS_DASHBOARD, '/banking'),
@@ -63,20 +63,20 @@ export const PATH_DASHBOARD = {
   },
 
   eCommerce: {
-    root: path(ROOTS_DASHBOARD, '/pg-finder'),
-    shop: path(ROOTS_DASHBOARD, '/pg-finder/home'),
-    product: path(ROOTS_DASHBOARD, '/pg-finder/pg/:name'),
-    checkout: path(ROOTS_DASHBOARD, '/pg-finder/checkout'),
-    payment: path(ROOTS_DASHBOARD, '/pg-finder/payment'),
-    invoice: path(ROOTS_DASHBOARD, '/pg-finder/invoice'),
-    booking: path(ROOTS_DASHBOARD, '/pg-finder/booking'),
+    root: path(ROOTS_DASHBOARD, '/pg-finder/customer'),
+    shop: path(ROOTS_DASHBOARD, '/pg-finder/customer/home'),
+    product: path(ROOTS_DASHBOARD, '/pg-finder/customer/pg/:name'),
+    checkout: path(ROOTS_DASHBOARD, '/pg-finder/customer/checkout'),
+    payment: path(ROOTS_DASHBOARD, '/pg-finder/customer/payment'),
+    invoice: path(ROOTS_DASHBOARD, '/pg-finder/customer/invoice'),
+    booking: path(ROOTS_DASHBOARD, '/pg-finder/customer/booking'),
     productById: path(ROOTS_DASHBOARD, '/e-commerce/product/nike-air-force-1-ndestrukt'),
     editById: path(ROOTS_DASHBOARD, '/e-commerce/product/nike-blazer-low-77-vintage/edit'),
-    list: path(ROOTS_DASHBOARD, '/pg-finder/list'),
-    userlist: path(ROOTS_DASHBOARD, '/pg-finder/user/list'),
-    newProduct: path(ROOTS_DASHBOARD, '/pg-finder/pg/new'),
-    bookPG: path(ROOTS_DASHBOARD, '/pg-finder/pgbookDetails'),
-    feedback: path(ROOTS_DASHBOARD, '/pg-finder/feedback')
+    list: path(ROOTS_DASHBOARD, '/pg-finder/Admin/list'),
+    userlist: path(ROOTS_DASHBOARD, '/pg-finder/Admin/user/list'),
+    newProduct: path(ROOTS_DASHBOARD, '/pg-finder/Admin/pg/new'),
+    bookPG: path(ROOTS_DASHBOARD, '/pg-finder/Admin/pgbookDetails'),
+    feedback: path(ROOTS_DASHBOARD, '/pg-finder/Admin/feedback')
   }
   // blog: {
   //   root: path(ROOTS_DASHBOARD, '/blog'),

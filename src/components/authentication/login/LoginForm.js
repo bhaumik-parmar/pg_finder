@@ -59,7 +59,7 @@ export default function LoginForm() {
       try {
         await login(values.email, values.password).then((response) => {
           if (role === 'customer') {
-            navigate('/dashboard/pg-finder/home');
+            navigate('/dashboard/pg-finder/customer/home');
             enqueueSnackbar('Login success', {
               variant: 'success',
               action: (key) => (
@@ -69,7 +69,7 @@ export default function LoginForm() {
               )
             });
           } else {
-            navigate('/dashboard/pg-finder/app');
+            navigate('/dashboard/pg-finder/Admin/app');
             enqueueSnackbar('Login success', {
               variant: 'success',
               action: (key) => (

@@ -91,7 +91,7 @@ export default function PaymentNewCardForm({ onCancel }) {
             </MIconButton>
           )
         });
-        navigate('/dashboard/pg-finder/invoice');
+        navigate('/dashboard/pg-finder/customer/invoice');
       }
       setSubmitting(false);
     }
