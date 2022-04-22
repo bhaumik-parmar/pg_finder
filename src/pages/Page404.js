@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Link as RouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 import { Box, Button, Typography, Container } from '@mui/material';
@@ -21,6 +21,15 @@ const RootStyle = styled(Page)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Page404() {
+  const navigate = useNavigate();
+
+  const home = () => {
+    if (localStorage.getItem('role') === 'Admin') {
+      navigate('/dashboard/pg-finder/Admin/app');
+    } else {
+      navigate('/dashboard/pg-finder/customer/home');
+    }
+  };
   return (
     <RootStyle title="404 Page Not Found | Minimal-UI">
       <Container>
@@ -40,7 +49,7 @@ export default function Page404() {
               <PageNotFoundIllustration sx={{ height: 260, my: { xs: 5, sm: 10 } }} />
             </motion.div>
 
-            <Button to="/" size="large" variant="contained" component={RouterLink}>
+            <Button size="large" variant="contained" onClick={home}>
               Go to Home
             </Button>
           </Box>
