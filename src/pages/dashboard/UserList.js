@@ -148,13 +148,13 @@ export default function UserList() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="User: List | Minimal-UI">
+    <Page title=" PG-Finder: Dashboard | User List">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="User List"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.eCommerce.userlist },
+            { name: 'Dashboard', href: PATH_DASHBOARD.general.app },
+            // { name: 'User', href: PATH_DASHBOARD.eCommerce.userlist },
             { name: 'User List' }
           ]}
           // action={

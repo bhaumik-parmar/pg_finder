@@ -68,7 +68,7 @@ export default function AnalyticsWeeklySales() {
 
   const TOTAL = pgData?.length;
   return (
-    <RootStyle onClick={() => navigate('/dashboard/pg-finder/list')}>
+    <RootStyle onClick={() => navigate('/dashboard/pg-finder/Admin/list')}>
       <IconWrapperStyle>
         <Icon icon={buildingHouse} width={24} height={24} />
       </IconWrapperStyle>

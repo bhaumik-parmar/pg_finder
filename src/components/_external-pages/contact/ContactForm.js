@@ -55,7 +55,7 @@ export default function ContactForm() {
 
         if (isMountedRef.current) {
           setSubmitting(false);
-          navigate('/dashboard/pg-finder/home');
+          navigate('/dashboard/pg-finder/customer/home');
         }
       } catch (error) {
         console.error(error);

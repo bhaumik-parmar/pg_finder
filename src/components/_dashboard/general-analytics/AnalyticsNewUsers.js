@@ -70,7 +70,7 @@ export default function AnalyticsNewUsers() {
 
   const TOTAL = userData?.length;
   return (
-    <RootStyle onClick={() => navigate('/dashboard/pg-finder/user/list')}>
+    <RootStyle onClick={() => navigate('/dashboard/pg-finder/Admin/user/list')}>
       <IconWrapperStyle>
         <Icon icon={userCircleO} width={24} height={24} />
       </IconWrapperStyle>

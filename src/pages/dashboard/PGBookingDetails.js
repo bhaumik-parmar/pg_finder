@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from 'react';
 import { format } from 'date-fns';
 import { sentenceCase } from 'change-case';
 import { Icon } from '@iconify/react';
-
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import shareFill from '@iconify/icons-eva/share-fill';
 import printerFill from '@iconify/icons-eva/printer-fill';
@@ -34,16 +33,20 @@ import {
   Dialog,
   DialogContent,
   DialogContentText,
-  DialogActions
+  DialogActions,
+  Container
 } from '@mui/material';
+import Page from '../../components/Page';
+import useSettings from '../../hooks/useSettings';
+import { PATH_DASHBOARD } from '../../routes/paths';
 import { useDispatch } from '../../redux/store';
 import { deleteBookPG } from '../../redux/slices/product';
 // utils
-import mockData from '../../utils/mock-data';
 //
 import Label from '../../components/Label';
 import Scrollbar from '../../components/Scrollbar';
 import { MIconButton } from '../../components/@material-extend';
+import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 
 // ----------------------------------------------------------------------
 
@@ -161,6 +164,7 @@ export default function PGBookingDetails() {
   // const isLight = theme.palette.mode === 'light';
   // const dispatch = useDispatch();
   // const navigate = useNavigate();
+  const { themeStretch } = useSettings();
   const [pgBookData, setPGBookData] = useState([]);
 
   // const handleClickDownload = () => {};
@@ -196,44 +200,54 @@ export default function PGBookingDetails() {
 
   return (
     <>
-      <Card>
-        <CardHeader title="Booking Details" sx={{ mb: 3 }} />
-        <Scrollbar>
-          <TableContainer sx={{ minWidth: 720 }}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell sx={{ minWidth: 160 }}>PG Name</TableCell>
-                  <TableCell sx={{ minWidth: 160 }}>E-mail</TableCell>
-                  <TableCell sx={{ minWidth: 120 }}>Phone</TableCell>
-                  <TableCell sx={{ minWidth: 120 }}>Profession</TableCell>
-                  <TableCell sx={{ minWidth: 120 }}>Book Date</TableCell>
-                  <TableCell sx={{ minWidth: 120 }}>Room Tpe</TableCell>
-                  {/* <TableCell sx={{ minWidth: 160 }}>Check Out</TableCell>
+      <Page title=" PG-Finder: Dashboard | PG Booking List ">
+        <Container maxWidth={themeStretch ? false : 'lg'}>
+          <HeaderBreadcrumbs
+            heading="PG Booking List"
+            links={[
+              { name: 'Dashboard', href: PATH_DASHBOARD.general.app },
+              // { name: 'User', href: PATH_DASHBOARD.eCommerce.userlist },
+              { name: 'PG Booking List' }
+            ]}
+          />
+          <Card>
+            {/* <CardHeader title="Booking Details" sx={{ mb: 3 }} /> */}
+            <Scrollbar>
+              <TableContainer sx={{ minWidth: 720 }}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ minWidth: 160 }}>PG Name</TableCell>
+                      <TableCell sx={{ minWidth: 160 }}>E-mail</TableCell>
+                      <TableCell sx={{ minWidth: 120 }}>Phone</TableCell>
+                      <TableCell sx={{ minWidth: 120 }}>Profession</TableCell>
+                      <TableCell sx={{ minWidth: 120 }}>Book Date</TableCell>
+                      <TableCell sx={{ minWidth: 120 }}>Room Tpe</TableCell>
+                      {/* <TableCell sx={{ minWidth: 160 }}>Check Out</TableCell>
                   <TableCell sx={{ minWidth: 120 }}>Status</TableCell>
                   <TableCell sx={{ minWidth: 200 }}>Phone</TableCell> */}
-                  <TableCell />
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {pgBookData.map((row) => {
-                  const { uid, PGname, email, phone, bookDate, profession, roomType } = row;
-                  return (
-                    <TableRow key={row.id}>
-                      <TableCell>
-                        <Stack direction="row" alignItems="center" spacing={2}>
-                          {/* <Avatar alt={row.name} src={row.avatar} /> */}
-                          <Typography variant="subtitle2">{PGname}</Typography>
-                        </Stack>
-                      </TableCell>
-                      <TableCell>{email}</TableCell>
-                      <TableCell>{phone}</TableCell>
-                      <TableCell sx={{ textTransform: 'capitalize' }}>{profession}</TableCell>
-                      <TableCell>{bookDate.toDate().toDateString()}</TableCell>
-                      <TableCell>{roomType}</TableCell>
-                      {/* <TableCell>{format(new Date(row.checkOut), 'dd MMM yyyy')}</TableCell> */}
+                      <TableCell />
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {pgBookData.map((row) => {
+                      const { uid, PGname, email, phone, bookDate, profession, roomType } = row;
+                      return (
+                        <TableRow key={row.id}>
+                          <TableCell>
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                              {/* <Avatar alt={row.name} src={row.avatar} /> */}
+                              <Typography variant="subtitle2">{PGname}</Typography>
+                            </Stack>
+                          </TableCell>
+                          <TableCell>{email}</TableCell>
+                          <TableCell>{phone}</TableCell>
+                          <TableCell sx={{ textTransform: 'capitalize' }}>{profession}</TableCell>
+                          <TableCell>{bookDate.toDate().toDateString()}</TableCell>
+                          <TableCell>{roomType}</TableCell>
+                          {/* <TableCell>{format(new Date(row.checkOut), 'dd MMM yyyy')}</TableCell> */}
 
-                      {/* <TableCell>
+                          {/* <TableCell>
                       <Label
                         variant={isLight ? 'ghost' : 'filled'}
                         color={
@@ -244,9 +258,9 @@ export default function PGBookingDetails() {
                       </Label>
                     </TableCell> */}
 
-                      {/* <TableCell>{row.phoneNumber}</TableCell> */}
+                          {/* <TableCell>{row.phoneNumber}</TableCell> */}
 
-                      {/* <TableCell align="right">
+                          {/* <TableCell align="right">
                         <MoreMenuButton
                           // onDownload={handleClickDownload}
                           // onPrint={handleClickPrint}
@@ -254,28 +268,30 @@ export default function PGBookingDetails() {
                           onDelete={() => handleClickDelete(PGname, uid)}
                         />
                       </TableCell> */}
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Scrollbar>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Scrollbar>
 
-        <Divider />
+            <Divider />
 
-        <Box sx={{ p: 2, textAlign: 'right' }}>
-          <Button
-            to="#"
-            size="small"
-            color="inherit"
-            component={RouterLink}
-            endIcon={<Icon icon={arrowIosForwardFill} />}
-          >
-            View All
-          </Button>
-        </Box>
-      </Card>
+            <Box sx={{ p: 2, textAlign: 'right' }}>
+              <Button
+                to="#"
+                size="small"
+                color="inherit"
+                component={RouterLink}
+                endIcon={<Icon icon={arrowIosForwardFill} />}
+              >
+                View All
+              </Button>
+            </Box>
+          </Card>
+        </Container>
+      </Page>
     </>
   );
 }

@@ -63,7 +63,7 @@ export const PATH_DASHBOARD = {
   },
 
   eCommerce: {
-    root: path(ROOTS_DASHBOARD, '/pg-finder/customer'),
+    root: path(ROOTS_DASHBOARD, '/pg-finder'),
     shop: path(ROOTS_DASHBOARD, '/pg-finder/customer/home'),
     product: path(ROOTS_DASHBOARD, '/pg-finder/customer/pg/:name'),
     checkout: path(ROOTS_DASHBOARD, '/pg-finder/customer/checkout'),

@@ -69,6 +69,12 @@ const slice = createSlice({
       state.product.review = action.payload;
     },
 
+    // GET ALL PG REVIEWS
+    getAllPGReviewsSuccess(state, action) {
+      state.isLoading = false;
+      state.product.review = action.payload;
+    },
+
     // DELETE PRODUCT
     deleteProduct(state, action) {
       state.products = reject(state.products, { id: action.payload });
@@ -375,6 +381,37 @@ export function getReviews(name) {
             }));
             console.log('temp', reviews);
             dispatch(slice.actions.getReviewsSuccess(reviews));
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    });
+  };
+}
+
+export function getAllPGReviews() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    firebase.auth().onAuthStateChanged((user) => {
+      const temp = [];
+      if (user) {
+        const docRef = firebase.firestore().collection('Feedback');
+        docRef
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              console.log('feedback', doc.data());
+              temp.push(doc.data());
+            });
+            // const reviews = temp?.map((item) => ({
+            //   date: item?.feedbackDate?.toDate()?.toDateString(),
+            //   name: item?.name,
+            //   rating: item?.rating,
+            //   review: item?.review
+            // }));
+            // console.log('temp', reviews);
+            dispatch(slice.actions.getAllPGReviewsSuccess(temp));
           })
           .catch((error) => {
             console.error(error);

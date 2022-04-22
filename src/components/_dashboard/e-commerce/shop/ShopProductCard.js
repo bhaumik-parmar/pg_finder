@@ -1,17 +1,20 @@
 import PropTypes from 'prop-types';
-import { paramCase } from 'change-case';
+// import { paramCase } from 'change-case';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { Box, Card, Link, Typography, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // routes
+import { useEffect } from 'react';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // utils
 import { fCurrency } from '../../../../utils/formatNumber';
 //
+import { getAllPGReviews } from '../../../../redux/slices/product';
 import Label from '../../../Label';
+import { useDispatch } from '../../../../redux/store';
 
-import ColorPreview from '../../../ColorPreview';
+// import ColorPreview from '../../../ColorPreview';
 
 // ----------------------------------------------------------------------
 
@@ -31,10 +34,15 @@ ShopProductCard.propTypes = {
 
 export default function ShopProductCard({ product }) {
   const { name, image, area, city, state, price, status, category } = product;
+  const dispatch = useDispatch();
   const add = `${area}, ${city}, ${state}`;
   const key = name.split(' ').join('');
   // const linkTo = `${PATH_DASHBOARD.eCommerce.root}/pg/${paramCase(name)}`;
-  const linkTo = `${PATH_DASHBOARD.eCommerce.root}/pg/${key}`;
+  const linkTo = `${PATH_DASHBOARD.eCommerce.root}/customer/pg/${key}`;
+
+  useEffect(() => {
+    dispatch(getAllPGReviews());
+  }, [dispatch]);
 
   return (
     <Card>

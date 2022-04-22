@@ -131,11 +131,11 @@ export default function PaymentNewCardForm({ onCancel }) {
     <>
       <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-          <Grid item xs={14} md={10}>
-            <Card sx={{ mb: 3, ml: 25 }}>
+          <Grid item xs={12} md={8}>
+            <Card sx={{ mb: 3, ml: 50 }}>
               <Stack direction="row">
                 <CardHeader title={<Typography variant="h6">Payment Details:</Typography>} sx={{ mb: 3 }} />
-                <Typography sx={{ ml: 75, mt: 4 }}>Pay To:</Typography>
+                <Typography sx={{ ml: 37, mt: 4 }}>Pay To:</Typography>
                 <Typography variant="body2" sx={{ color: 'text.secondary', ml: 1, mt: 4 }}>
                   {PGname.name}
                 </Typography>

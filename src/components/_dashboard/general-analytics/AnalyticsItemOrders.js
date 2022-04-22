@@ -66,7 +66,7 @@ export default function AnalyticsItemOrders() {
 
   const TOTAL = bookingData?.length;
   return (
-    <RootStyle onClick={() => navigate('/dashboard/pg-finder/pgbookDetails')}>
+    <RootStyle onClick={() => navigate('/dashboard/pg-finder/Admin/pgbookDetails')}>
       <IconWrapperStyle>
         <Icon icon={transactionOrder} width={24} height={24} />
       </IconWrapperStyle>

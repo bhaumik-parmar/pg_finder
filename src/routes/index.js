@@ -83,7 +83,7 @@ export default function Router() {
         { path: 'user/list', element: <UserList /> },
         { path: 'list', element: <EcommerceProductList /> },
         { path: 'pg/new', element: <EcommerceProductCreate /> },
-        { path: 'product/:name/edit', element: <EcommerceProductCreate /> },
+        { path: ':name/edit', element: <EcommerceProductCreate /> },
         { path: 'pgbookdetails', element: <PGBookingDetails /> },
         { path: 'feedback', element: <FeedbackDetails /> }
         // { path: 'ecommerce', element: <GeneralEcommerce /> },

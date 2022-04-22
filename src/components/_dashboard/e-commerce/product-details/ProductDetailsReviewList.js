@@ -113,9 +113,9 @@ export default function ProductDetailsReviewList({ product }) {
           <ReviewItem key={count} review={item} />
         ))}
       </List>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+      {/* <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Pagination count={10} color="primary" />
-      </Box>
+      </Box> */}
     </Box>
   );
 }

@@ -5,7 +5,7 @@ import useAuth from '../../hooks/useAuth';
 import useSettings from '../../hooks/useSettings';
 // components
 import Page from '../../components/Page';
-import { AppWelcome } from '../../components/_dashboard/general-app';
+// import { AppWelcome } from '../../components/_dashboard/general-app';
 import {
   // AppWidgets1,
   // AppWidgets2,
@@ -37,7 +37,7 @@ export default function GeneralApp() {
   const { user } = useAuth();
 
   return (
-    <Page title="General: App | Minimal-UI">
+    <Page title="PG-Finder: Dashboard | App">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Box sx={{ pb: 5 }}>
           <Typography variant="h4">Hi, {user.displayName}</Typography>

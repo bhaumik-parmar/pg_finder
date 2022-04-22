@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
-import { format } from 'date-fns';
-import { sentenceCase } from 'change-case';
+// import { format } from 'date-fns';
+// import { sentenceCase } from 'change-case';
 import { Icon } from '@iconify/react';
 
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import shareFill from '@iconify/icons-eva/share-fill';
-import printerFill from '@iconify/icons-eva/printer-fill';
-import downloadFill from '@iconify/icons-eva/download-fill';
+// import shareFill from '@iconify/icons-eva/share-fill';
+// import printerFill from '@iconify/icons-eva/printer-fill';
+// import downloadFill from '@iconify/icons-eva/download-fill';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 import arrowIosForwardFill from '@iconify/icons-eva/arrow-ios-forward-fill';
@@ -21,6 +21,7 @@ import {
   Stack,
   Table,
   Avatar,
+  Container,
   Button,
   Divider,
   MenuItem,
@@ -37,6 +38,9 @@ import {
   DialogActions
 } from '@mui/material';
 import { useDispatch } from '../../redux/store';
+import Page from '../../components/Page';
+import useSettings from '../../hooks/useSettings';
+import { PATH_DASHBOARD } from '../../routes/paths';
 import { deleteBookPG } from '../../redux/slices/product';
 // utils
 import mockData from '../../utils/mock-data';
@@ -44,6 +48,7 @@ import mockData from '../../utils/mock-data';
 import Label from '../../components/Label';
 import Scrollbar from '../../components/Scrollbar';
 import { MIconButton } from '../../components/@material-extend';
+import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 
 // ----------------------------------------------------------------------
 
@@ -158,9 +163,10 @@ function MoreMenuButton({ onDownload, onPrint, onShare, onDelete }) {
 
 export default function FeedbackDetails() {
   const theme = useTheme();
-  const isLight = theme.palette.mode === 'light';
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const { themeStretch } = useSettings();
+  // const isLight = theme.palette.mode === 'light';
+  // const dispatch = useDispatch();
+  // const navigate = useNavigate();
   const [feedbackData, setFeedbackData] = useState([]);
 
   // const handleClickDownload = () => {};
@@ -196,42 +202,52 @@ export default function FeedbackDetails() {
 
   return (
     <>
-      <Card>
-        <CardHeader title="Booking Details" sx={{ mb: 3 }} />
-        <Scrollbar>
-          <TableContainer sx={{ minWidth: 720 }}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell sx={{ minWidth: 160 }}>E-mail</TableCell>
-                  <TableCell sx={{ minWidth: 160 }}>Review</TableCell>
-                  <TableCell sx={{ minWidth: 120 }}>Rating</TableCell>
-                  <TableCell sx={{ minWidth: 120 }}>PG Name</TableCell>
-                  <TableCell sx={{ minWidth: 120 }}>Feedback Date</TableCell>
-                  {/* <TableCell sx={{ minWidth: 160 }}>Check Out</TableCell>
+      <Page title=" PG-Finder: Dashboard | Feedback List ">
+        <Container maxWidth={themeStretch ? false : 'lg'}>
+          <HeaderBreadcrumbs
+            heading="Feedback List"
+            links={[
+              { name: 'Dashboard', href: PATH_DASHBOARD.general.app },
+              // { name: 'User', href: PATH_DASHBOARD.eCommerce.userlist },
+              { name: 'Feedback List' }
+            ]}
+          />
+          <Card>
+            {/* <CardHeader title="Booking Details" sx={{ mb: 3 }} /> */}
+            <Scrollbar>
+              <TableContainer sx={{ minWidth: 720 }}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ minWidth: 160 }}>E-mail</TableCell>
+                      <TableCell sx={{ minWidth: 160 }}>Review</TableCell>
+                      <TableCell sx={{ minWidth: 120 }}>Rating</TableCell>
+                      <TableCell sx={{ minWidth: 120 }}>PG Name</TableCell>
+                      <TableCell sx={{ minWidth: 120 }}>Feedback Date</TableCell>
+                      {/* <TableCell sx={{ minWidth: 160 }}>Check Out</TableCell>
                   <TableCell sx={{ minWidth: 120 }}>Status</TableCell>
                   <TableCell sx={{ minWidth: 200 }}>Phone</TableCell> */}
-                  <TableCell />
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {feedbackData.map((row) => {
-                  const { uid, email, review, rating, PGname, feedbackDate } = row;
-                  return (
-                    <TableRow key={row.id}>
-                      <TableCell>
-                        <Stack direction="row" alignItems="center" spacing={2}>
-                          {/* <Avatar alt={row.name} src={row.avatar} /> */}
-                          <Typography variant="subtitle2">{email}</Typography>
-                        </Stack>
-                      </TableCell>
-                      <TableCell>{review}</TableCell>
-                      <TableCell>{rating}</TableCell>
-                      <TableCell sx={{ textTransform: 'capitalize' }}>{PGname}</TableCell>
-                      <TableCell>{feedbackDate.toDate().toDateString()}</TableCell>
-                      {/* <TableCell>{format(new Date(row.checkOut), 'dd MMM yyyy')}</TableCell> */}
+                      <TableCell />
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {feedbackData.map((row) => {
+                      const { uid, email, review, rating, PGname, feedbackDate } = row;
+                      return (
+                        <TableRow key={row.id}>
+                          <TableCell>
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                              {/* <Avatar alt={row.name} src={row.avatar} /> */}
+                              <Typography variant="subtitle2">{email}</Typography>
+                            </Stack>
+                          </TableCell>
+                          <TableCell>{review}</TableCell>
+                          <TableCell>{rating}</TableCell>
+                          <TableCell sx={{ textTransform: 'capitalize' }}>{PGname}</TableCell>
+                          <TableCell>{feedbackDate.toDate().toDateString()}</TableCell>
+                          {/* <TableCell>{format(new Date(row.checkOut), 'dd MMM yyyy')}</TableCell> */}
 
-                      {/* <TableCell>
+                          {/* <TableCell>
                       <Label
                         variant={isLight ? 'ghost' : 'filled'}
                         color={
@@ -242,9 +258,9 @@ export default function FeedbackDetails() {
                       </Label>
                     </TableCell> */}
 
-                      {/* <TableCell>{row.phoneNumber}</TableCell> */}
+                          {/* <TableCell>{row.phoneNumber}</TableCell> */}
 
-                      {/* <TableCell align="right">
+                          {/* <TableCell align="right">
                         <MoreMenuButton
                           // onDownload={handleClickDownload}
                           // onPrint={handleClickPrint}
@@ -252,28 +268,30 @@ export default function FeedbackDetails() {
                           onDelete={() => handleClickDelete(PGname, uid)}
                         />
                       </TableCell> */}
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Scrollbar>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Scrollbar>
 
-        <Divider />
+            <Divider />
 
-        <Box sx={{ p: 2, textAlign: 'right' }}>
-          <Button
-            to="#"
-            size="small"
-            color="inherit"
-            component={RouterLink}
-            endIcon={<Icon icon={arrowIosForwardFill} />}
-          >
-            View All
-          </Button>
-        </Box>
-      </Card>
+            <Box sx={{ p: 2, textAlign: 'right' }}>
+              <Button
+                to="#"
+                size="small"
+                color="inherit"
+                component={RouterLink}
+                endIcon={<Icon icon={arrowIosForwardFill} />}
+              >
+                View All
+              </Button>
+            </Box>
+          </Card>
+        </Container>
+      </Page>
     </>
   );
 }

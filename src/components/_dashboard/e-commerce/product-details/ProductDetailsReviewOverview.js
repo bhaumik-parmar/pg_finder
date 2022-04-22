@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import { Link as ScrollLink } from 'react-scroll';
 import edit2Fill from '@iconify/icons-eva/edit-2-fill';
-import { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 // material
@@ -68,7 +68,7 @@ ProductDetailsReviewOverview.propTypes = {
 export default function ProductDetailsReviewOverview({ product, onOpen }) {
   // const { totalRating, totalReview, ratings } = product;
   console.log(
-    'product',
+    'product:::::>>>>',
     product?.review?.reduce((prev, current) => current?.rating + prev, 0),
     product?.review?.length
   );

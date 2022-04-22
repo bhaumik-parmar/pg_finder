@@ -224,12 +224,14 @@ function AuthProvider({ children }) {
 
   const paymentMethod = async (payment) => {
     firebase.auth().onAuthStateChanged((user) => {
+      const PGname = JSON.parse(localStorage.getItem('PG Name'));
       if (user) {
         const paymentMethodRef = firebase.firestore().collection('Payment').doc();
         paymentMethodRef
           .set({
             uid: user.uid,
-            payment
+            payment,
+            pgName: PGname.name
           })
           .then(() => {
             console.log('PG booking successful');
@@ -243,6 +245,7 @@ function AuthProvider({ children }) {
 
   const payment = async (cardName, cardNumber, cardExpiredMonth, cardExpiredYear) => {
     firebase.auth().onAuthStateChanged((user) => {
+      const PGname = JSON.parse(localStorage.getItem('PG Name'));
       if (user) {
         const cardExpiredDate = [cardExpiredMonth, cardExpiredYear].join('/');
         const paymentRef = firebase.firestore().collection('Payment').doc();
@@ -252,6 +255,7 @@ function AuthProvider({ children }) {
             cardName,
             cardNumber,
             cardExpiredDate,
+            pgName: PGname.name,
             uid: user.uid
           })
           .then(() => {

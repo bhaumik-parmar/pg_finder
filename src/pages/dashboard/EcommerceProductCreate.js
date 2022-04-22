@@ -31,15 +31,15 @@ export default function EcommerceProductCreate() {
   }, [dispatch]);
 
   return (
-    <Page title="Ecommerce: Create a new product | Minimal-UI">
+    <Page title="PG-Finder : Dashboard | Add a new PG">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading={!isEdit ? 'Create a new PG' : 'Edit PG'}
+          heading={!isEdit ? 'Add a new PG' : 'Edit PG'}
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
+            { name: 'Dashboard', href: PATH_DASHBOARD.general.app },
             {
-              name: 'PG',
-              href: PATH_DASHBOARD.eCommerce.root
+              name: 'Manage PG',
+              href: PATH_DASHBOARD.eCommerce.list
             },
             { name: !isEdit ? 'New PG' : name }
           ]}

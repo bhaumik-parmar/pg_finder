@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+
 // material
 import { styled } from '@mui/material/styles';
 import { Box, Button, Typography, Container } from '@mui/material';
@@ -7,6 +8,10 @@ import { Box, Button, Typography, Container } from '@mui/material';
 import { MotionContainer, varBounceIn } from '../components/animate';
 import Page from '../components/Page';
 import { PageNotFoundIllustration } from '../assets';
+// hooks
+import useAuth from '../hooks/useAuth';
+// pages
+import Login from './authentication/Login';
 
 // ----------------------------------------------------------------------
 
@@ -22,8 +27,11 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 export default function Page404() {
   const navigate = useNavigate();
-
+  const { isAuthenticated } = useAuth();
   const home = () => {
+    if (!isAuthenticated) {
+      return <Login />;
+    }
     if (localStorage.getItem('role') === 'Admin') {
       navigate('/dashboard/pg-finder/Admin/app');
     } else {

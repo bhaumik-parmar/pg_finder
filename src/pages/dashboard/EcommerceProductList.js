@@ -171,7 +171,7 @@ export default function EcommerceProductList() {
   const handleDeleteProduct = async (name) => {
     dispatch(deleteProduct(name));
     // await deletePG(name);
-    navigate('/dashboard/analytics');
+    navigate('/Dashboard/pg-finder/Admin/app');
   };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - products.length) : 0;

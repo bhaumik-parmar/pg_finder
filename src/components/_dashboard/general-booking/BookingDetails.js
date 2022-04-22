@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from 'react';
 import { format } from 'date-fns';
 import { sentenceCase } from 'change-case';
 import { Icon } from '@iconify/react';
-
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import shareFill from '@iconify/icons-eva/share-fill';
 import printerFill from '@iconify/icons-eva/printer-fill';
@@ -34,8 +33,13 @@ import {
   Dialog,
   DialogContent,
   DialogContentText,
-  DialogActions
+  DialogActions,
+  Container
 } from '@mui/material';
+import { PATH_DASHBOARD } from '../../../routes/paths';
+import useSettings from '../../../hooks/useSettings';
+import HeaderBreadcrumbs from '../../HeaderBreadcrumbs';
+import Page from '../../Page';
 import { useDispatch } from '../../../redux/store';
 import { deleteBookPG } from '../../../redux/slices/product';
 // utils
@@ -158,6 +162,7 @@ function MoreMenuButton({ onDownload, onPrint, onShare, onDelete }) {
 
 export default function BookingDetails() {
   const theme = useTheme();
+  const { themeStretch } = useSettings();
   const isLight = theme.palette.mode === 'light';
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -168,7 +173,7 @@ export default function BookingDetails() {
   // const handleClickShare = () => {};
   const handleClickDelete = (name, uid) => {
     dispatch(deleteBookPG(name, uid));
-    navigate('/dashboard/pg-finder/home');
+    navigate('/dashboard/pg-finder/customer/home');
   };
   useEffect(
     () =>
@@ -197,38 +202,58 @@ export default function BookingDetails() {
 
   return (
     <>
-      <Card>
-        <CardHeader title="Booking Details" sx={{ mb: 3 }} />
-        <Scrollbar>
-          <TableContainer sx={{ minWidth: 720 }}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell sx={{ minWidth: 240 }}>PG Name</TableCell>
-                  <TableCell sx={{ minWidth: 160 }}>Booking Date</TableCell>
-                  <TableCell sx={{ minWidth: 120 }}>Room Type</TableCell>
-                  {/* <TableCell sx={{ minWidth: 160 }}>Check Out</TableCell>
+      <Page title=" PG-Finder | Booking Details">
+        <Container maxWidth={themeStretch ? false : 'lg'}>
+          <HeaderBreadcrumbs
+            heading="Booking Details"
+            links={[
+              { name: 'Home', href: PATH_DASHBOARD.eCommerce.shop },
+              // { name: 'User', href: PATH_DASHBOARD.eCommerce.userlist },
+              { name: 'Booking Details' }
+            ]}
+            // action={
+            //   <Button
+            //     variant="contained"
+            //     component={RouterLink}
+            //     to={PATH_DASHBOARD.user.newUser}
+            //     startIcon={<Icon icon={plusFill} />}
+            //   >
+            //     New User
+            //   </Button>
+            // }
+          />
+          <Card>
+            {/* <CardHeader title="Booking Details" sx={{ mb: 3 }} /> */}
+            <Scrollbar>
+              <TableContainer sx={{ minWidth: 720 }}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ minWidth: 240 }}>PG Name</TableCell>
+                      <TableCell sx={{ minWidth: 160 }}>Booking Date</TableCell>
+                      <TableCell sx={{ minWidth: 120 }}>Room Type</TableCell>
+                      {/* <TableCell sx={{ minWidth: 160 }}>Check Out</TableCell>
                   <TableCell sx={{ minWidth: 120 }}>Status</TableCell>
                   <TableCell sx={{ minWidth: 200 }}>Phone</TableCell> */}
-                  <TableCell />
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {bookData.map((row) => {
-                  const { uid, PGname, bookDate, roomType } = row;
-                  return (
-                    <TableRow key={row.id}>
-                      <TableCell>
-                        <Stack direction="row" alignItems="center" spacing={2}>
-                          {/* <Avatar alt={row.name} src={row.avatar} /> */}
-                          <Typography variant="subtitle2">{PGname}</Typography>
-                        </Stack>
-                      </TableCell>
+                      <TableCell />
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {bookData.map((row) => {
+                      const { uid, PGname, bookDate, roomType } = row;
+                      return (
+                        <TableRow key={row.id}>
+                          <TableCell>
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                              {/* <Avatar alt={row.name} src={row.avatar} /> */}
+                              <Typography variant="subtitle2">{PGname}</Typography>
+                            </Stack>
+                          </TableCell>
 
-                      <TableCell>{bookDate.toDate().toDateString()}</TableCell>
-                      {/* <TableCell>{format(new Date(row.checkOut), 'dd MMM yyyy')}</TableCell> */}
+                          <TableCell>{bookDate.toDate().toDateString()}</TableCell>
+                          {/* <TableCell>{format(new Date(row.checkOut), 'dd MMM yyyy')}</TableCell> */}
 
-                      {/* <TableCell>
+                          {/* <TableCell>
                       <Label
                         variant={isLight ? 'ghost' : 'filled'}
                         color={
@@ -239,39 +264,41 @@ export default function BookingDetails() {
                       </Label>
                     </TableCell> */}
 
-                      {/* <TableCell>{row.phoneNumber}</TableCell> */}
-                      <TableCell sx={{ textTransform: 'capitalize' }}>{roomType}</TableCell>
+                          {/* <TableCell>{row.phoneNumber}</TableCell> */}
+                          <TableCell sx={{ textTransform: 'capitalize' }}>{roomType}</TableCell>
 
-                      <TableCell align="right">
-                        <MoreMenuButton
-                          // onDownload={handleClickDownload}
-                          // onPrint={handleClickPrint}
-                          // onShare={handleClickShare}
-                          onDelete={() => handleClickDelete(PGname, uid)}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Scrollbar>
+                          <TableCell align="right">
+                            <MoreMenuButton
+                              // onDownload={handleClickDownload}
+                              // onPrint={handleClickPrint}
+                              // onShare={handleClickShare}
+                              onDelete={() => handleClickDelete(PGname, uid)}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Scrollbar>
 
-        <Divider />
+            <Divider />
 
-        <Box sx={{ p: 2, textAlign: 'right' }}>
-          <Button
-            to="#"
-            size="small"
-            color="inherit"
-            component={RouterLink}
-            endIcon={<Icon icon={arrowIosForwardFill} />}
-          >
-            View All
-          </Button>
-        </Box>
-      </Card>
+            <Box sx={{ p: 2, textAlign: 'right' }}>
+              <Button
+                to="#"
+                size="small"
+                color="inherit"
+                component={RouterLink}
+                endIcon={<Icon icon={arrowIosForwardFill} />}
+              >
+                View All
+              </Button>
+            </Box>
+          </Card>
+        </Container>
+      </Page>
     </>
   );
 }
