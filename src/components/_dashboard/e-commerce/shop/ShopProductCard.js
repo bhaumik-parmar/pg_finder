@@ -10,7 +10,6 @@ import { PATH_DASHBOARD } from '../../../../routes/paths';
 // utils
 import { fCurrency } from '../../../../utils/formatNumber';
 //
-import { getAllPGReviews } from '../../../../redux/slices/product';
 import Label from '../../../Label';
 import { useDispatch } from '../../../../redux/store';
 
@@ -39,10 +38,6 @@ export default function ShopProductCard({ product }) {
   const key = name.split(' ').join('');
   // const linkTo = `${PATH_DASHBOARD.eCommerce.root}/pg/${paramCase(name)}`;
   const linkTo = `${PATH_DASHBOARD.eCommerce.root}/customer/pg/${key}`;
-
-  useEffect(() => {
-    dispatch(getAllPGReviews());
-  }, [dispatch]);
 
   return (
     <Card>

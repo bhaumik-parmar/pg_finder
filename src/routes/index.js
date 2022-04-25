@@ -182,10 +182,10 @@ export default function Router() {
         { path: 'coming-soon', element: <ComingSoon /> },
         { path: 'maintenance', element: <Maintenance /> },
         { path: 'pricing', element: <Pricing /> },
-        { path: 'payment', element: <Payment /> }
-        // { path: '500', element: <Page500 /> },
-        // { path: '404', element: <NotFound /> },
-        // { path: '*', element: <Navigate to="/404" replace /> }
+        { path: 'payment', element: <Payment /> },
+        { path: '500', element: <Page500 /> },
+        { path: '404', element: <NotFound /> },
+        { path: '*', element: <Navigate to="/404" replace /> }
       ]
     },
     {

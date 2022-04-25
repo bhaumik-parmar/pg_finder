@@ -279,8 +279,8 @@ export default function EcommerceProductList() {
                             {sentenceCase(status ? 'Available' : 'Filled')}
                           </Label>
                         </TableCell>
-                        <TableCell style={{ minWidth: 120 }}>{fCurrency(price)}</TableCell>
-                        <TableCell style={{ minWidth: 120 }}>
+                        <TableCell style={{ minWidth: 110 }}>{fCurrency(price)}</TableCell>
+                        <TableCell style={{ minWidth: 110 }}>
                           <Label
                             variant="filled"
                             color={(category === 'Girls' && 'error') || 'info'}
