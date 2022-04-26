@@ -44,23 +44,15 @@ export default function ResetPasswordForm({ onSent, onGetEmail }) {
       try {
         await resetPassword(values.email)
           .then(() => {
-            enqueueSnackbar('Login success', {
-              variant: 'success',
-              action: (key) => (
-                <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-                  <Icon icon={closeFill} />
-                </MIconButton>
-              )
-            });
+            if (isMountedRef.current) {
+              onSent();
+              onGetEmail(formik.values.email);
+              setSubmitting(false);
+            }
           })
           .catch((e) => {
             console.log(e);
           });
-        // if (isMountedRef.current) {
-        //   onSent();
-        //   onGetEmail(formik.values.email);
-        //   setSubmitting(false);
-        // }
       } catch (error) {
         console.error(error);
         if (isMountedRef.current) {

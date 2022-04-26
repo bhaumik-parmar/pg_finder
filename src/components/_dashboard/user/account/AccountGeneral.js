@@ -49,7 +49,7 @@ export default function AccountGeneral() {
         console.log('...values', { ...values });
         await updateProfile({ ...values });
         enqueueSnackbar('Update success', { variant: 'success' });
-        navigate('/dashboard/pg-finder/home');
+        navigate('/dashboard/pg-finder/customer/home');
         if (isMountedRef.current) {
           setSubmitting(false);
         }
