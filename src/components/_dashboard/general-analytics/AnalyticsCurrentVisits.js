@@ -85,7 +85,7 @@ export default function AnalyticsCurrentVisits() {
       pie: { donut: { labels: { show: false } } }
     }
   });
-
+  console.log('first', categoryData);
   const boys = categoryData.filter((item) => item.category === 'Boys');
   const girls = categoryData.filter((item) => item.category === 'Girls');
 

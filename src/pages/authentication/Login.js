@@ -93,7 +93,7 @@ export default function Login() {
             </Tooltip>
           </Stack>
 
-          {method === 'firebase' && <AuthFirebaseSocials />}
+          {method === 'firebase' && role === 'customer' ? <AuthFirebaseSocials /> : null}
 
           {/* <Alert severity="info" sx={{ mb: 3 }}>
             Use email : <strong>demo@minimals.cc</strong> / password :<strong>&nbsp;demo1234</strong>
